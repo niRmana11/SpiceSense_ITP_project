@@ -30,5 +30,7 @@ app.use("/api/orders", orderRoutes);
 const paymentRoutes = require("./routes/payments");
 app.use("/api/payments", paymentRoutes);
 
+const itemRoutes = require("./routes/items");
+app.use("/api/items", itemRoutes);
 
 
