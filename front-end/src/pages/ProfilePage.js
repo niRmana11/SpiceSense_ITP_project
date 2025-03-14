@@ -3,6 +3,7 @@ import axios from "axios";
 
 function ProfilePage() {
   const [orders, setOrders] = useState([]);
+  const [items, setItems] = useState({}); // Store item details
   const user = JSON.parse(localStorage.getItem("user")); // Get user from localStorage
 
   useEffect(() => {
@@ -21,6 +22,24 @@ function ProfilePage() {
 
     fetchOrders();
   }, [user]);
+
+  // Fetch item names for the items in the orders
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/items");
+        const itemsMap = {};
+        response.data.forEach(item => {
+          itemsMap[item._id] = item.name; // Store item name by ID
+        });
+        setItems(itemsMap);
+      } catch (error) {
+        console.error("Error fetching items", error);
+      }
+    };
+
+    fetchItems();
+  }, []);
 
   const handlePayment = async (orderId) => {
     try {
@@ -62,7 +81,7 @@ function ProfilePage() {
                 <td>
                   {order.items.map((item, index) => (
                     <div key={index}>
-                      {item.itemId} - {item.quantity} pcs @ ${item.price.toFixed(2)}
+                      {items[item.itemId] || "Loading..."} - {item.quantity} pcs @ ${item.price.toFixed(2)}
                     </div>
                   ))}
                 </td>
