@@ -34,3 +34,8 @@ const itemRoutes = require("./routes/items");
 app.use("/api/items", itemRoutes);
 
 
+const creditCardRoutes = require("./routes/creditCards");
+app.use("/api/credit-cards", creditCardRoutes);
+
+
+
