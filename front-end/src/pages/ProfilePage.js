@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function ProfilePage() {
   const [orders, setOrders] = useState([]);
@@ -100,6 +101,11 @@ function ProfilePage() {
       ) : (
         <p>No orders found.</p>
       )}
+
+        <Link to="/credit-cards">
+            <button>Manage My Credit Cards</button>
+        </Link>
+
     </div>
   );
 }

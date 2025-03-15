@@ -2,17 +2,23 @@ const express = require("express");
 const CreditCard = require("../models/CreditCard");
 const router = express.Router();
 
-// 🟢 Get all credit cards for a user
+// Get user's saved credit cards
 router.get("/:userId", async (req, res) => {
     try {
-        const cards = await CreditCard.find({ userId: req.params.userId });
-        res.json(cards);
+        const userId = req.params.userId;
+        if (!userId) {
+            return res.status(400).json({ error: "User ID is required" });
+        }
+
+        const creditCards = await CreditCard.find({ userId });
+        res.json(creditCards);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error("Error fetching credit cards:", err);
+        res.status(500).json({ error: "Server error" });
     }
 });
 
-// 🔵 Add a new credit card
+//  Add a new credit card
 router.post("/", async (req, res) => {
     try {
         const { userId, cardNumber, cardHolder, expiryDate, cvv } = req.body;
@@ -24,7 +30,7 @@ router.post("/", async (req, res) => {
     }
 });
 
-// 🟡 Update a credit card
+//  Update a credit card
 router.put("/:cardId", async (req, res) => {
     try {
         const updatedCard = await CreditCard.findByIdAndUpdate(req.params.cardId, req.body, { new: true });
@@ -34,7 +40,7 @@ router.put("/:cardId", async (req, res) => {
     }
 });
 
-// 🔴 Delete a credit card
+//  Delete a credit card
 router.delete("/:cardId", async (req, res) => {
     try {
         await CreditCard.findByIdAndDelete(req.params.cardId);
