@@ -1,10 +1,10 @@
-// OrdersList.js
 import { useEffect, useState } from "react";
 import axios from "axios";
 
 function OrdersList({ userId }) {
   const [orders, setOrders] = useState([]);
   const [items, setItems] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -37,16 +37,26 @@ function OrdersList({ userId }) {
 
   const handlePayment = async (orderId) => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
-      await axios.post(
+
+      const response = await axios.post(
         "http://localhost:5000/api/payments",
         { orderId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
       alert("Payment Successful");
-      setOrders(orders.map(order => order._id === orderId ? { ...order, status: "paid" } : order));
+
+      // Update order status and store invoice ID
+      setOrders(orders.map(order =>
+        order._id === orderId ? { ...order, status: "paid", invoiceId: response.data.invoiceId } : order
+      ));
     } catch (error) {
       console.error("Payment failed", error);
+      alert("Payment failed. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,6 +71,7 @@ function OrdersList({ userId }) {
               <th>Items</th>
               <th>Total</th>
               <th>Status</th>
+              <th>Invoice</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -78,8 +89,13 @@ function OrdersList({ userId }) {
                 <td>${order.total.toFixed(2)}</td>
                 <td>{order.status}</td>
                 <td>
+                  {order.invoiceId ? <a href={`/download-invoice/${order.invoiceId}`}>Download</a> : "-"}
+                </td>
+                <td>
                   {order.status === "pending" ? (
-                    <button onClick={() => handlePayment(order._id)}>Pay Now</button>
+                    <button onClick={() => handlePayment(order._id)} disabled={loading}>
+                      {loading ? "Processing..." : "Pay Now"}
+                    </button>
                   ) : (
                     <span>✅ Paid</span>
                   )}
