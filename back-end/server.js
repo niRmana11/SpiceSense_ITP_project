@@ -39,3 +39,8 @@ app.use("/api/credit-cards", creditCardRoutes);
 
 
 
+const paymentRoutesTwo = require("./routes/paymentRoutes");
+app.use("/api/paymentroute", paymentRoutesTwo);
+
+
+
