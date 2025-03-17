@@ -1,3 +1,4 @@
+// routes/payments.js
 const express = require("express");
 const Payment = require("../models/Payment");
 const Order = require("../models/Order");
@@ -48,8 +49,6 @@ router.get("/invoice/:paymentId", async (req, res) => {
       return res.status(404).json({ error: "Payment not found" });
     }
 
-    console.log("Populated payment:", payment); // Debug log
-
     const order = payment.orderId;
     const card = payment.cardId;
 
@@ -64,8 +63,6 @@ router.get("/invoice/:paymentId", async (req, res) => {
     let itemIds = [];
     if (Array.isArray(order.items)) {
       itemIds = order.items.map((item) => item.itemId);
-    } else {
-      console.log("Order items missing or not an array:", order.items);
     }
     const items = await Item.find({ _id: { $in: itemIds } });
     const itemsMap = items.reduce((acc, item) => {

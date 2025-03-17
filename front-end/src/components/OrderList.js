@@ -66,74 +66,75 @@ function OrdersList({ userId }) {
 
   // Handle payment
 
-// OrdersList.js (only showing handlePayment for brevity)
-const handlePayment = async () => {
-  try {
-    const token = localStorage.getItem("token");
-    let paymentData = {
-      userId,
-      orderId: currentOrder._id,
-      amount: currentOrder.total,
-    };
-
-    if (selectedCard) {
-      paymentData.cardId = selectedCard._id;
-    } else if (newCard.cardNumber) {
-      const cardResponse = await axios.post(
-        "http://localhost:5000/api/credit-cards",
-        { userId, ...newCard },
+  const handlePayment = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      let paymentData = {
+        userId,
+        orderId: currentOrder._id,
+        amount: currentOrder.total,
+      };
+  
+      if (selectedCard) {
+        paymentData.cardId = selectedCard._id;
+      } else if (newCard.cardNumber) {
+        const cardResponse = await axios.post(
+          "http://localhost:5000/api/credit-cards",
+          { userId, ...newCard },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        paymentData.cardId = cardResponse.data._id;
+      } else {
+        alert("Please select a card or enter new card details.");
+        return;
+      }
+  
+      console.log("Sending payment data:", paymentData);
+      const paymentResponse = await axios.post(
+        "http://localhost:5000/api/payments",
+        paymentData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      paymentData.cardId = cardResponse.data._id;
-    } else {
-      alert("Please select a card or enter new card details.");
-      return;
-    }
-
-    console.log("Sending payment data:", paymentData);
-    const paymentResponse = await axios.post(
-      "http://localhost:5000/api/payments",
-      paymentData,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    console.log("Payment response:", paymentResponse.data);
-
-    // Update order status immediately after payment success
-    setOrders(
-      orders.map((order) =>
-        order._id === currentOrder._id ? { ...order, status: "paid" } : order
-      )
-    );
-    setShowPaymentModal(false);
-    setSelectedCard(null);
-    setNewCard({ cardNumber: "", cardHolder: "", expiryDate: "", cvv: "" });
-
-    // Fetch and download invoice (separate try/catch to isolate failure)
-    try {
-      console.log("Fetching invoice for paymentId:", paymentResponse.data.paymentId);
-      const invoiceResponse = await axios.get(
-        `http://localhost:5000/api/payments/invoice/${paymentResponse.data.paymentId}`,
-        { responseType: "blob" }
+      console.log("Payment response:", paymentResponse.data);
+  
+      // Update UI immediately after payment success
+      setOrders(
+        orders.map((order) =>
+          order._id === currentOrder._id ? { ...order, status: "paid" } : order
+        )
       );
-      console.log("Invoice response received");
-      const url = window.URL.createObjectURL(new Blob([invoiceResponse.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `invoice-${paymentResponse.data.paymentId}.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (invoiceError) {
-      console.error("Invoice download failed:", invoiceError.response ? invoiceError.response.data : invoiceError.message);
-      alert("Payment succeeded, but invoice download failed. Please try downloading it manually from your order history.");
+      setShowPaymentModal(false);
+      setSelectedCard(null);
+      setNewCard({ cardNumber: "", cardHolder: "", expiryDate: "", cvv: "" });
+  
+      // Show success alert immediately
+      alert("Payment Successful");
+  
+      // Attempt invoice download separately
+      console.log("Fetching invoice for paymentId:", paymentResponse.data.paymentId);
+      try {
+        const invoiceResponse = await axios.get(
+          `http://localhost:5000/api/payments/invoice/${paymentResponse.data.paymentId}`,
+          { responseType: "blob" }
+        );
+        console.log("Invoice response received:", invoiceResponse.status);
+        const url = window.URL.createObjectURL(new Blob([invoiceResponse.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `invoice-${paymentResponse.data.paymentId}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      } catch (invoiceError) {
+        console.error("Invoice download error (non-critical):", invoiceError.message);
+        // Optionally notify user without overriding payment success
+        // alert("Invoice download failed, but payment was successful. Check your downloads.");
+      }
+    } catch (error) {
+      console.error("Payment error:", error.response ? error.response.data : error.message);
+      alert("Payment failed. Please try again.");
     }
-
-    alert("Payment Successful");
-  } catch (error) {
-    console.error("Payment failed with error:", error.response ? error.response.data : error.message);
-    alert("Payment failed. Please try again.");
-  }
-};
+  };
 
   return (
     <div>
