@@ -7,6 +7,9 @@ const OrderSchema = new mongoose.Schema({
   total: Number,
   status: { type: String, enum: ["pending", "paid"], default: "pending" },
   invoiceId: String,
+  shippingAddress: { type: String, required: true },
+  billingAddress: { type: String, required: true }
+
 });
 
 module.exports = mongoose.model("Order", OrderSchema);

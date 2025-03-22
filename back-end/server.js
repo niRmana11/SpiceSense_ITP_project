@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const bodyParser = require('body-parser');
 
 const app = express();
 app.use(express.json());
@@ -32,3 +33,11 @@ app.use("/api/items", itemRoutes);
 
 const creditCardRoutes = require("./routes/creditCards");
 app.use("/api/credit-cards", creditCardRoutes);
+
+
+//bishans routes
+const orderRoute = require('./routes/order');
+app.use('/api/order', orderRoute);
+
+const itemRoute = require('./routes/item');
+app.use('/api/item', itemRoute);
