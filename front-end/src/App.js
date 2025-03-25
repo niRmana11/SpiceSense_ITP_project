@@ -31,7 +31,7 @@ function App() {
     <CookiesProvider>
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/login2" element={<LoginPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/credit-cards" element={<CreditCardPage />} />
         <Route path="/home" element={<HomePage />} />
@@ -40,7 +40,7 @@ function App() {
         <Route path="/confirm/:orderId" element={<OrderConfirmationPage />} />
         <Route path="/welcome" element={<Welcome />} />
           <Route path="/home2" element={<Home />} />
-          <Route path="/Welcome" element={<Welcome />} /> {/* Updated Home for customers */}
+          <Route path="/" element={<Welcome />} /> {/* Updated Home for customers */}
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
