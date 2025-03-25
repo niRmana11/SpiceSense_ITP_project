@@ -3,12 +3,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { createOrder } from '../api';
 
 
-const user = JSON.parse(localStorage.getItem("user")); // Get user from localStorage
+//const user = JSON.parse(localStorage.getItem("user")); // Get user from localStorage
+const userId = sessionStorage.getItem("userId");  //get user id from sessionStorage
+
 const OrderProcessingPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    userId: user, // Replace with actual user ID
+    userId: userId, // Replace with actual user ID
     quantity: 1,
     shippingAddress: '',
     billingAddress: ''
@@ -24,6 +26,7 @@ const OrderProcessingPage = () => {
         shippingAddress: form.shippingAddress,
         billingAddress: form.billingAddress
       };
+
 
       const response = await createOrder(orderData);
       navigate(`/confirm/${response.data.order._id}`);

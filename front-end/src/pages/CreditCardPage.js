@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 
 const CreditCardPage = () => {
-    const user = JSON.parse(localStorage.getItem("user")); // Get user from localStorage
-    const userId = user ? user._id : null;
+    //const user = JSON.parse(localStorage.getItem("user")); // Get user from localStorage
+    //const userId = user ? user._id : null;
+    const userId = sessionStorage.getItem("userId");
 
     const [cards, setCards] = useState([]);
     const [formData, setFormData] = useState({ cardNumber: "", cardHolder: "", expiryDate: "", cvv: "" });

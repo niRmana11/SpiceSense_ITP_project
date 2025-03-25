@@ -13,3 +13,11 @@ export const fetchItemDetails = async (itemId) => {
 export const createOrder = async (orderData) => {
   return axios.post(`${API_BASE_URL}/order/create`, orderData);
 };
+
+export const updateOrder = async (orderId, orderData) => {
+  return axios.put(`${API_BASE_URL}/order/${orderId}`, orderData);
+};
+
+export const deleteOrder = async (orderId) => {
+  return axios.delete(`${API_BASE_URL}/order/${orderId}`);
+};

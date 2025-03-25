@@ -3,29 +3,19 @@ const Order = require('../models/Order');
 const Item = require('../models/Item');
 const router = express.Router();
 
-
-
-
 // Get Order by ID (for Order Confirmation Page)
 router.get('/:id', async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).populate('items.itemId');
-
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
-
     res.json(order);
   } catch (err) {
     console.error('❌ Error fetching order:', err);
     res.status(500).json({ message: 'Error fetching order', error: err.message });
   }
 });
-
-
-
-
-
 
 // Create Order
 router.post('/create', async (req, res) => {
@@ -41,7 +31,6 @@ router.post('/create', async (req, res) => {
 
     for (let i = 0; i < items.length; i++) {
       const item = await Item.findById(items[i].itemId);
-
       if (!item) {
         return res.status(404).json({ message: `Item with ID ${items[i].itemId} not found` });
       }
@@ -66,10 +55,67 @@ router.post('/create', async (req, res) => {
 
     await newOrder.save();
     res.status(201).json({ message: 'Order created successfully', order: newOrder });
-
   } catch (err) {
     console.error('❌ Error creating order:', err);
     res.status(500).json({ message: 'Error creating order', error: err.message });
+  }
+});
+
+// Update Order
+router.put('/:id', async (req, res) => {
+  const { items, shippingAddress, billingAddress } = req.body;
+
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Update items and recalculate total if provided
+    if (items && items.length > 0) {
+      let total = 0;
+      const validatedItems = [];
+      for (let i = 0; i < items.length; i++) {
+        const item = await Item.findById(items[i].itemId);
+        if (!item) {
+          return res.status(404).json({ message: `Item with ID ${items[i].itemId} not found` });
+        }
+        validatedItems.push({
+          itemId: item._id,
+          quantity: items[i].quantity,
+          price: item.price
+        });
+        total += item.price * items[i].quantity;
+      }
+      order.items = validatedItems;
+      order.total = total;
+    }
+
+    // Update addresses if provided
+    if (shippingAddress) order.shippingAddress = shippingAddress;
+    if (billingAddress) order.billingAddress = billingAddress;
+
+    await order.save();
+    res.json({ message: 'Order updated successfully', order });
+  } catch (err) {
+    console.error('❌ Error updating order:', err);
+    res.status(500).json({ message: 'Error updating order', error: err.message });
+  }
+});
+
+// Delete Order
+router.delete('/:id', async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    await Order.deleteOne({ _id: req.params.id });
+    res.json({ message: 'Order deleted successfully' });
+  } catch (err) {
+    console.error('❌ Error deleting order:', err);
+    res.status(500).json({ message: 'Error deleting order', error: err.message });
   }
 });
 
