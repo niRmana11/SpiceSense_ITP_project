@@ -21,3 +21,7 @@ export const updateOrder = async (orderId, orderData) => {
 export const deleteOrder = async (orderId) => {
   return axios.delete(`${API_BASE_URL}/order/${orderId}`);
 };
+
+export const fetchOrder = async (orderId) => {
+  return axios.get(`${API_BASE_URL}/order/${orderId}`);
+};

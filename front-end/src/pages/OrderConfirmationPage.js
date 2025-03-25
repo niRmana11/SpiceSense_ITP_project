@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { updateOrder, deleteOrder } from '../api'; // Import API functions
-import axios from 'axios'; // Still needed for the initial GET request
+import { fetchOrder, updateOrder, deleteOrder } from '../api';
 
 const OrderConfirmationPage = () => {
   const { orderId } = useParams();
@@ -10,39 +9,53 @@ const OrderConfirmationPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/order/${orderId}`)
-      .then((res) => setOrder(res.data))
-      .catch((err) => console.error('Error fetching order:', err));
+    fetchOrder(orderId)
+      .then((res) => {
+        console.log('Fetched order:', JSON.stringify(res.data, null, 2));
+        setOrder(res.data);
+      })
+      .catch((err) => console.error('Error fetching order:', err.response?.data || err.message));
   }, [orderId]);
 
   const handleEdit = () => setIsEditing(true);
 
   const handleSave = async () => {
     try {
+      console.log('Current order.items:', JSON.stringify(order.items, null, 2));
+
       const updatedOrder = {
-        items: order.items.map((item) => ({
-          itemId: item.itemId._id,
-          quantity: item.quantity,
-        })),
+        items: order.items.map((item) => {
+          const itemId = item.itemId?._id || item.itemId; // Fallback to itemId if not populated
+          if (!itemId) {
+            throw new Error('Item ID is missing in order data');
+          }
+          return {
+            itemId,
+            quantity: item.quantity,
+          };
+        }),
         shippingAddress: order.shippingAddress,
         billingAddress: order.billingAddress,
       };
 
-      const response = await updateOrder(orderId, updatedOrder); // Use updateOrder from api.js
-      setOrder(response.data.order); // Update state with the latest order data
+      console.log('Order ID:', orderId);
+      console.log('Updated order data being sent:', JSON.stringify(updatedOrder, null, 2));
+
+      const response = await updateOrder(orderId, updatedOrder);
+      console.log('Update response:', response.data);
+      setOrder(response.data.order);
       setIsEditing(false);
       alert('Order updated successfully!');
     } catch (err) {
-      console.error('Error updating order:', err);
-      alert('Failed to update order');
+      console.error('Error updating order:', err.response?.data || err.message);
+      alert(`Failed to update order: ${err.response?.data?.message || err.message}`);
     }
   };
 
   const handleCancel = async () => {
     if (window.confirm('Are you sure you want to cancel this order?')) {
       try {
-        await deleteOrder(orderId); // Use deleteOrder from api.js
+        await deleteOrder(orderId);
         alert('Order canceled successfully!');
         navigate('/home');
       } catch (err) {
@@ -54,7 +67,7 @@ const OrderConfirmationPage = () => {
 
   const handleQuantityChange = (index, value) => {
     const updatedItems = [...order.items];
-    updatedItems[index].quantity = parseInt(value) || 1; // Default to 1 if invalid
+    updatedItems[index].quantity = parseInt(value) || 1;
     setOrder({ ...order, items: updatedItems });
   };
 
@@ -67,8 +80,8 @@ const OrderConfirmationPage = () => {
         <>
           <h3>Edit Order</h3>
           {order.items.map((item, index) => (
-            <div key={item.itemId._id}>
-              <p>Item: {item.itemId.name}</p>
+            <div key={item.itemId?._id || item.itemId}>
+              <p>Item: {item.itemId?.name || 'Unknown Item'}</p>
               <label>Quantity:</label>
               <input
                 type="number"
@@ -97,8 +110,8 @@ const OrderConfirmationPage = () => {
         <>
           <h3>Order Details</h3>
           {order.items.map((item) => (
-            <p key={item.itemId._id}>
-              Item: {item.itemId.name} - Quantity: {item.quantity} - Price: ${item.price}
+            <p key={item.itemId?._id || item.itemId}>
+              Item: {item.itemId?.name || 'Unknown Item'} - Quantity: {item.quantity} - Price: ${item.price}
             </p>
           ))}
           <p>Shipping Address: {order.shippingAddress}</p>
