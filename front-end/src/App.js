@@ -31,15 +31,15 @@ function App() {
     <CookiesProvider>
     <Router>
       <Routes>
-        <Route path="/login2" element={<LoginPage />} />
+        <Route path="/login2" element={<LoginPage />} /> {/* remove this login */}
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/credit-cards" element={<CreditCardPage />} />
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/home2" element={<HomePage />} />
         <Route path="/item/:id" element={<ItemPage />} />
         <Route path="/order/:id" element={<OrderProcessingPage />} />
         <Route path="/confirm/:orderId" element={<OrderConfirmationPage />} />
         <Route path="/welcome" element={<Welcome />} />
-          <Route path="/home2" element={<Home />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/" element={<Welcome />} /> {/* Updated Home for customers */}
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />

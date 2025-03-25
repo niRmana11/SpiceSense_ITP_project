@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { fetchItems } from '../api';
 
 const Home = () => {
   const [userData, setUserData] = useState(null);
@@ -48,6 +49,14 @@ const Home = () => {
     }
   };
 
+  const [items, setItems] = useState([]);
+    
+  
+    useEffect(() => {
+      fetchItems().then((response) => setItems(response.data)).catch(console.error);
+    }, []);
+
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-100">
       {/* Navigation Bar */}
@@ -81,7 +90,22 @@ const Home = () => {
         <p className="text-gray-600">Explore our range of spices and more.</p>
         {error && <p className="text-red-500 mt-4">{error}</p>}
       </div>
+
+      <div>
+      <h1>Spice Items</h1>
+      <ul>
+        {items.map((item) => (
+          <li key={item._id}>
+            <h3>{item.name}</h3>
+            <p>Price: ${item.price}</p>
+            <button onClick={() => navigate(`/item/${item._id}`)}>View Details</button>
+          </li>
+        ))}
+      </ul>
     </div>
+
+    </div>
+    
   );
 };
 

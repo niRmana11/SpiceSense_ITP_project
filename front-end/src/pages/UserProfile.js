@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import OrdersList from "../components/OrderList";
 
 const UserProfile = () => {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const userId = sessionStorage.getItem("userId");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -90,13 +93,22 @@ const UserProfile = () => {
             >
               Back to Home
             </button>
+            <OrdersList userId={userId} />
+      <Link to="/credit-cards">
+        <button>Manage My Credit Cards</button>
+      </Link>
           </div>
         ) : (
           <p>Loading profile...</p>
         )}
       </div>
     </div>
+    
+
   );
 };
+
+
+
 
 export default UserProfile;
