@@ -1,8 +1,10 @@
+// pages/UserProfile.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
-import OrdersList from "../components/OrderList";
+import OrdersList from "../components/OrderList"; // Corrected to singular OrdersList
+import NavigationBar from "../components/NavigationBar";
 
 const UserProfile = () => {
   const [userData, setUserData] = useState(null);
@@ -37,7 +39,6 @@ const UserProfile = () => {
     fetchUserData();
   }, [navigate, location.state]);
 
-  // Function to render role-specific fields
   const renderRoleSpecificFields = () => {
     if (!userData) return null;
 
@@ -69,46 +70,39 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-100 p-8">
-      <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-xl p-8">
-        {userData && <h1 className="text-3xl font-bold text-amber-700 mb-6">{userData.role} Profile</h1>}
-        
-        {error ? (
-          <p className="text-red-500">{error}</p>
-        ) : userData ? (
-          <div className="space-y-4">
-            <p><strong>Name:</strong> {userData.name}</p>
-            <p><strong>Email:</strong> {userData.email}</p>
-            <p><strong>phone:</strong> {userData.phone}</p>
-            <p><strong>Role:</strong> {userData.role}</p>
-            
-            {/* Render role-specific fields */}
-            {renderRoleSpecificFields()}
-            
-            <p><strong>Email Verified:</strong> {userData.isAccountVerified ? "Yes" : "No"}</p>
-            
-            <button
-              onClick={() => navigate("/home", { state: { userData } })}
-              className="mt-4 bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700"
-            >
-              Back to Home
-            </button>
-            <OrdersList userId={userId} />
-      <Link to="/credit-cards">
-        <button>Manage My Credit Cards</button>
-      </Link>
-          </div>
-        ) : (
-          <p>Loading profile...</p>
-        )}
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-100">
+      <NavigationBar userData={userData} />
+      <div className="p-8">
+        <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-xl p-8">
+          {userData && <h1 className="text-3xl font-bold text-amber-700 mb-6">{userData.role} Profile</h1>}
+          
+          {error ? (
+            <p className="text-red-500">{error}</p>
+          ) : userData ? (
+            <div className="space-y-4">
+              <p><strong>Name:</strong> {userData.name}</p>
+              <p><strong>Email:</strong> {userData.email}</p>
+              <p><strong>Phone:</strong> {userData.phone}</p>
+              <p><strong>Role:</strong> {userData.role}</p>
+              
+              {renderRoleSpecificFields()}
+              
+              <p><strong>Email Verified:</strong> {userData.isAccountVerified ? "Yes" : "No"}</p>
+              
+              <OrdersList userId={userId} />
+              <Link to="/credit-cards">
+                <button className="mt-4 bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700">
+                  Manage My Credit Cards
+                </button>
+              </Link>
+            </div>
+          ) : (
+            <p>Loading profile...</p>
+          )}
+        </div>
       </div>
     </div>
-    
-
   );
 };
-
-
-
 
 export default UserProfile;
