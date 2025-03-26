@@ -16,7 +16,7 @@ const ExpiryAlerts = () => {
                 document.body.style.backgroundRepeat = "no-repeat";
         
                 return () => {
-                    document.body.style.backgroundImage = ""; // Reset on unmount
+                    document.body.style.backgroundImage = "";
                 };
             }, []);
 

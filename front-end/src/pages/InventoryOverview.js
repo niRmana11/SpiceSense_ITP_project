@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../Styles/inventoryOverview.css";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
-import NavBar from "../components/navBar"; // Import the Navbar component
+import NavBar from "../components/navBar"; 
 import backgroundImage from "../assets/background.png";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -22,7 +22,7 @@ const InventoryOverview = () => {
         document.body.style.backgroundRepeat = "no-repeat";
 
         return () => {
-            document.body.style.backgroundImage = ""; // Reset on unmount
+            document.body.style.backgroundImage = ""; 
         };
     }, []);
 
@@ -30,13 +30,13 @@ const InventoryOverview = () => {
         fetch(`${API_URL}/stocks/inventory`)
             .then(response => response.json())
             .then(data => {
-                console.log("Fetched inventory data:", data); // Debugging
+                
                 
                 if (Array.isArray(data)) {
                     setStocks(data);
                     setLowStockItems(data.filter(item => item.quantity < 20));
 
-                    // 🔹 Collect expired batches
+                    
                     const expired = data.flatMap(item => 
                         item.expiredBatches.map(batch => ({
                             name: batch.name,
@@ -65,7 +65,7 @@ const InventoryOverview = () => {
 
     return (
         <div>
-            <NavBar /> {/* Add the Navbar at the top */}
+            <NavBar /> 
             <div className="inventory-container">
                 <h2>Inventory Overview</h2>
 

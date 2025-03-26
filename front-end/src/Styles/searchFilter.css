@@ -2,19 +2,19 @@
     max-width: 900px;
     margin: 0px auto;
     padding: 30px;
-    background: #fdf7e3; /* White background for a clean look */
+    background: #fdf7e3; 
     border-radius: 15px;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     font-family: 'Arial', sans-serif;
     text-align: center;
     color: #333;
-    border: 1px solid #e0e0e0; /* Light border to define the container */
+    border: 1px solid #e0e0e0; 
 }
 
 .search-filter-container h2 {
     font-size: 28px;
     margin-bottom: 20px;
-    color: #8b4513; /* Spiced brown for consistency with your theme */
+    color: #8b4513; 
 }
 
 .search-inputs, .filter-options {
@@ -34,7 +34,7 @@
 }
 
 .search-inputs input:focus,.search-inputs select:focus, .filter-options select:focus {
-    border-color: #d59e76; /* Spiced gold border on focus */
+    border-color: #d59e76; 
     outline: none;
 }
 
@@ -46,29 +46,29 @@
 
 .stock-table th, .stock-table td {
     padding: 12px;
-    border: 1px solid #e0e0e0; /* Light border for table */
+    border: 1px solid #e0e0e0; 
     text-align: left;
 }
 
 .stock-table th {
-    background-color: #d59e76; /* Spiced gold background */
+    background-color: #d59e76; 
     color: white;
     text-transform: uppercase;
     font-weight: bold;
 }
 
 .stock-table tr:hover {
-    background-color: #f8f8f8; /* Light gray on hover */
+    background-color: #f8f8f8; 
 }
 
 .expired {
-    background-color: #ffcccc; /* Light red for expired */
+    background-color: #ffcccc; 
 }
 
 .nearing-expiry {
-    background-color: #ffdb99; /* Soft yellow for nearing expiry */
+    background-color: #ffdb99; 
 }
 
 .safe {
-    background-color: #d4edda; /* Light green for safe */
+    background-color: #d4edda; 
 }

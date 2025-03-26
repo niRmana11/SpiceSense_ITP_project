@@ -1,27 +1,27 @@
-/* Expiry Alerts Container */
+
 .expiry-container {
     max-width: 900px;
     margin: 0px auto;
     padding: 20px;
-    background: #fdf7e3; /* Spicy beige background */
+    background: #fdf7e3; 
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     font-family: 'Arial', sans-serif;
 }
 
-/* Title Styling */
+
 .expiry-container h2 {
     text-align: center;
-    color: #8b4513; /* Spiced brown */
+    color: #8b4513; 
     margin-bottom: 20px;
 }
 
-/* Expiry Table */
+
 .expiry-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-    background: #fdf2e9; /* Light spiced beige background */
+    background: #fdf2e9; 
     border-radius: 8px;
     overflow: hidden;
 }
@@ -30,32 +30,32 @@
 .expiry-table td {
     padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #e0c9a6; /* Spicy gold border */
+    border-bottom: 1px solid #e0c9a6; 
 }
 
 .expiry-table th {
-    background: #d59e76; /* Spiced gold background for headers */
+    background: #d59e76; 
     color: white;
     text-transform: uppercase;
 }
 
 .expiry-table tr:hover {
-    background: #fae1c2; /* Soft yellow on hover */
+    background: #fae1c2; 
 }
 
-/* Expiry Status Class - Expired */
+
 .expiry-table .expired {
-    background: #ffcccc; /* Light red background for expired items */
-    color: #b30000; /* Dark red text */
+    background: #ffcccc; 
+    color: #b30000; 
 }
 
-/* Expiry Status Class - Nearing Expiry */
+
 .expiry-table .nearingexpiry {
-    background: #fff2cc; /* Light yellow background for nearing expiry */
-    color: #d68c00; /* Dark yellow text */
+    background: #fff2cc; 
+    color: #d68c00; 
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
     .expiry-container {
         width: 90%;

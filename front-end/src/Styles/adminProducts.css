@@ -1,64 +1,64 @@
-/* Admin Products Page Styling */
+
 .admin-products-container {
     width: 80%;
     max-width: 900px;
     margin: 0px auto;
     padding: 20px;
-    background: #fff6e5; /* Light, warm, soft background resembling spices */
+    background: #fff6e5; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
 
-/* Heading */
+
 .admin-products-container h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #8e5b3b; /* Warm brownish color */
+    color: #8e5b3b; 
     font-size: 2em;
     font-weight: bold;
 }
 
-/* Product Form */
+
 .product-form {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin: 0 auto; /* Center the form horizontally */
+    margin: 0 auto; 
     padding: 20px;
-    background: #ffffff; /* White background for forms */
+    background: #ffffff; 
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 60%; /* Adjusted width for a smaller form */
-    max-width: 600px; /* Optional: Maximum width for responsiveness */
+    width: 60%; 
+    max-width: 600px; 
 }
 
 .product-form input,
 .product-form select {
     padding: 12px;
     font-size: 16px;
-    border: 1px solid #f1c27d; /* Light brownish border */
+    border: 1px solid #f1c27d; 
     border-radius: 5px;
-    background-color: #f9e0a7; /* Light yellow background resembling saffron */
+    background-color: #f9e0a7; 
     transition: background-color 0.3s ease;
 }
 
 .product-form input:focus,
 .product-form select:focus {
-    border-color: #d35400; /* Spice-inspired orange on focus */
+    border-color: #d35400; 
     background-color: #ffffff;
 }
 
 .product-form label {
     font-weight: bold;
     margin-top: 5px;
-    color: #d35400; /* Spice-inspired orange for labels */
+    color: #d35400; 
 }
 
 .product-form button {
     padding: 12px;
     font-size: 16px;
     color: white;
-    background: #e67e22; /* Warm spice orange */
+    background: #e67e22; 
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -66,10 +66,10 @@
 }
 
 .product-form button:hover {
-    background: #d35400; /* Darker orange on hover */
+    background: #d35400; 
 }
 
-/* Product Table */
+
 .product-table {
     width: 100%;
     border-collapse: collapse;
@@ -86,7 +86,7 @@
 }
 
 .product-table th {
-    background: #d59e76; /* Spice orange header */
+    background: #d59e76; 
     color: white;
     font-weight: bold;
 }
@@ -99,7 +99,7 @@
     border: 1px solid #ddd;
 }
 
-/* Buttons */
+
 .product-table button {
     padding: 8px 12px;
     font-size: 14px;
@@ -111,7 +111,7 @@
 }
 
 .product-table button:first-child {
-    background: #28a745; /* Fresh herb green */
+    background: #28a745; 
     color: white;
 }
 
@@ -120,7 +120,7 @@
 }
 
 .product-table button:last-child {
-    background: #c0392b; /* Deep red, like chili */
+    background: #c0392b; 
     color: white;
 }
 
@@ -136,7 +136,7 @@
     border-radius: 5px;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
     .admin-products-container {
         width: 95%;

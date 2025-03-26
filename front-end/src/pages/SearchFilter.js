@@ -23,11 +23,11 @@ const SearchFilter = () => {
             document.body.style.backgroundRepeat = "no-repeat";
     
             return () => {
-                document.body.style.backgroundImage = ""; // Reset on unmount
+                document.body.style.backgroundImage = ""; 
             };
         }, []);
 
-    // Fetch stocks from backend
+    // Fetch stocks 
     useEffect(() => {
         axios.get(`${API_URL}/stocks/searchFilter`)
             .then(response => setStocks(response.data))

@@ -1,4 +1,4 @@
-/* Inventory Overview Page Styles */
+
 
 .inventory-container {
     max-width: 900px;
@@ -103,7 +103,7 @@
     color: #5a3d1c;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
     .inventory-container {
         width: 90%;

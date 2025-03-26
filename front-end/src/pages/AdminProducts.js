@@ -22,7 +22,7 @@ const AdminProducts = () => {
                 document.body.style.backgroundRepeat = "no-repeat";
         
                 return () => {
-                    document.body.style.backgroundImage = ""; // Reset on unmount
+                    document.body.style.backgroundImage = ""; 
                 };
             }, []);
     
@@ -59,7 +59,7 @@ const AdminProducts = () => {
         try {
             let response;
             if (editingId) {
-                // Update existing product
+                
                 response = await axios.put(`${API_URL}/${editingId}`, productData, {
                     headers: { "Content-Type": "multipart/form-data" },
                 });
@@ -67,7 +67,7 @@ const AdminProducts = () => {
                 setProducts(products.map(p => (p._id === editingId ? response.data.product : p)));
                 setEditingId(null);
             } else {
-                // Add new product
+                
                 response = await axios.post(API_URL, productData, {
                     headers: { "Content-Type": "multipart/form-data" },
                 });
@@ -75,7 +75,7 @@ const AdminProducts = () => {
                 setProducts([...products, response.data.product]);
             }
     
-            // Reset form after submission
+            
             setFormData({ productName: "", category: "", image: null });
             window.location.reload();
         } catch (error) {
@@ -90,7 +90,7 @@ const AdminProducts = () => {
         try {
             await axios.delete(`${API_URL}/${id}`);
             alert("Product deleted!");
-            setProducts(products.filter(p => p._id !== id)); // Update state after deleting
+            setProducts(products.filter(p => p._id !== id)); 
         } catch (error) {
             console.error("Error deleting product:", error);
         }

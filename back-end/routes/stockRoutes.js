@@ -12,11 +12,9 @@ router.get("/inventory", async (req, res) => {
         const today = new Date();
         const stockData = await Stock.find().populate("product", "productName category");
 
-
-
         const formattedData = stockData.map(stock => {
             const expiredBatches = stock.batches
-                .filter(batch => new Date(batch.expiryDate) < today) // Check if expired
+                .filter(batch => new Date(batch.expiryDate) < today) 
                 .map(batch => ({
                     batchNumber: batch.batchNumber,
                     name: stock.product?.productName,
@@ -75,7 +73,7 @@ router.post("/add", async (req, res) => {
 
         const nextBatchNumber = `B-${highestBatchNumber + 1}`;
 
-        // Add batch
+        
         stock.batches.push({ batchNumber: nextBatchNumber, expiryDate, quantity: Number(quantity) });
         stock.totalQuantity += Number(quantity);
 
@@ -114,7 +112,7 @@ router.put("/edit/:stockId/:batchNumber", async (req, res) => {
         batch.expiryDate = expiryDate;
         batch.quantity = Number(quantity);
 
-        // Update total quantity
+        
         stock.totalQuantity = stock.batches.reduce((sum, b) => sum + b.quantity, 0);
 
         await stock.save();
@@ -135,7 +133,7 @@ router.delete("/delete/:stockId/:batchNumber", async (req, res) => {
 
         stock.batches = stock.batches.filter(batch => batch.batchNumber !== batchNumber);
 
-        // Recalculate totalQuantity
+        
         stock.totalQuantity = stock.batches.reduce((sum, b) => sum + b.quantity, 0);
 
         await stock.save();
@@ -217,14 +215,14 @@ router.get("/transactions", async (req, res) => {
 router.get("/expiry", async (req, res) => {
     try {
         const today = new Date();
-        today.setHours(0, 0, 0, 0);  // Reset time to midnight
+        today.setHours(0, 0, 0, 0);  
 
         const allItems = await Stock.find().populate("product", "productName category");
 
         const sortedItems = allItems.flatMap(item => {
             if (!Array.isArray(item.batches)) {
                 console.warn(`Item ${item._id} has no valid batches.`);
-                return [];  // Skip if batches are missing
+                return [];  
             }
 
             return item.batches.map(batch => {

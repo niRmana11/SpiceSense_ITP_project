@@ -4,13 +4,13 @@ const Product = require("../models/Product");
 const router = express.Router();
 const path = require("path");
 
-// ✅ Ensure all uploaded files go to the "uploads" folder
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "uploads/");  // ✅ Always save in uploads folder
+        cb(null, "uploads/");  
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + "-" + file.originalname);  // ✅ Ensure filename consistency
+        cb(null, Date.now() + "-" + file.originalname);  
     },
 });
 
@@ -26,6 +26,7 @@ router.get("/", async (req, res) => {
     }
 });
 
+// add a product
 router.post("/", upload.single("image"), async (req, res) => {
     try {
         const { productName, category } = req.body;
@@ -34,7 +35,7 @@ router.post("/", upload.single("image"), async (req, res) => {
             return res.status(400).json({ error: "Product name and category are required." });
         }
 
-        // ✅ Ensure image path always includes "uploads/"
+        
         const imagePath = req.file ? `uploads/${req.file.filename}` : null;
 
         const newProduct = new Product({ productName, category, image: imagePath });
@@ -53,7 +54,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
         let updateFields = { productName, category };
 
         if (req.file) {
-            updateFields.image = req.file.filename; // Only update image if a new one is uploaded
+            updateFields.image = req.file.filename; 
         }
 
         const updatedProduct = await Product.findByIdAndUpdate(req.params.id, updateFields, { new: true });

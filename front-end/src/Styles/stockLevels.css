@@ -15,7 +15,7 @@
     margin-bottom: 20px;
 }
 
-/* Form container */
+
 .form-container {
     display: flex;
     justify-content: space-between;
@@ -25,7 +25,7 @@
 
 .form-container .stock-form {
     width: 48%;
-    background-color: #fff3e0; /* Light spice background */
+    background-color: #fff3e0; 
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -33,14 +33,14 @@
 
 .form-container .stock-form h3 {
     text-align: center;
-    color: #d45b27; /* Spicy orange */
+    color: #d45b27; 
     font-size: 22px;
     margin-bottom: 15px;
 }
 
 .form-container .stock-form label {
     font-weight: bold;
-    color: #8e4b1e; /* Earthy brown */
+    color: #8e4b1e; 
     margin-bottom: 8px;
     display: block;
 }
@@ -50,15 +50,15 @@
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
-    border: 1px solid #c88c56; /* Spiced gold */
+    border: 1px solid #c88c56;
     border-radius: 6px;
     font-size: 16px;
-    box-sizing: border-box; /* Ensures padding and border are included in the width */
+    box-sizing: border-box; 
 }
 
-/* Stock Button */
+
 .form-container .stock-form .stock-button {
-    background-color: #ac5619; /* Spiced brown for stock */
+    background-color: #ac5619; 
     color: white;
     padding: 12px 20px;
     border: none;
@@ -69,12 +69,12 @@
 }
 
 .form-container .stock-form .stock-button:hover {
-    background-color: #7A3F0A; /* Darker brown on hover */
+    background-color: #7A3F0A; 
 }
 
-/* Sell Button */
+
 .form-container .stock-form .sell-button {
-    background-color: #b80707; /* Spiced red for sell */
+    background-color: #b80707; 
     color: white;
     padding: 12px 20px;
     border: none;
@@ -85,15 +85,15 @@
 }
 
 .form-container .stock-form .sell-button:hover {
-    background-color: #9A0000; /* Darker red on hover */
+    background-color: #9A0000; 
 }
 
-/* Table styling */
+
 .stocks-stock-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #fff; /* White background */
+    background-color: #fff; 
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -103,29 +103,29 @@
 .stocks-stock-table td {
     padding: 12px 20px;
     text-align: left;
-    border: 1px solid #e8a800; /* Spiced yellow */
+    border: 1px solid #e8a800; 
 }
 
 .stocks-stock-table th {
-    background-color: #c78267; /* Earthy reddish brown */
+    background-color: #c78267; 
     color: white;
     font-size: 18px;
 }
 
 .stocks-stock-table td {
-    color: #4b2d1d; /* Deep brown */
+    color: #4b2d1d; 
     font-size: 16px;
 }
 
 
 
-/* Batch details section */
+
 .batch-list {
     margin-top: 10px;
 }
 
 .batch-list .batch-details {
-    background-color: #f9d3b4; /* Spiced light orange */
+    background-color: #f9d3b4; 
     padding: 8px;
     border-radius: 6px;
     margin-bottom: 10px;
@@ -133,11 +133,9 @@
 
 .batch-list .batch-details span {
     display: block;
-    color: #4b2d1d; /* Deep brown */
+    color: #4b2d1d; 
 }
 
-/* Batch Actions Container */
-/* Batch Actions (Buttons) */
 .batch-actions {
     display: flex;
     justify-content:space-evenly;
@@ -152,31 +150,31 @@
     cursor: pointer;
 }
 
-/* Edit Button */
+
 .batch-actions .edit-btn {
-    background-color: #4CAF50; /* Green for Edit */
+    background-color: #4CAF50; 
     color: white;
     border: none;
     transition: background-color 0.3s ease;
 }
 
 .batch-actions .edit-btn:hover {
-    background-color: #45a049; /* Darker green on hover */
+    background-color: #45a049; 
 }
 
-/* Delete Button */
+
 .batch-actions .delete-btn {
-    background-color: #cc0000; /* Red for Delete */
+    background-color: #cc0000; 
     color: white;
     border: none;
     transition: background-color 0.3s ease;
 }
 
 .batch-actions .delete-btn:hover {
-    background-color: #b30000; /* Darker red on hover */
+    background-color: #b30000; 
 }
 
-/* Align Edit and Delete buttons with the batch details */
+
 .batch-detail {
     display: flex;
     justify-content: space-between;
@@ -184,7 +182,7 @@
 }
 
 .batch-detail .batch-actions {
-    flex-shrink: 0; /* Prevents shrinking of action buttons container */
+    flex-shrink: 0; 
 }
 
 
@@ -197,7 +195,7 @@
 
 .edit-form input {
     padding: 10px;
-    border: 1px solid #d45b27; /* Spicy orange border */
+    border: 1px solid #d45b27; 
     border-radius: 6px;
     font-size: 16px;
 }
@@ -205,7 +203,7 @@
 .edit-form .save-btn,
 .edit-form .cancel-btn {
     padding: 10px;
-    background-color: #9f4f2f; /* Earthy reddish brown */
+    background-color: #9f4f2f;
     color: white;
     border: none;
     border-radius: 6px;
@@ -215,18 +213,18 @@
 
 .edit-form .save-btn:hover,
 .edit-form .cancel-btn:hover {
-    background-color: #7c3a1e; /* Darker earthy brown */
+    background-color: #7c3a1e; 
 }
 
 .edit-form .cancel-btn {
-    background-color: #8a3c2c; /* Spicy red */
+    background-color: #8a3c2c;
 }
 
 .edit-form .cancel-btn:hover {
-    background-color: #6a2a1a; /* Darker spicy red */
+    background-color: #6a2a1a; 
 }
 
-/* Miscellaneous styles */
+
 .stock-form select,
 .stock-form input {
     width: 100%;
