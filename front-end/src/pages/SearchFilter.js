@@ -44,7 +44,13 @@ const SearchFilter = () => {
     });
 
     return (
-        <div>
+        <div style={{
+            backgroundImage: `url(${require("../assets/background.png")})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+            backgroundRepeat: "no-repeat"
+}}>
             <NavBar /> 
         <div className="search-filter-container">
             <h2>Search & Filter</h2>

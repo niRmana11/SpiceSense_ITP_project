@@ -15,7 +15,13 @@ const InventoryTransactions = () => {
     }, []);
 
     return (
-        <div>
+        <div style={{
+            backgroundImage: `url(${require("../assets/background.png")})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+            backgroundRepeat: "no-repeat"
+}}>
             <NavBar />
         <div className="transactions-container">
             <h2>Stock Transactions</h2>

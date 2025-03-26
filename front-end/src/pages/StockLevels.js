@@ -98,7 +98,13 @@ const StockLevels = () => {
     };
     
     return (
-        <div>
+        <div style={{
+            backgroundImage: `url(${require("../assets/background.png")})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+            backgroundRepeat: "no-repeat"
+}}>
             <NavBar /> {/* Add the Navbar at the top */}
             <div className="stock-container">
                 <h2>Stock Management</h2>

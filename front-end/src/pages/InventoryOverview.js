@@ -21,7 +21,7 @@ const InventoryOverview = () => {
                 
                 if (Array.isArray(data)) {
                     setStocks(data);
-                    setLowStockItems(data.filter(item => item.quantity < 10));
+                    setLowStockItems(data.filter(item => item.quantity < 20));
 
                     // 🔹 Collect expired batches
                     const expired = data.flatMap(item => 
@@ -45,13 +45,19 @@ const InventoryOverview = () => {
             {
                 label: "Stock Levels",
                 data: stocks.map(item => item.quantity),
-                backgroundColor: stocks.map(item => (item.quantity < 10 ? "#ff4d4d" : "#36a2eb")),
+                backgroundColor: stocks.map(item => (item.quantity < 20 ? "#ff4d4d" : "#36a2eb")),
             }
         ]
     };
 
     return (
-        <div>
+        <div style={{
+            backgroundImage: `url(${require("../assets/background.png")})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+            backgroundRepeat: "no-repeat"
+}} >
             <NavBar /> {/* Add the Navbar at the top */}
             <div className="inventory-container">
                 <h2>Inventory Overview</h2>
@@ -90,7 +96,7 @@ const InventoryOverview = () => {
                     </thead>
                     <tbody>
                         {stocks.map(item => (
-                            <tr key={item.id} className={item.quantity < 10 ? "low-stock" : ""}>
+                            <tr key={item.id} className={item.quantity < 20 ? "low-stock" : ""}>
                                 <td>{item.name}</td>
                                 <td>{item.category}</td>
                                 <td>{item.quantity}</td>

@@ -18,7 +18,13 @@ const ExpiryAlerts = () => {
     }, []);
 
     return (
-        <div>
+        <div style={{
+            backgroundImage: `url(${require("../assets/background.png")})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+            backgroundRepeat: "no-repeat"
+}}>
              <NavBar />
         <div className="expiry-container">
             <h2>Expiry Date Alerts</h2>
