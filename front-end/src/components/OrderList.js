@@ -8,6 +8,12 @@ function OrdersList({ userId }) {
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
   const [newCard, setNewCard] = useState({ cardNumber: "", cardHolder: "", expiryDate: "", cvv: "" });
+  const [cardErrors, setCardErrors] = useState({
+    cardNumber: "",
+    cardHolder: "",
+    expiryDate: "",
+    cvv: ""
+  });
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [currentOrder, setCurrentOrder] = useState(null);
 
@@ -57,16 +63,102 @@ function OrdersList({ userId }) {
     setCurrentOrder(order);
     setShowPaymentModal(true);
     fetchCreditCards();
+    // Reset form state
+    setSelectedCard(null);
+    setNewCard({ cardNumber: "", cardHolder: "", expiryDate: "", cvv: "" });
+    setCardErrors({ cardNumber: "", cardHolder: "", expiryDate: "", cvv: "" });
+  };
+
+  // Validate credit card
+  const validateCardForm = () => {
+    let isValid = true;
+    const newErrors = {
+      cardNumber: "",
+      cardHolder: "",
+      expiryDate: "",
+      cvv: ""
+    };
+
+    // Skip validation if using a saved card
+    if (selectedCard) {
+      setCardErrors(newErrors);
+      return true;
+    }
+
+    // Card number validation
+    const cleanNumber = newCard.cardNumber.replace(/\s/g, '');
+    if (!cleanNumber) {
+      newErrors.cardNumber = "Card number is required";
+      isValid = false;
+    } else if (!/^\d+$/.test(cleanNumber)) {
+      newErrors.cardNumber = "Card number must contain only digits";
+      isValid = false;
+    } else if (cleanNumber.length < 13 || cleanNumber.length > 19) {
+      newErrors.cardNumber = "Card number must be between 13 and 19 digits";
+      isValid = false;
+    }
+
+    // Card holder validation
+    if (!newCard.cardHolder.trim()) {
+      newErrors.cardHolder = "Card holder name is required";
+      isValid = false;
+    }
+
+    // Expiry date validation
+    if (!newCard.expiryDate) {
+      newErrors.expiryDate = "Expiry date is required";
+      isValid = false;
+    } else if (!/^\d{2}\/\d{2}$/.test(newCard.expiryDate)) {
+      newErrors.expiryDate = "Use MM/YY format";
+      isValid = false;
+    }
+
+    // CVV validation
+    if (!newCard.cvv) {
+      newErrors.cvv = "CVV is required";
+      isValid = false;
+    } else if (!/^\d{3,4}$/.test(newCard.cvv)) {
+      newErrors.cvv = "CVV must be 3 or 4 digits";
+      isValid = false;
+    }
+
+    setCardErrors(newErrors);
+    return isValid;
   };
 
   // Handle new card input
   const handleNewCardChange = (e) => {
-    setNewCard({ ...newCard, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setNewCard({ ...newCard, [name]: value });
+    
+    // Clear error for this field as user types
+    if (cardErrors[name]) {
+      setCardErrors({
+        ...cardErrors,
+        [name]: ""
+      });
+    }
+  };
+
+  // Handle selection of a saved card
+  const handleCardSelection = (card) => {
+    setSelectedCard(card);
+    // Clear all form errors when selecting a saved card
+    setCardErrors({
+      cardNumber: "",
+      cardHolder: "",
+      expiryDate: "",
+      cvv: ""
+    });
   };
 
   // Handle payment
-
   const handlePayment = async () => {
+    // Validate form if using new card
+    if (!selectedCard && !validateCardForm()) {
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
       let paymentData = {
@@ -127,8 +219,6 @@ function OrdersList({ userId }) {
         link.remove();
       } catch (invoiceError) {
         console.error("Invoice download error (non-critical):", invoiceError.message);
-        // Optionally notify user without overriding payment success
-        // alert("Invoice download failed, but payment was successful. Check your downloads.");
       }
     } catch (error) {
       console.error("Payment error:", error.response ? error.response.data : error.message);
@@ -188,53 +278,108 @@ function OrdersList({ userId }) {
 
             <h4>Select a Saved Card</h4>
             {cards.length > 0 ? (
-              cards.map((card) => (
-                <div key={card._id}>
-                  <input
-                    type="radio"
-                    name="card"
-                    value={card._id}
-                    onChange={() => setSelectedCard(card)}
-                  />
-                  **** **** **** {card.cardNumber.slice(-4)} ({card.cardHolder})
-                </div>
-              ))
+              <div style={{ marginBottom: "20px" }}>
+                {cards.map((card) => (
+                  <div key={card._id} style={{ margin: "8px 0" }}>
+                    <input
+                      type="radio"
+                      id={`card-${card._id}`}
+                      name="card"
+                      value={card._id}
+                      checked={selectedCard && selectedCard._id === card._id}
+                      onChange={() => handleCardSelection(card)}
+                    />
+                    <label htmlFor={`card-${card._id}`} style={{ marginLeft: "8px" }}>
+                      **** **** **** {card.cardNumber.slice(-4)} ({card.cardHolder})
+                    </label>
+                  </div>
+                ))}
+              </div>
             ) : (
               <p>No saved cards found.</p>
             )}
 
             <h4>Or Enter New Card</h4>
-            <input
-              type="text"
-              name="cardNumber"
-              placeholder="Card Number"
-              value={newCard.cardNumber}
-              onChange={handleNewCardChange}
-            />
-            <input
-              type="text"
-              name="cardHolder"
-              placeholder="Card Holder Name"
-              value={newCard.cardHolder}
-              onChange={handleNewCardChange}
-            />
-            <input
-              type="text"
-              name="expiryDate"
-              placeholder="Expiry Date (MM/YY)"
-              value={newCard.expiryDate}
-              onChange={handleNewCardChange}
-            />
-            <input
-              type="text"
-              name="cvv"
-              placeholder="CVV"
-              value={newCard.cvv}
-              onChange={handleNewCardChange}
-            />
+            <div style={formGroupStyle}>
+              <label htmlFor="cardNumber">Card Number</label>
+              <input
+                type="text"
+                id="cardNumber"
+                name="cardNumber"
+                placeholder="Card Number"
+                value={newCard.cardNumber}
+                onChange={handleNewCardChange}
+                style={cardErrors.cardNumber ? errorInputStyle : inputStyle}
+              />
+              {cardErrors.cardNumber && (
+                <div style={errorMessageStyle}>{cardErrors.cardNumber}</div>
+              )}
+            </div>
 
-            <button onClick={handlePayment}>Pay</button>
-            <button onClick={() => setShowPaymentModal(false)}>Cancel</button>
+            <div style={formGroupStyle}>
+              <label htmlFor="cardHolder">Cardholder Name</label>
+              <input
+                type="text"
+                id="cardHolder"
+                name="cardHolder"
+                placeholder="Card Holder Name"
+                value={newCard.cardHolder}
+                onChange={handleNewCardChange}
+                style={cardErrors.cardHolder ? errorInputStyle : inputStyle}
+              />
+              {cardErrors.cardHolder && (
+                <div style={errorMessageStyle}>{cardErrors.cardHolder}</div>
+              )}
+            </div>
+
+            <div style={{ display: "flex", gap: "10px" }}>
+              <div style={{ ...formGroupStyle, flex: 1 }}>
+                <label htmlFor="expiryDate">Expiry Date</label>
+                <input
+                  type="text"
+                  id="expiryDate"
+                  name="expiryDate"
+                  placeholder="MM/YY"
+                  value={newCard.expiryDate}
+                  onChange={handleNewCardChange}
+                  style={cardErrors.expiryDate ? errorInputStyle : inputStyle}
+                />
+                {cardErrors.expiryDate && (
+                  <div style={errorMessageStyle}>{cardErrors.expiryDate}</div>
+                )}
+              </div>
+
+              <div style={{ ...formGroupStyle, flex: 1 }}>
+                <label htmlFor="cvv">CVV</label>
+                <input
+                  type="text"
+                  id="cvv"
+                  name="cvv"
+                  placeholder="CVV"
+                  value={newCard.cvv}
+                  onChange={handleNewCardChange}
+                  style={cardErrors.cvv ? errorInputStyle : inputStyle}
+                />
+                {cardErrors.cvv && (
+                  <div style={errorMessageStyle}>{cardErrors.cvv}</div>
+                )}
+              </div>
+            </div>
+
+            <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+              <button 
+                onClick={handlePayment} 
+                style={buttonStyle}
+              >
+                Pay Now
+              </button>
+              <button 
+                onClick={() => setShowPaymentModal(false)} 
+                style={cancelButtonStyle}
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -242,7 +387,7 @@ function OrdersList({ userId }) {
   );
 }
 
-// Basic inline styles for the modal
+// Styles
 const modalStyle = {
   position: "fixed",
   top: 0,
@@ -253,6 +398,7 @@ const modalStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  zIndex: 1000
 };
 
 const modalContentStyle = {
@@ -260,6 +406,54 @@ const modalContentStyle = {
   padding: "20px",
   borderRadius: "5px",
   width: "400px",
+  maxHeight: "80vh",
+  overflowY: "auto"
+};
+
+const formGroupStyle = {
+  marginBottom: "15px"
+};
+
+const inputStyle = {
+  display: "block",
+  width: "100%",
+  padding: "8px",
+  border: "1px solid #ccc",
+  borderRadius: "4px",
+  marginTop: "5px"
+};
+
+const errorInputStyle = {
+  display: "block",
+  width: "100%",
+  padding: "8px",
+  border: "1px solid #e74c3c",
+  borderRadius: "4px",
+  marginTop: "5px"
+};
+
+const errorMessageStyle = {
+  color: "#e74c3c",
+  fontSize: "12px",
+  marginTop: "5px"
+};
+
+const buttonStyle = {
+  backgroundColor: "#3498db",
+  color: "white",
+  border: "none",
+  padding: "10px 15px",
+  borderRadius: "4px",
+  cursor: "pointer"
+};
+
+const cancelButtonStyle = {
+  backgroundColor: "#95a5a6",
+  color: "white",
+  border: "none",
+  padding: "10px 15px",
+  borderRadius: "4px",
+  cursor: "pointer"
 };
 
 export default OrdersList;
