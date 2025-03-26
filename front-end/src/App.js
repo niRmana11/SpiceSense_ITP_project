@@ -22,6 +22,13 @@ import EmployeeDashboard from "./pages/EmployeeDashboard";
 import SendResetOtp from "./pages/SendResetOtp";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
+import NavBar from "./components/navBar.js";
+import InventoryOverview from "./pages/InventoryOverview.js";
+import StockLevels from "./pages/StockLevels.js";
+import ExpiryAlerts from "./pages/ExpiryAlerts.js";
+import InventoryTransactions from "./pages/InventoryTransactions.js";
+import SearchFilter from "./pages/SearchFilter.js";
+import AdminProducts from "./pages/AdminProducts.js";
 
 
 function App() {
@@ -55,6 +62,12 @@ function App() {
           <Route path="/send-reset-otp" element={<SendResetOtp />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/inventory-overview" element={<InventoryOverview />}></Route>
+        <Route path="/stock-levels" element={<StockLevels />}></Route>
+        <Route path="/expiry-alerts" element={<ExpiryAlerts />}></Route>
+        <Route path="/inventory-transactions" element={<InventoryTransactions />}></Route>
+        <Route path="/search-filter" element={<SearchFilter />}></Route>
+        <Route path="/admin-products" element={<AdminProducts />}></Route>
       </Routes>
     </Router>
     </CookiesProvider>

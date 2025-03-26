@@ -1,0 +1,43 @@
+.search-filter-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.search-inputs, .filter-options {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.search-inputs input, .filter-options select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.stock-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stock-table th, .stock-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.stock-table th {
+    background-color: #f4f4f4;
+}
+
+.expired {
+    background-color: #ffcccc;
+}
+
+.nearing-expiry {
+    background-color: #ffdb99;
+}
+
+.safe {
+    background-color: #d4edda;
+}
