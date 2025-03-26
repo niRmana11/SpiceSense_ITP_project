@@ -4,6 +4,8 @@ import axios from "axios";
 
 function OrdersList({ userId }) {
   const [orders, setOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [items, setItems] = useState({});
   const [cards, setCards] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
@@ -24,6 +26,7 @@ function OrdersList({ userId }) {
       try {
         const response = await axios.get(`http://localhost:5000/api/orders/${userId}`);
         setOrders(response.data);
+        setFilteredOrders(response.data);
       } catch (error) {
         console.error("Error fetching orders", error);
       }
@@ -48,6 +51,24 @@ function OrdersList({ userId }) {
     fetchItems();
   }, []);
 
+  // Handle search
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+    
+    const filtered = orders.filter(order => {
+      // Check order ID
+      if (order._id.toLowerCase().includes(term)) return true;
+      // Check status
+      if (order.status.toLowerCase().includes(term)) return true;
+      // Check item names
+      return order.items.some(item => 
+        items[item.itemId]?.toLowerCase().includes(term)
+      );
+    });
+    setFilteredOrders(filtered);
+  };
+
   // Fetch user's credit cards when opening payment modal
   const fetchCreditCards = async () => {
     try {
@@ -63,7 +84,6 @@ function OrdersList({ userId }) {
     setCurrentOrder(order);
     setShowPaymentModal(true);
     fetchCreditCards();
-    // Reset form state
     setSelectedCard(null);
     setNewCard({ cardNumber: "", cardHolder: "", expiryDate: "", cvv: "" });
     setCardErrors({ cardNumber: "", cardHolder: "", expiryDate: "", cvv: "" });
@@ -79,13 +99,11 @@ function OrdersList({ userId }) {
       cvv: ""
     };
 
-    // Skip validation if using a saved card
     if (selectedCard) {
       setCardErrors(newErrors);
       return true;
     }
 
-    // Card number validation
     const cleanNumber = newCard.cardNumber.replace(/\s/g, '');
     if (!cleanNumber) {
       newErrors.cardNumber = "Card number is required";
@@ -98,13 +116,11 @@ function OrdersList({ userId }) {
       isValid = false;
     }
 
-    // Card holder validation
     if (!newCard.cardHolder.trim()) {
       newErrors.cardHolder = "Card holder name is required";
       isValid = false;
     }
 
-    // Expiry date validation
     if (!newCard.expiryDate) {
       newErrors.expiryDate = "Expiry date is required";
       isValid = false;
@@ -113,7 +129,6 @@ function OrdersList({ userId }) {
       isValid = false;
     }
 
-    // CVV validation
     if (!newCard.cvv) {
       newErrors.cvv = "CVV is required";
       isValid = false;
@@ -131,7 +146,6 @@ function OrdersList({ userId }) {
     const { name, value } = e.target;
     setNewCard({ ...newCard, [name]: value });
     
-    // Clear error for this field as user types
     if (cardErrors[name]) {
       setCardErrors({
         ...cardErrors,
@@ -143,7 +157,6 @@ function OrdersList({ userId }) {
   // Handle selection of a saved card
   const handleCardSelection = (card) => {
     setSelectedCard(card);
-    // Clear all form errors when selecting a saved card
     setCardErrors({
       cardNumber: "",
       cardHolder: "",
@@ -154,7 +167,6 @@ function OrdersList({ userId }) {
 
   // Handle payment
   const handlePayment = async () => {
-    // Validate form if using new card
     if (!selectedCard && !validateCardForm()) {
       return;
     }
@@ -189,9 +201,13 @@ function OrdersList({ userId }) {
       );
       console.log("Payment response:", paymentResponse.data);
   
-      // Update UI immediately after payment success
       setOrders(
         orders.map((order) =>
+          order._id === currentOrder._id ? { ...order, status: "paid" } : order
+        )
+      );
+      setFilteredOrders(
+        filteredOrders.map((order) =>
           order._id === currentOrder._id ? { ...order, status: "paid" } : order
         )
       );
@@ -199,10 +215,8 @@ function OrdersList({ userId }) {
       setSelectedCard(null);
       setNewCard({ cardNumber: "", cardHolder: "", expiryDate: "", cvv: "" });
   
-      // Show success alert immediately
       alert("Payment Successful");
   
-      // Attempt invoice download separately
       console.log("Fetching invoice for paymentId:", paymentResponse.data.paymentId);
       try {
         const invoiceResponse = await axios.get(
@@ -229,7 +243,21 @@ function OrdersList({ userId }) {
   return (
     <div>
       <h2>My Orders</h2>
-      {orders.length > 0 ? (
+      <div style={{ marginBottom: "20px" }}>
+        <input
+          type="text"
+          placeholder="Search by Order ID, Status, or Item Name..."
+          value={searchTerm}
+          onChange={handleSearch}
+          style={{
+            ...inputStyle,
+            width: "300px",
+            marginBottom: "10px"
+          }}
+        />
+      </div>
+
+      {filteredOrders.length > 0 ? (
         <table border="1" cellPadding="10">
           <thead>
             <tr>
@@ -241,7 +269,7 @@ function OrdersList({ userId }) {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
+            {filteredOrders.map((order) => (
               <tr key={order._id}>
                 <td>{order._id}</td>
                 <td>
@@ -266,10 +294,9 @@ function OrdersList({ userId }) {
           </tbody>
         </table>
       ) : (
-        <p>No orders found.</p>
+        <p>No orders found{searchTerm ? " matching your search" : ""}.</p>
       )}
 
-      {/* Payment Modal */}
       {showPaymentModal && (
         <div style={modalStyle}>
           <div style={modalContentStyle}>
