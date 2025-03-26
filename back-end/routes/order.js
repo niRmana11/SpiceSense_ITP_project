@@ -12,7 +12,7 @@ router.get('/:id', async (req, res) => {
     }
     res.json(order);
   } catch (err) {
-    console.error('❌ Error fetching order:', err);
+    console.error(' Error fetching order:', err);
     res.status(500).json({ message: 'Error fetching order', error: err.message });
   }
 });
@@ -52,7 +52,7 @@ router.post('/create', async (req, res) => {
     await newOrder.save();
     res.status(201).json({ message: 'Order created successfully', order: newOrder });
   } catch (err) {
-    console.error('❌ Error creating order:', err);
+    console.error(' Error creating order:', err);
     res.status(500).json({ message: 'Error creating order', error: err.message });
   }
 });
@@ -94,7 +94,7 @@ router.put('/:id', async (req, res) => {
     await order.save();
     res.json({ message: 'Order updated successfully', order });
   } catch (err) {
-    console.error('❌ Error updating order:', err);
+    console.error(' Error updating order:', err);
     res.status(500).json({ message: 'Error updating order', error: err.message });
   }
 });
@@ -109,7 +109,7 @@ router.delete('/:id', async (req, res) => {
     await Order.deleteOne({ _id: req.params.id });
     res.json({ message: 'Order deleted successfully' });
   } catch (err) {
-    console.error('❌ Error deleting order:', err);
+    console.error(' Error deleting order:', err);
     res.status(500).json({ message: 'Error deleting order', error: err.message });
   }
 });
