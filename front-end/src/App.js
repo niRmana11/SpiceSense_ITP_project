@@ -20,6 +20,8 @@ import Home from "./pages/Home";
 import SupplierDashboard from "./pages/SupplierDashboard";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import SendResetOtp from "./pages/SendResetOtp";
+import AboutUs from "./pages/AboutUs";
+import ContactUs from "./pages/ContactUs";
 
 
 function App() {
@@ -51,6 +53,8 @@ function App() {
           <Route path="/supplier-dashboard" element={<SupplierDashboard/>} />
           <Route path="/employee-dashboard" element={<EmployeeDashboard/>} />
           <Route path="/send-reset-otp" element={<SendResetOtp />} />
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/contact-us" element={<ContactUs />} />
       </Routes>
     </Router>
     </CookiesProvider>
