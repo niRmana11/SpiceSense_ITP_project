@@ -210,3 +210,80 @@ export const deleteUser = async (req, res) => {
     return res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
+// Add this function to your userController.js file
+
+// Update user profile (for self-update by any user)
+export const updateUserProfile = async (req, res) => {
+  try {
+    // Get user ID from authenticated user
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ success: false, message: "Unauthorized: No user ID found" });
+    }
+
+    const userId = req.user.id;
+    const updateData = req.body;
+    
+    // Find user first
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    
+    // For security, prevent changing email and role through this endpoint
+    delete updateData.email;
+    delete updateData.role;
+    delete updateData.password;
+    delete updateData.isAccountVerified;
+    
+    // Update only allowed fields based on user role
+    const allowedFields = ["name", "phone"];
+    
+    // Add role-specific fields
+    switch (user.role) {
+      case "customer":
+        allowedFields.push("shippingAddress", "billingAddress");
+        break;
+      case "supplier":
+        allowedFields.push("companyName", "contactPerson");
+        break;
+      case "employee":
+        allowedFields.push("jobTitle", "department");
+        break;
+      default:
+        break;
+    }
+    
+    // Filter out any fields that aren't allowed for this user's role
+    const filteredUpdateData = {};
+    Object.keys(updateData).forEach(key => {
+      if (allowedFields.includes(key)) {
+        filteredUpdateData[key] = updateData[key];
+      }
+    });
+    
+    // Update the user
+    const updatedUser = await userModel.findByIdAndUpdate(
+      userId, 
+      filteredUpdateData, 
+      { new: true, runValidators: true }
+    ).select("-password -verifyOtp -resetOtp -resetOtpExpireAt");
+    
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: "Failed to update profile" });
+    }
+    
+    return res.json({ 
+      success: true, 
+      message: "Profile updated successfully",
+      userData: updatedUser
+    });
+    
+  } catch (error) {
+    console.error("updateUserProfile error:", error.message);
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ success: false, message: error.message });
+    }
+    return res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
