@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../Styles/stockLevels.css";
-import NavBar from "../components/navBar"; // Import the Navbar component
+import NavBar from "../components/navBar"; 
+import backgroundImage from "../assets/background.png";
 
 const API_URL = "http://localhost:5000/api";
 
@@ -12,6 +13,18 @@ const StockLevels = () => {
     const [editingBatch, setEditingBatch] = useState(null);
     const [editFormData, setEditFormData] = useState({ expiryDate: "", quantity: "" });
     const [stockOutData, setStockOutData] = useState({ soldProductId: "", soldQuantity: "" });
+
+    useEffect(() => {
+                    document.body.style.backgroundImage = `url(${backgroundImage})`;
+                    document.body.style.backgroundSize = "cover";
+                    document.body.style.backgroundPosition = "center";
+                    document.body.style.backgroundAttachment = "fixed";
+                    document.body.style.backgroundRepeat = "no-repeat";
+            
+                    return () => {
+                        document.body.style.backgroundImage = ""; 
+                    };
+                }, []);
 
     // Fetch products and stocks
     useEffect(() => {
@@ -127,7 +140,7 @@ const StockLevels = () => {
                         <label htmlFor="quantity">Quantity (Kg)</label>
                         <input type="number" name="quantity" placeholder="Quantity" value={formData.quantity} onChange={handleChange} required />
 
-                        <button type="submit">Add Stock</button>
+                        <button type="submit" className="stock-button">Add Stock</button>
                     </form>
 
                     {/* outgoing stock form */}
@@ -144,11 +157,11 @@ const StockLevels = () => {
                         <label htmlFor="soldQuantity">Quantity (Kg)</label>
                         <input type="number" name="soldQuantity" placeholder="Quantity" value={stockOutData.soldQuantity} onChange={handleStockOutChange} required />
 
-                        <button type="submit">Sell</button>
+                        <button type="submit" className="sell-button">Sell</button>
                     </form>
                 </div>
 
-                <table className="stock-table">
+                <table className="stocks-stock-table">
                     <thead>
                         <tr>
                             <th>Product</th>

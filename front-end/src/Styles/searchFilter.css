@@ -1,43 +1,74 @@
 .search-filter-container {
-    padding: 20px;
-    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: 0px auto;
+    padding: 30px;
+    background: #fdf7e3; /* White background for a clean look */
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    color: #333;
+    border: 1px solid #e0e0e0; /* Light border to define the container */
+}
+
+.search-filter-container h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #8b4513; /* Spiced brown for consistency with your theme */
 }
 
 .search-inputs, .filter-options {
     display: flex;
-    gap: 10px;
-    margin-top: 15px;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
 }
 
-.search-inputs input, .filter-options select {
-    padding: 8px;
+.search-inputs input, .search-inputs select, .filter-options select {
+    padding: 12px 15px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 200px;
+    transition: border-color 0.3s ease;
+}
+
+.search-inputs input:focus,.search-inputs select:focus, .filter-options select:focus {
+    border-color: #d59e76; /* Spiced gold border on focus */
+    outline: none;
 }
 
 .stock-table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 30px;
 }
 
 .stock-table th, .stock-table td {
-    padding: 10px;
-    border: 1px solid #ddd;
+    padding: 12px;
+    border: 1px solid #e0e0e0; /* Light border for table */
     text-align: left;
 }
 
 .stock-table th {
-    background-color: #f4f4f4;
+    background-color: #d59e76; /* Spiced gold background */
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.stock-table tr:hover {
+    background-color: #f8f8f8; /* Light gray on hover */
 }
 
 .expired {
-    background-color: #ffcccc;
+    background-color: #ffcccc; /* Light red for expired */
 }
 
 .nearing-expiry {
-    background-color: #ffdb99;
+    background-color: #ffdb99; /* Soft yellow for nearing expiry */
 }
 
 .safe {
-    background-color: #d4edda;
+    background-color: #d4edda; /* Light green for safe */
 }

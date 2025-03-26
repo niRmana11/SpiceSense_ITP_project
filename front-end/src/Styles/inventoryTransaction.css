@@ -1,31 +1,53 @@
 .transactions-container {
-    max-width: 800px;
-    margin: 20px auto;
+    max-width: 900px;
+    margin: 0px auto;
+    padding: 30px;
+    background: #fdf7e3; /* Spicy beige background */
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
     text-align: center;
+    color: #333;
+    border: 1px solid #e0e0e0; /* Light border to define the container */
+}
+
+.transactions-container h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #8b4513; /* Spiced brown for consistency with your theme */
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
+    padding: 12px;
+    border: 1px solid #e0e0e0; /* Light border for table */
+    text-align: left;
 }
 
 th {
-    background-color: #f4f4f4;
+    background-color: #d59e76; /* Spiced gold background */
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: #f8f8f8; /* Light gray on hover */
 }
 
 .stock-in {
+    background: #d4edda; /* Light green for stock in */
     color: green;
     font-weight: bold;
 }
 
 .stock-out {
+    background: #ffcccc; /* Light red for stock out */
     color: red;
     font-weight: bold;
 }

@@ -2,11 +2,24 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../Styles/inventoryTransaction.css";
 import NavBar from "../components/navBar";
+import backgroundImage from "../assets/background.png";
 
 const API_URL = "http://localhost:5000/api";
 
 const InventoryTransactions = () => {
     const [transactions, setTransactions] = useState([]);
+
+    useEffect(() => {
+            document.body.style.backgroundImage = `url(${backgroundImage})`;
+            document.body.style.backgroundSize = "cover";
+            document.body.style.backgroundPosition = "center";
+            document.body.style.backgroundAttachment = "fixed";
+            document.body.style.backgroundRepeat = "no-repeat";
+    
+            return () => {
+                document.body.style.backgroundImage = ""; // Reset on unmount
+            };
+        }, []);
 
     useEffect(() => {
         axios.get(`${API_URL}/stocks/transactions`)
@@ -15,13 +28,7 @@ const InventoryTransactions = () => {
     }, []);
 
     return (
-        <div style={{
-            backgroundImage: `url(${require("../assets/background.png")})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundAttachment: "fixed",
-            backgroundRepeat: "no-repeat"
-}}>
+        <div>
             <NavBar />
         <div className="transactions-container">
             <h2>Stock Transactions</h2>

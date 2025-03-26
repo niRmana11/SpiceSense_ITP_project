@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";  
 import "../Styles/adminProducts.css";
 import NavBar from "../components/navBar";
+import backgroundImage from "../assets/background.png";
 
 
 const API_URL = "http://localhost:5000/api/products";
@@ -13,7 +14,18 @@ const AdminProducts = () => {
     const [formData, setFormData] = useState({ productName: "", category: "", image: null });
     const [editingId, setEditingId] = useState(null);
 
-  
+    useEffect(() => {
+                document.body.style.backgroundImage = `url(${backgroundImage})`;
+                document.body.style.backgroundSize = "cover";
+                document.body.style.backgroundPosition = "center";
+                document.body.style.backgroundAttachment = "fixed";
+                document.body.style.backgroundRepeat = "no-repeat";
+        
+                return () => {
+                    document.body.style.backgroundImage = ""; // Reset on unmount
+                };
+            }, []);
+    
 
     // fetch products
     useEffect(() => {
@@ -96,13 +108,7 @@ const AdminProducts = () => {
     
 
     return (
-        <div style={{
-            backgroundImage: `url(${require("../assets/background.png")})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundAttachment: "fixed",
-            backgroundRepeat: "no-repeat"
-}}>
+        <div>
              <NavBar />
         <div className="admin-products-container">
             <h2>Admin Product Management</h2>

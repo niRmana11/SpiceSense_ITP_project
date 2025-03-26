@@ -3,6 +3,7 @@ import "../Styles/inventoryOverview.css";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 import NavBar from "../components/navBar"; // Import the Navbar component
+import backgroundImage from "../assets/background.png";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -12,6 +13,18 @@ const InventoryOverview = () => {
     const [stocks, setStocks] = useState([]);
     const [lowStockItems, setLowStockItems] = useState([]);
     const [expiredItems, setExpiredItems] = useState([]);
+
+    useEffect(() => {
+        document.body.style.backgroundImage = `url(${backgroundImage})`;
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center";
+        document.body.style.backgroundAttachment = "fixed";
+        document.body.style.backgroundRepeat = "no-repeat";
+
+        return () => {
+            document.body.style.backgroundImage = ""; // Reset on unmount
+        };
+    }, []);
 
     useEffect(() => {
         fetch(`${API_URL}/stocks/inventory`)
@@ -51,13 +64,7 @@ const InventoryOverview = () => {
     };
 
     return (
-        <div style={{
-            backgroundImage: `url(${require("../assets/background.png")})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundAttachment: "fixed",
-            backgroundRepeat: "no-repeat"
-}} >
+        <div>
             <NavBar /> {/* Add the Navbar at the top */}
             <div className="inventory-container">
                 <h2>Inventory Overview</h2>

@@ -1,232 +1,234 @@
-
+/* Stock container */
 .stock-container {
-    max-width: 1100px;
-    margin: 20px auto;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
-    background: #ffffff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    background-color: #fdf7e3; 
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 
 .stock-container h2 {
     text-align: center;
-    font-size: 26px;
-    color: #333;
+    color: #8b4513; 
+    font-size: 28px;
     margin-bottom: 20px;
-    font-weight: bold;
 }
 
-.form-container{
+/* Form container */
+.form-container {
     display: flex;
     justify-content: space-between;
     gap: 20px;
+    margin-bottom: 30px;
 }
 
-
-
-.stock-form {
+.form-container .stock-form {
     width: 48%;
-    padding: 15px;
-    border: 1px solid #ddd;
+    background-color: #fff3e0; /* Light spice background */
+    padding: 20px;
     border-radius: 8px;
-    background-color: #f9f9f9;
-    
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.stock-form label {
+.form-container .stock-form h3 {
+    text-align: center;
+    color: #d45b27; /* Spicy orange */
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.form-container .stock-form label {
     font-weight: bold;
-    color: #333;
-    font-size: 14px;
+    color: #8e4b1e; /* Earthy brown */
+    margin-bottom: 8px;
+    display: block;
 }
 
-.stock-form select,
-.stock-form input {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+.form-container .stock-form select,
+.form-container .stock-form input {
     width: 100%;
-    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #c88c56; /* Spiced gold */
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box; /* Ensures padding and border are included in the width */
 }
 
-.stock-form button {
-    background: #007bff;
+/* Stock Button */
+.form-container .stock-form .stock-button {
+    background-color: #ac5619; /* Spiced brown for stock */
     color: white;
-    padding: 10px;
-    font-size: 16px;
+    padding: 12px 20px;
     border: none;
     border-radius: 6px;
+    font-size: 16px;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: background-color 0.3s ease;
 }
 
-.stock-form button:hover {
-    background: #0056b3;
+.form-container .stock-form .stock-button:hover {
+    background-color: #7A3F0A; /* Darker brown on hover */
 }
 
+/* Sell Button */
+.form-container .stock-form .sell-button {
+    background-color: #b80707; /* Spiced red for sell */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
-.stock-table {
+.form-container .stock-form .sell-button:hover {
+    background-color: #9A0000; /* Darker red on hover */
+}
+
+/* Table styling */
+.stocks-stock-table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
+    margin-top: 20px;
+    background-color: #fff; /* White background */
     border-radius: 8px;
     overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.stock-table th, .stock-table td {
-    border: 1px solid #ddd;
-    padding: 12px;
+.stocks-stock-table th,
+.stocks-stock-table td {
+    padding: 12px 20px;
     text-align: left;
+    border: 1px solid #e8a800; /* Spiced yellow */
 }
 
-.stock-table td{
-    vertical-align: middle;
+.stocks-stock-table th {
+    background-color: #c78267; /* Earthy reddish brown */
+    color: white;
+    font-size: 18px;
 }
 
-.stock-table th {
-    background: #007bff;
-    
-    font-weight: bold;
-}
-
-.stock-table tr:nth-child(even) {
-    background: #f1f5f9;
-}
-
-.stock-table tr:hover {
-    background: #e3e8ee;
+.stocks-stock-table td {
+    color: #4b2d1d; /* Deep brown */
+    font-size: 16px;
 }
 
 
+
+/* Batch details section */
 .batch-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    margin-top: 10px;
 }
 
-
-.batch-details {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: space-between;
-    background: #eef2f3;
-    padding: 10px;
+.batch-list .batch-details {
+    background-color: #f9d3b4; /* Spiced light orange */
+    padding: 8px;
     border-radius: 6px;
-    border: 1px solid #ddd;
-    font-size: 14px;
+    margin-bottom: 10px;
 }
 
-
-.action-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    align-items: center;
-    justify-content: center;
-    min-height: 100px;
+.batch-list .batch-details span {
+    display: block;
+    color: #4b2d1d; /* Deep brown */
 }
 
-
+/* Batch Actions Container */
+/* Batch Actions (Buttons) */
 .batch-actions {
     display: flex;
-    gap: 6px;
-    justify-content: center;
-    align-items: center;
-    min-height: 50px;
+    justify-content:space-evenly;
+    
+    margin-top: 20px;
 }
 
-.edit-btn, .delete-btn {
-    padding: 8px 14px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
+.batch-actions button {
+    padding: 8px 12px;
     font-size: 14px;
-    transition: 0.3s ease-in-out;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
-.edit-btn {
-    background: #ffc107;
-    color: black;
-}
-
-.delete-btn {
-    background: #dc3545;
+/* Edit Button */
+.batch-actions .edit-btn {
+    background-color: #4CAF50; /* Green for Edit */
     color: white;
+    border: none;
+    transition: background-color 0.3s ease;
 }
 
-.edit-btn:hover {
-    background: #ffb700;
+.batch-actions .edit-btn:hover {
+    background-color: #45a049; /* Darker green on hover */
 }
 
-.delete-btn:hover {
-    background: #c82333;
+/* Delete Button */
+.batch-actions .delete-btn {
+    background-color: #cc0000; /* Red for Delete */
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
 }
+
+.batch-actions .delete-btn:hover {
+    background-color: #b30000; /* Darker red on hover */
+}
+
+/* Align Edit and Delete buttons with the batch details */
+.batch-detail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.batch-detail .batch-actions {
+    flex-shrink: 0; /* Prevents shrinking of action buttons container */
+}
+
 
 
 .edit-form {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    align-items: center;
-    min-height: 80px;
+    gap: 10px;
 }
 
 .edit-form input {
-    padding: 6px;
-    width: 120px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 10px;
+    border: 1px solid #d45b27; /* Spicy orange border */
+    border-radius: 6px;
+    font-size: 16px;
 }
 
-.save-btn {
-    background: #28a745;
+.edit-form .save-btn,
+.edit-form .cancel-btn {
+    padding: 10px;
+    background-color: #9f4f2f; /* Earthy reddish brown */
     color: white;
-    padding: 6px 12px;
     border: none;
+    border-radius: 6px;
+    font-size: 16px;
     cursor: pointer;
-    border-radius: 5px;
 }
 
-.cancel-btn {
-    background: #dc3545;
-    color: white;
-    padding: 6px 12px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
+.edit-form .save-btn:hover,
+.edit-form .cancel-btn:hover {
+    background-color: #7c3a1e; /* Darker earthy brown */
 }
 
-.save-btn:hover {
-    background: #218838;
+.edit-form .cancel-btn {
+    background-color: #8a3c2c; /* Spicy red */
 }
 
-.cancel-btn:hover {
-    background: #c82333;
+.edit-form .cancel-btn:hover {
+    background-color: #6a2a1a; /* Darker spicy red */
 }
 
-
-@media screen and (max-width: 768px) {
-    .stock-table th, .stock-table td {
-        padding: 10px;
-        font-size: 14px;
-    }
-
-    .batch-details {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .action-buttons {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .edit-btn, .delete-btn {
-        padding: 6px 10px;
-        font-size: 12px;
-    }
+/* Miscellaneous styles */
+.stock-form select,
+.stock-form input {
+    width: 100%;
+    font-size: 16px;
 }
