@@ -5,11 +5,13 @@ import ConfirmDialog from './ConfirmDialog';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedRole, setSelectedRole] = useState('all');
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -49,6 +51,7 @@ const UserManagement = () => {
         
         if (response.data.success) {
           setUsers(response.data.users);
+          setFilteredUsers(response.data.users);
         } else {
           setError(response.data.message);
         }
@@ -63,9 +66,35 @@ const UserManagement = () => {
     fetchUsers();
   }, [selectedRole, updateSuccess, deleteSuccess]);
 
+  // Filter users based on search term
+  useEffect(() => {
+    if (searchTerm.trim() === '') {
+      setFilteredUsers(users);
+    } else {
+      const lowercasedTerm = searchTerm.toLowerCase();
+      const results = users.filter(user => 
+        user.name?.toLowerCase().includes(lowercasedTerm) || 
+        user.email?.toLowerCase().includes(lowercasedTerm) || 
+        user.phone?.toLowerCase().includes(lowercasedTerm)
+      );
+      setFilteredUsers(results);
+    }
+  }, [searchTerm, users]);
+
+  // Handle search input change
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Clear search
+  const handleClearSearch = () => {
+    setSearchTerm('');
+  };
+
   // Handle role selection
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
+    setSearchTerm(''); // Clear search when changing roles
   };
 
   // Open update form with user data
@@ -266,6 +295,16 @@ const UserManagement = () => {
     <div className="bg-white p-6 rounded-xl shadow-md">
       <h2 className="text-2xl font-bold text-amber-700 mb-4">User Management</h2>
       
+      <div className="mb-6">
+  <input
+    type="text"
+    placeholder="Search by name, email, or phone..."
+    value={searchTerm}
+    onChange={handleSearchChange}
+    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+  />
+</div>
+
       {/* Role filter tabs */}
       <div className="flex mb-6 border-b overflow-x-auto">
         <button
@@ -322,12 +361,14 @@ const UserManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {users.length === 0 ? (
+              {filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="py-4 text-center text-gray-500">No users found</td>
+                  <td colSpan="6" className="py-4 text-center text-gray-500">
+                    {searchTerm ? 'No users found matching your search' : 'No users found'}
+                  </td>
                 </tr>
               ) : (
-                users.map(user => (
+                filteredUsers.map(user => (
                   <tr key={user._id} className="hover:bg-gray-50">
                     <td className="py-2 px-4 border">{user.name}</td>
                     <td className="py-2 px-4 border">{user.email}</td>

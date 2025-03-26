@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
@@ -6,10 +6,11 @@ import { Link } from 'react-router-dom';
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState(""); // Added phone state
+  const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState(""); // Added phone error state
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); // Added confirm password state
-  const [role, setRole] = useState("customer"); // Default role
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("customer");
   const [companyName, setCompanyName] = useState("");
   const [contactPerson, setContactPerson] = useState("");
   const [jobTitle, setJobTitle] = useState("");
@@ -18,7 +19,7 @@ const Register = () => {
   const [billingAddress, setBillingAddress] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [passwordMatch, setPasswordMatch] = useState(true); // Added password match state
+  const [passwordMatch, setPasswordMatch] = useState(true);
   const navigate = useNavigate();
 
   // Check password match on change
@@ -26,6 +27,32 @@ const Register = () => {
     const value = e.target.value;
     setConfirmPassword(value);
     setPasswordMatch(password === value);
+  };
+
+  // Validate phone number
+  const validatePhone = (phoneNumber) => {
+    // Regex to match:
+    // 1. Optional country code (+ followed by digits)
+    // 2. 10 digits number (like 0712345678)
+    const phoneRegex = /^(\+\d{1,4})?[ -]?\d{10}$/;
+    
+    if (!phoneNumber) {
+      setPhoneError("Phone number is required");
+      return false;
+    } else if (!phoneRegex.test(phoneNumber)) {
+      setPhoneError("Invalid phone format. Use +[country code] followed by 10 digits or just 10 digits");
+      return false;
+    }
+    
+    setPhoneError("");
+    return true;
+  };
+
+  // Handle phone change
+  const handlePhoneChange = (e) => {
+    const value = e.target.value;
+    setPhone(value);
+    validatePhone(value);
   };
 
   const handleSubmit = async (e) => {
@@ -41,14 +68,20 @@ const Register = () => {
       return;
     }
 
+    // Validate phone number
+    if (!validatePhone(phone)) {
+      setLoading(false);
+      return;
+    }
+
     try {
       // Prepare user data based on role
       const userData = {
         name,
         email,
-        phone, // Added phone
+        phone,
         password,
-        confirmPassword, // Added confirm password
+        confirmPassword,
         role,
         ...(role === "supplier" && { companyName, contactPerson }),
         ...(role === "employee" && { jobTitle, department }),
@@ -95,7 +128,7 @@ const Register = () => {
             <input
               id="name"
               type="text"
-              placeholder="John Doe"
+              placeholder="Your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -119,7 +152,7 @@ const Register = () => {
             />
           </div>
 
-          {/* Phone Number - Added */}
+          {/* Phone Number - With Validation */}
           <div className="space-y-2">
             <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
               Phone Number
@@ -127,12 +160,19 @@ const Register = () => {
             <input
               id="phone"
               type="tel"
-              placeholder="+1 (123) 456-7890"
+              placeholder="+94 0712345678 or 0712345678"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={handlePhoneChange}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className={`w-full px-3 py-2 border ${
+                phoneError ? 'border-red-500' : 'border-gray-300'
+              } rounded-md focus:outline-none focus:ring-2 ${
+                phoneError ? 'focus:ring-red-500' : 'focus:ring-amber-500'
+              }`}
             />
+            {phoneError && (
+              <p className="text-red-500 text-xs mt-1">{phoneError}</p>
+            )}
           </div>
 
           {/* Password */}
@@ -154,7 +194,7 @@ const Register = () => {
             />
           </div>
 
-          {/* Confirm Password - Added */}
+          {/* Confirm Password */}
           <div className="space-y-2">
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
               Confirm Password
@@ -215,12 +255,12 @@ const Register = () => {
 
               <div className="space-y-2">
                 <label htmlFor="contactPerson" className="block text-sm font-medium text-gray-700">
-                  Contact Person
+                Warehouse Location
                 </label>
                 <input
                   id="contactPerson"
                   type="text"
-                  placeholder="John Doe"
+                  placeholder="Warehouse Location"
                   value={contactPerson}
                   onChange={(e) => setContactPerson(e.target.value)}
                   required
@@ -273,7 +313,7 @@ const Register = () => {
                 <input
                   id="shippingAddress"
                   type="text"
-                  placeholder="123 Main St"
+                  placeholder="123 colombo 10"
                   value={shippingAddress}
                   onChange={(e) => setShippingAddress(e.target.value)}
                   required
@@ -288,7 +328,7 @@ const Register = () => {
                 <input
                   id="billingAddress"
                   type="text"
-                  placeholder="123 Main St"
+                  placeholder="Mathale ukuwela"
                   value={billingAddress}
                   onChange={(e) => setBillingAddress(e.target.value)}
                   required
@@ -301,7 +341,7 @@ const Register = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={loading || !passwordMatch}
+            disabled={loading || !passwordMatch || phoneError}
             className="w-full bg-amber-600 text-white py-2 px-4 rounded-md hover:bg-amber-700 transition-colors disabled:bg-amber-300"
           >
             {loading ? "Registering..." : "Register"}
