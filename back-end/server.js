@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
@@ -12,8 +14,14 @@ import itemRoutes from "./routes/items.js";
 import creditCardRoutes from "./routes/creditCards.js";
 import orderRoute from "./routes/order.js";
 import itemRoute from "./routes/item.js";
+import productRoutes from "./routes/productRoutes.js";
+import stockRoutes from "./routes/stockRoutes.js";
 
 dotenv.config();
+
+// Get __dirname equivalent in ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 console.log("SMTP_USER:", process.env.SMTP_USER);
 console.log("SMTP_PASS:", process.env.SMTP_PASS);
@@ -37,6 +45,9 @@ app.use(
     optionsSuccessStatus: 204,
   })
 );
+
+// Serve static images from the uploads folder
+app.use("/uploads", express.static(`${__dirname}/uploads`));
 
 // Request Logging Middleware
 app.use((req, res, next) => {
@@ -62,6 +73,8 @@ app.use("/api/items", itemRoutes);
 app.use("/api/credit-cards", creditCardRoutes);
 app.use("/api/order", orderRoute);
 app.use("/api/item", itemRoute);
+app.use("/api/products", productRoutes);
+app.use("/api/stocks", stockRoutes);
 
 // Test Cookie Endpoint
 app.get("/api/test-cookie", (req, res) => {
@@ -95,5 +108,3 @@ process.on("unhandledRejection", (err) => {
   console.error("Unhandled Rejection:", err);
   process.exit(1);
 });
-
-

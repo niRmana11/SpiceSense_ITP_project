@@ -1,0 +1,87 @@
+const express = require("express");
+const multer = require("multer");
+const Product = require("../models/Product");
+const router = express.Router();
+const path = require("path");
+
+// ✅ Ensure all uploaded files go to the "uploads" folder
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/");  // ✅ Always save in uploads folder
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + "-" + file.originalname);  // ✅ Ensure filename consistency
+    },
+});
+
+const upload = multer({ storage: storage });
+
+// Get all products
+router.get("/", async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching products", error });
+    }
+});
+
+router.post("/", upload.single("image"), async (req, res) => {
+    try {
+        const { productName, category } = req.body;
+
+        if (!productName || !category) {
+            return res.status(400).json({ error: "Product name and category are required." });
+        }
+
+        // ✅ Ensure image path always includes "uploads/"
+        const imagePath = req.file ? `uploads/${req.file.filename}` : null;
+
+        const newProduct = new Product({ productName, category, image: imagePath });
+        await newProduct.save();
+
+        res.json({ message: "Product added!", product: newProduct });
+    } catch (error) {
+        res.status(500).json({ error: "Error adding product", details: error.message });
+    }
+});
+
+// Update product
+router.put("/:id", upload.single("image"), async (req, res) => {
+    try {
+        const { productName, category } = req.body;
+        let updateFields = { productName, category };
+
+        if (req.file) {
+            updateFields.image = req.file.filename; // Only update image if a new one is uploaded
+        }
+
+        const updatedProduct = await Product.findByIdAndUpdate(req.params.id, updateFields, { new: true });
+
+        if (!updatedProduct) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        res.json({ message: "Product updated", product: updatedProduct });
+    } catch (error) {
+        res.status(400).json({ message: "Error updating product", error });
+    }
+});
+
+
+
+// delete a product
+router.delete("/:id", async (req, res) => {
+    try {
+        const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+        if (!deletedProduct) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+        res.json({ message: "Product deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Error deleting product", error });
+    }
+});
+
+
+module.exports = router;
