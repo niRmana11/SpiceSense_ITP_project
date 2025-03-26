@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../Styles/inventoryTransaction.css";
+import NavBar from "../components/navBar";
 
 const API_URL = "http://localhost:5000/api";
 
@@ -14,6 +15,8 @@ const InventoryTransactions = () => {
     }, []);
 
     return (
+        <div>
+            <NavBar />
         <div className="transactions-container">
             <h2>Stock Transactions</h2>
             <table>
@@ -40,7 +43,8 @@ const InventoryTransactions = () => {
                     ))}
                 </tbody>
             </table>
-        </div>
+            </div>
+            </div>
     );
 };
 

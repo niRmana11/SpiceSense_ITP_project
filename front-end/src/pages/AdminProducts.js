@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";  
 import "../Styles/adminProducts.css";
+import NavBar from "../components/navBar";
 
 
 const API_URL = "http://localhost:5000/api/products";
@@ -95,6 +96,8 @@ const AdminProducts = () => {
     
 
     return (
+        <div>
+             <NavBar />
         <div className="admin-products-container">
             <h2>Admin Product Management</h2>
             <form onSubmit={handleSubmit} className="product-form">
@@ -140,7 +143,8 @@ const AdminProducts = () => {
             </table>
 
                
-        </div>
+            </div>
+            </div>
     );
 };
 

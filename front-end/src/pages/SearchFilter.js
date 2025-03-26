@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../Styles/searchFilter.css";
+import NavBar from "../components/navBar";
 
 const API_URL = "http://localhost:5000/api";
 
@@ -43,6 +44,8 @@ const SearchFilter = () => {
     });
 
     return (
+        <div>
+            <NavBar /> 
         <div className="search-filter-container">
             <h2>Search & Filter</h2>
 
@@ -97,7 +100,8 @@ const SearchFilter = () => {
                     )}
                 </tbody>
             </table>
-        </div>
+            </div>
+            </div>
     );
 };
 
