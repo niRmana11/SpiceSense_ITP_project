@@ -1,6 +1,7 @@
 // OrdersList.js
 import { useEffect, useState } from "react";
 import axios from "axios";
+import "../Styles/OrdersList.css";
 
 function OrdersList({ userId }) {
   const [orders, setOrders] = useState([]);
@@ -57,11 +58,8 @@ function OrdersList({ userId }) {
     setSearchTerm(term);
     
     const filtered = orders.filter(order => {
-      // Check order ID
       if (order._id.toLowerCase().includes(term)) return true;
-      // Check status
       if (order.status.toLowerCase().includes(term)) return true;
-      // Check item names
       return order.items.some(item => 
         items[item.itemId]?.toLowerCase().includes(term)
       );
@@ -193,13 +191,11 @@ function OrdersList({ userId }) {
         return;
       }
   
-      console.log("Sending payment data:", paymentData);
       const paymentResponse = await axios.post(
         "http://localhost:5000/api/payments",
         paymentData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log("Payment response:", paymentResponse.data);
   
       setOrders(
         orders.map((order) =>
@@ -217,13 +213,11 @@ function OrdersList({ userId }) {
   
       alert("Payment Successful");
   
-      console.log("Fetching invoice for paymentId:", paymentResponse.data.paymentId);
       try {
         const invoiceResponse = await axios.get(
           `http://localhost:5000/api/payments/invoice/${paymentResponse.data.paymentId}`,
           { responseType: "blob" }
         );
-        console.log("Invoice response received:", invoiceResponse.status);
         const url = window.URL.createObjectURL(new Blob([invoiceResponse.data]));
         const link = document.createElement("a");
         link.href = url;
@@ -241,24 +235,20 @@ function OrdersList({ userId }) {
   };
 
   return (
-    <div>
+    <div className="orders-container">
       <h2>My Orders</h2>
-      <div style={{ marginBottom: "20px" }}>
+      <div className="search-container">
         <input
           type="text"
           placeholder="Search by Order ID, Status, or Item Name..."
           value={searchTerm}
           onChange={handleSearch}
-          style={{
-            ...inputStyle,
-            width: "300px",
-            marginBottom: "10px"
-          }}
+          className="search-input"
         />
       </div>
 
       {filteredOrders.length > 0 ? (
-        <table border="1" cellPadding="10">
+        <table className="orders-table">
           <thead>
             <tr>
               <th>Order ID</th>
@@ -284,7 +274,12 @@ function OrdersList({ userId }) {
                 <td>{order.status}</td>
                 <td>
                   {order.status === "pending" ? (
-                    <button onClick={() => openPaymentModal(order)}>Pay Now</button>
+                    <button 
+                      onClick={() => openPaymentModal(order)}
+                      className="pay-button"
+                    >
+                      Pay Now
+                    </button>
                   ) : (
                     <span>✅ Paid</span>
                   )}
@@ -294,20 +289,20 @@ function OrdersList({ userId }) {
           </tbody>
         </table>
       ) : (
-        <p>No orders found{searchTerm ? " matching your search" : ""}.</p>
+        <p className="no-orders">No orders found{searchTerm ? " matching your search" : ""}.</p>
       )}
 
       {showPaymentModal && (
-        <div style={modalStyle}>
-          <div style={modalContentStyle}>
+        <div className="modal-overlay">
+          <div className="modal-content">
             <h3>Pay for Order #{currentOrder._id}</h3>
             <p>Total: ${currentOrder.total.toFixed(2)}</p>
 
             <h4>Select a Saved Card</h4>
             {cards.length > 0 ? (
-              <div style={{ marginBottom: "20px" }}>
+              <div className="cards-list">
                 {cards.map((card) => (
-                  <div key={card._id} style={{ margin: "8px 0" }}>
+                  <div key={card._id} className="card-option">
                     <input
                       type="radio"
                       id={`card-${card._id}`}
@@ -316,7 +311,7 @@ function OrdersList({ userId }) {
                       checked={selectedCard && selectedCard._id === card._id}
                       onChange={() => handleCardSelection(card)}
                     />
-                    <label htmlFor={`card-${card._id}`} style={{ marginLeft: "8px" }}>
+                    <label htmlFor={`card-${card._id}`}>
                       **** **** **** {card.cardNumber.slice(-4)} ({card.cardHolder})
                     </label>
                   </div>
@@ -327,7 +322,7 @@ function OrdersList({ userId }) {
             )}
 
             <h4>Or Enter New Card</h4>
-            <div style={formGroupStyle}>
+            <div className="form-group">
               <label htmlFor="cardNumber">Card Number</label>
               <input
                 type="text"
@@ -336,14 +331,14 @@ function OrdersList({ userId }) {
                 placeholder="Card Number"
                 value={newCard.cardNumber}
                 onChange={handleNewCardChange}
-                style={cardErrors.cardNumber ? errorInputStyle : inputStyle}
+                className={cardErrors.cardNumber ? "input-error" : ""}
               />
               {cardErrors.cardNumber && (
-                <div style={errorMessageStyle}>{cardErrors.cardNumber}</div>
+                <span className="error-message">{cardErrors.cardNumber}</span>
               )}
             </div>
 
-            <div style={formGroupStyle}>
+            <div className="form-group">
               <label htmlFor="cardHolder">Cardholder Name</label>
               <input
                 type="text"
@@ -352,15 +347,15 @@ function OrdersList({ userId }) {
                 placeholder="Card Holder Name"
                 value={newCard.cardHolder}
                 onChange={handleNewCardChange}
-                style={cardErrors.cardHolder ? errorInputStyle : inputStyle}
+                className={cardErrors.cardHolder ? "input-error" : ""}
               />
               {cardErrors.cardHolder && (
-                <div style={errorMessageStyle}>{cardErrors.cardHolder}</div>
+                <span className="error-message">{cardErrors.cardHolder}</span>
               )}
             </div>
 
-            <div style={{ display: "flex", gap: "10px" }}>
-              <div style={{ ...formGroupStyle, flex: 1 }}>
+            <div className="form-row">
+              <div className="form-group">
                 <label htmlFor="expiryDate">Expiry Date</label>
                 <input
                   type="text"
@@ -369,14 +364,14 @@ function OrdersList({ userId }) {
                   placeholder="MM/YY"
                   value={newCard.expiryDate}
                   onChange={handleNewCardChange}
-                  style={cardErrors.expiryDate ? errorInputStyle : inputStyle}
+                  className={cardErrors.expiryDate ? "input-error" : ""}
                 />
                 {cardErrors.expiryDate && (
-                  <div style={errorMessageStyle}>{cardErrors.expiryDate}</div>
+                  <span className="error-message">{cardErrors.expiryDate}</span>
                 )}
               </div>
 
-              <div style={{ ...formGroupStyle, flex: 1 }}>
+              <div className="form-group">
                 <label htmlFor="cvv">CVV</label>
                 <input
                   type="text"
@@ -385,24 +380,24 @@ function OrdersList({ userId }) {
                   placeholder="CVV"
                   value={newCard.cvv}
                   onChange={handleNewCardChange}
-                  style={cardErrors.cvv ? errorInputStyle : inputStyle}
+                  className={cardErrors.cvv ? "input-error" : ""}
                 />
                 {cardErrors.cvv && (
-                  <div style={errorMessageStyle}>{cardErrors.cvv}</div>
+                  <span className="error-message">{cardErrors.cvv}</span>
                 )}
               </div>
             </div>
 
-            <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+            <div className="modal-buttons">
               <button 
-                onClick={handlePayment} 
-                style={buttonStyle}
+                onClick={handlePayment}
+                className="pay-button"
               >
                 Pay Now
               </button>
               <button 
-                onClick={() => setShowPaymentModal(false)} 
-                style={cancelButtonStyle}
+                onClick={() => setShowPaymentModal(false)}
+                className="cancel-button"
               >
                 Cancel
               </button>
@@ -413,74 +408,5 @@ function OrdersList({ userId }) {
     </div>
   );
 }
-
-// Styles
-const modalStyle = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  background: "rgba(0, 0, 0, 0.5)",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  zIndex: 1000
-};
-
-const modalContentStyle = {
-  background: "white",
-  padding: "20px",
-  borderRadius: "5px",
-  width: "400px",
-  maxHeight: "80vh",
-  overflowY: "auto"
-};
-
-const formGroupStyle = {
-  marginBottom: "15px"
-};
-
-const inputStyle = {
-  display: "block",
-  width: "100%",
-  padding: "8px",
-  border: "1px solid #ccc",
-  borderRadius: "4px",
-  marginTop: "5px"
-};
-
-const errorInputStyle = {
-  display: "block",
-  width: "100%",
-  padding: "8px",
-  border: "1px solid #e74c3c",
-  borderRadius: "4px",
-  marginTop: "5px"
-};
-
-const errorMessageStyle = {
-  color: "#e74c3c",
-  fontSize: "12px",
-  marginTop: "5px"
-};
-
-const buttonStyle = {
-  backgroundColor: "#3498db",
-  color: "white",
-  border: "none",
-  padding: "10px 15px",
-  borderRadius: "4px",
-  cursor: "pointer"
-};
-
-const cancelButtonStyle = {
-  backgroundColor: "#95a5a6",
-  color: "white",
-  border: "none",
-  padding: "10px 15px",
-  borderRadius: "4px",
-  cursor: "pointer"
-};
 
 export default OrdersList;

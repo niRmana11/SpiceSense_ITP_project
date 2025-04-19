@@ -1,6 +1,9 @@
+// pages/OrderConfirmationPage.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchOrder, updateOrder, deleteOrder } from '../api';
+import "../Styles/OrderConfirmationPage.css"; // Import CSS from Styles folder
+import NavigationBar from "../components/NavigationBar";
 
 const OrderConfirmationPage = () => {
   const { orderId } = useParams();
@@ -25,7 +28,7 @@ const OrderConfirmationPage = () => {
 
       const updatedOrder = {
         items: order.items.map((item) => {
-          const itemId = item.itemId?._id || item.itemId; // Fallback to itemId if not populated
+          const itemId = item.itemId?._id || item.itemId;
           if (!itemId) {
             throw new Error('Item ID is missing in order data');
           }
@@ -71,57 +74,70 @@ const OrderConfirmationPage = () => {
     setOrder({ ...order, items: updatedItems });
   };
 
-  if (!order) return <p>Loading...</p>;
+  if (!order) return <p className="order-confirmation-loading">Loading...</p>;
 
   return (
-    <div>
-      <h2>Order Confirmation</h2>
+    <div> <NavigationBar />
+    <div className="order-confirmation-container">
+      <h2 className="order-confirmation-title">Order Confirmation</h2>
       {isEditing ? (
-        <>
-          <h3>Edit Order</h3>
+        <div className="order-confirmation-edit-section">
+          <h3 className="order-confirmation-subtitle">Edit Order</h3>
           {order.items.map((item, index) => (
-            <div key={item.itemId?._id || item.itemId}>
-              <p>Item: {item.itemId?.name || 'Unknown Item'}</p>
-              <label>Quantity:</label>
+            <div key={item.itemId?._id || item.itemId} className="order-confirmation-item-edit">
+              <p className="order-confirmation-item-name">Item: {item.itemId?.name || 'Unknown Item'}</p>
+              <label className="order-confirmation-label">Quantity:</label>
               <input
                 type="number"
                 value={item.quantity}
                 onChange={(e) => handleQuantityChange(index, e.target.value)}
                 min="1"
+                className="order-confirmation-input"
               />
             </div>
           ))}
-          <label>Shipping Address:</label>
-          <input
-            type="text"
-            value={order.shippingAddress}
-            onChange={(e) => setOrder({ ...order, shippingAddress: e.target.value })}
-          />
-          <label>Billing Address:</label>
-          <input
-            type="text"
-            value={order.billingAddress}
-            onChange={(e) => setOrder({ ...order, billingAddress: e.target.value })}
-          />
-          <button onClick={handleSave}>Save</button>
-          <button onClick={() => setIsEditing(false)}>Cancel Edit</button>
-        </>
+          <div className="order-confirmation-form-group">
+            <label className="order-confirmation-label">Shipping Address:</label>
+            <input
+              type="text"
+              value={order.shippingAddress}
+              onChange={(e) => setOrder({ ...order, shippingAddress: e.target.value })}
+              className="order-confirmation-input"
+            />
+          </div>
+          <div className="order-confirmation-form-group">
+            <label className="order-confirmation-label">Billing Address:</label>
+            <input
+              type="text"
+              value={order.billingAddress}
+              onChange={(e) => setOrder({ ...order, billingAddress: e.target.value })}
+              className="order-confirmation-input"
+            />
+          </div>
+          <div className="order-confirmation-edit-buttons">
+            <button onClick={handleSave} className="order-confirmation-save-btn">Save</button>
+            <button onClick={() => setIsEditing(false)} className="order-confirmation-cancel-edit-btn">Cancel Edit</button>
+          </div>
+        </div>
       ) : (
-        <>
-          <h3>Order Details</h3>
+        <div className="order-confirmation-details-section">
+          <h3 className="order-confirmation-subtitle">Order Details</h3>
           {order.items.map((item) => (
-            <p key={item.itemId?._id || item.itemId}>
+            <p key={item.itemId?._id || item.itemId} className="order-confirmation-item">
               Item: {item.itemId?.name || 'Unknown Item'} - Quantity: {item.quantity} - Price: ${item.price}
             </p>
           ))}
-          <p>Shipping Address: {order.shippingAddress}</p>
-          <p>Billing Address: {order.billingAddress}</p>
-          <p>Total: ${order.total}</p>
-          <button onClick={handleEdit}>Edit</button>
-          <button onClick={() => navigate('/home')}>Confirm</button>
-          <button onClick={handleCancel}>Cancel Order</button>
-        </>
+          <p className="order-confirmation-detail">Shipping Address: {order.shippingAddress}</p>
+          <p className="order-confirmation-detail">Billing Address: {order.billingAddress}</p>
+          <p className="order-confirmation-detail">Total: ${order.total}</p>
+          <div className="order-confirmation-buttons">
+            <button onClick={handleEdit} className="order-confirmation-edit-btn">Edit</button>
+            <button onClick={() => navigate('/home')} className="order-confirmation-confirm-btn">Confirm</button>
+            <button onClick={handleCancel} className="order-confirmation-cancel-btn">Cancel Order</button>
+          </div>
+        </div>
       )}
+    </div>
     </div>
   );
 };

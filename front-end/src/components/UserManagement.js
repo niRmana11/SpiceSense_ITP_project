@@ -1,7 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Loading from './Loading';
-import ConfirmDialog from './ConfirmDialog';
+import '../Styles/UserManagement.css'; // Ensure this path matches your project structure
+
+const ConfirmDialog = ({ isOpen, title, message, onConfirm, onCancel }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="ginger-modal-overlay">
+      <div className="ginger-modal">
+        <div className="ginger-modal-header">
+          <h3 className="ginger-modal-title">{title}</h3>
+          <button onClick={onCancel} className="ginger-close-btn">×</button>
+        </div>
+        <div className="ginger-confirm-message">
+          <p>{message}</p>
+        </div>
+        <div className="ginger-form-actions">
+          <button onClick={onCancel} className="ginger-cancel-btn">
+            Cancel
+          </button>
+          <button onClick={onConfirm} className="ginger-delete-btn">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -18,7 +44,6 @@ const UserManagement = () => {
     phone: '',
     role: '',
     password: '',
-    // Role-specific fields
     companyName: '',
     contactPerson: '',
     jobTitle: '',
@@ -101,13 +126,12 @@ const UserManagement = () => {
   const handleUpdateClick = (user) => {
     setCurrentUser(user);
     
-    // Populate form with user data
     setFormData({
       name: user.name || '',
       email: user.email || '',
       phone: user.phone || '',
       role: user.role || '',
-      password: '', // Password is empty as we don't receive it from server
+      password: '',
       companyName: user.companyName || '',
       contactPerson: user.contactPerson || '',
       jobTitle: user.jobTitle || '',
@@ -134,7 +158,6 @@ const UserManagement = () => {
     try {
       setLoading(true);
       
-      // Only send non-empty fields
       const updateData = {};
       Object.keys(formData).forEach(key => {
         if (formData[key] !== '') {
@@ -142,7 +165,6 @@ const UserManagement = () => {
         }
       });
       
-      // Don't send empty password
       if (!updateData.password) {
         delete updateData.password;
       }
@@ -214,24 +236,24 @@ const UserManagement = () => {
       case 'supplier':
         return (
           <>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Company Name</label>
+            <div className="ginger-form-group">
+              <label className="ginger-label">Company Name</label>
               <input
                 type="text"
                 name="companyName"
                 value={formData.companyName}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded"
+                className="ginger-input"
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Contact Person</label>
+            <div className="ginger-form-group">
+              <label className="ginger-label">Contact Person</label>
               <input
                 type="text"
                 name="contactPerson"
                 value={formData.contactPerson}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded"
+                className="ginger-input"
               />
             </div>
           </>
@@ -239,24 +261,24 @@ const UserManagement = () => {
       case 'employee':
         return (
           <>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Job Title</label>
+            <div className="ginger-form-group">
+              <label className="ginger-label">Job Title</label>
               <input
                 type="text"
                 name="jobTitle"
                 value={formData.jobTitle}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded"
+                className="ginger-input"
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Department</label>
+            <div className="ginger-form-group">
+              <label className="ginger-label">Department</label>
               <input
                 type="text"
                 name="department"
                 value={formData.department}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded"
+                className="ginger-input"
               />
             </div>
           </>
@@ -264,23 +286,23 @@ const UserManagement = () => {
       case 'customer':
         return (
           <>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Shipping Address</label>
+            <div className="ginger-form-group">
+              <label className="ginger-label">Shipping Address</label>
               <textarea
                 name="shippingAddress"
                 value={formData.shippingAddress}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded"
+                className="ginger-textarea"
                 rows="3"
               ></textarea>
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Billing Address</label>
+            <div className="ginger-form-group">
+              <label className="ginger-label">Billing Address</label>
               <textarea
                 name="billingAddress"
                 value={formData.billingAddress}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded"
+                className="ginger-textarea"
                 rows="3"
               ></textarea>
             </div>
@@ -292,89 +314,92 @@ const UserManagement = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-md">
-      <h2 className="text-2xl font-bold text-amber-700 mb-4">User Management</h2>
+    <div className="ginger-container">
+      <h2 className="ginger-title">User Management</h2>
       
-      <div className="mb-6">
-  <input
-    type="text"
-    placeholder="Search by name, email, or phone..."
-    value={searchTerm}
-    onChange={handleSearchChange}
-    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
-  />
-</div>
+      <div className="ginger-search-container">
+        <input
+          type="text"
+          placeholder="Search by name, email, or phone..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+          className="ginger-search-input"
+        />
+        {searchTerm && (
+          <button onClick={handleClearSearch} className="ginger-clear-btn">×</button>
+        )}
+      </div>
 
       {/* Role filter tabs */}
-      <div className="flex mb-6 border-b overflow-x-auto">
+      <div className="ginger-tabs">
         <button
           onClick={() => handleRoleSelect('all')}
-          className={`px-4 py-2 font-medium ${selectedRole === 'all' ? 'text-amber-700 border-b-2 border-amber-700' : 'text-gray-500'}`}
+          className={`ginger-tab ${selectedRole === 'all' ? 'ginger-tab-active' : ''}`}
         >
           All Users
         </button>
         <button
           onClick={() => handleRoleSelect('admin')}
-          className={`px-4 py-2 font-medium ${selectedRole === 'admin' ? 'text-amber-700 border-b-2 border-amber-700' : 'text-gray-500'}`}
+          className={`ginger-tab ${selectedRole === 'admin' ? 'ginger-tab-active' : ''}`}
         >
           Admins
         </button>
         <button
           onClick={() => handleRoleSelect('supplier')}
-          className={`px-4 py-2 font-medium ${selectedRole === 'supplier' ? 'text-amber-700 border-b-2 border-amber-700' : 'text-gray-500'}`}
+          className={`ginger-tab ${selectedRole === 'supplier' ? 'ginger-tab-active' : ''}`}
         >
           Suppliers
         </button>
         <button
           onClick={() => handleRoleSelect('customer')}
-          className={`px-4 py-2 font-medium ${selectedRole === 'customer' ? 'text-amber-700 border-b-2 border-amber-700' : 'text-gray-500'}`}
+          className={`ginger-tab ${selectedRole === 'customer' ? 'ginger-tab-active' : ''}`}
         >
           Customers
         </button>
         <button
           onClick={() => handleRoleSelect('employee')}
-          className={`px-4 py-2 font-medium ${selectedRole === 'employee' ? 'text-amber-700 border-b-2 border-amber-700' : 'text-gray-500'}`}
+          className={`ginger-tab ${selectedRole === 'employee' ? 'ginger-tab-active' : ''}`}
         >
           Employees
         </button>
       </div>
       
       {/* Status messages */}
-      {error && <div className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</div>}
-      {updateSuccess && <div className="bg-green-100 text-green-700 p-3 rounded mb-4">User updated successfully!</div>}
-      {deleteSuccess && <div className="bg-green-100 text-green-700 p-3 rounded mb-4">User deleted successfully!</div>}
+      {error && <div className="ginger-error">{error}</div>}
+      {updateSuccess && <div className="ginger-success">User updated successfully!</div>}
+      {deleteSuccess && <div className="ginger-success">User deleted successfully!</div>}
       
       {/* User Table */}
       {loading ? (
         <Loading message="Loading users..." />
       ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-200">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="py-2 px-4 border text-left">Name</th>
-                <th className="py-2 px-4 border text-left">Email</th>
-                <th className="py-2 px-4 border text-left">Phone</th>
-                <th className="py-2 px-4 border text-left">Role</th>
-                <th className="py-2 px-4 border text-left">Role Details</th>
-                <th className="py-2 px-4 border text-center">Actions</th>
+        <div className="ginger-table-wrapper">
+          <table className="ginger-table">
+            <thead className="ginger-table-header">
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Role</th>
+                <th>Role Details</th>
+                <th className="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="py-4 text-center text-gray-500">
+                  <td colSpan="6" className="ginger-no-results">
                     {searchTerm ? 'No users found matching your search' : 'No users found'}
                   </td>
                 </tr>
               ) : (
                 filteredUsers.map(user => (
-                  <tr key={user._id} className="hover:bg-gray-50">
-                    <td className="py-2 px-4 border">{user.name}</td>
-                    <td className="py-2 px-4 border">{user.email}</td>
-                    <td className="py-2 px-4 border">{user.phone}</td>
-                    <td className="py-2 px-4 border capitalize">{user.role}</td>
-                    <td className="py-2 px-4 border">
+                  <tr key={user._id} className="ginger-table-row">
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.phone}</td>
+                    <td className="capitalize">{user.role}</td>
+                    <td>
                       {user.role === 'supplier' && (
                         <>
                           <p><strong>Company:</strong> {user.companyName}</p>
@@ -394,16 +419,16 @@ const UserManagement = () => {
                         </>
                       )}
                     </td>
-                    <td className="py-2 px-4 border text-center">
+                    <td className="ginger-actions">
                       <button
                         onClick={() => handleUpdateClick(user)}
-                        className="bg-amber-500 text-white px-3 py-1 rounded hover:bg-amber-600 mr-2"
+                        className="ginger-update-btn"
                       >
                         Update
                       </button>
                       <button
                         onClick={() => openDeleteDialog(user._id)}
-                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                        className="ginger-delete-btn"
                       >
                         Delete
                       </button>
@@ -418,73 +443,71 @@ const UserManagement = () => {
       
       {/* Update User Form Modal */}
       {showUpdateForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md max-h-screen overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-amber-700">Update User</h3>
-              <button onClick={handleCloseForm} className="text-gray-500 hover:text-gray-700 text-xl">
-                &times;
-              </button>
+        <div className="ginger-modal-overlay">
+          <div className="ginger-modal">
+            <div className="ginger-modal-header">
+              <h3 className="ginger-modal-title">Update User</h3>
+              <button onClick={handleCloseForm} className="ginger-close-btn">×</button>
             </div>
             
-            <form onSubmit={handleUpdateSubmit}>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Name</label>
+            <form onSubmit={handleUpdateSubmit} className="ginger-form">
+              <div className="ginger-form-group">
+                <label className="ginger-label">Name</label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="ginger-input"
                   required
                 />
               </div>
               
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Email</label>
+              <div className="ginger-form-group">
+                <label className="ginger-label">Email</label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="ginger-input"
                   required
                 />
               </div>
               
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Phone</label>
+              <div className="ginger-form-group">
+                <label className="ginger-label">Phone</label>
                 <input
                   type="text"
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="ginger-input"
                   required
                 />
               </div>
               
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Password (leave blank to keep unchanged)</label>
+              <div className="ginger-form-group">
+                <label className="ginger-label">Password (leave blank to keep unchanged)</label>
                 <input
                   type="password"
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="ginger-input"
                 />
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="ginger-hint">
                   Only fill this if you want to change the user's password
                 </p>
               </div>
               
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Role</label>
+              <div className="ginger-form-group">
+                <label className="ginger-label">Role</label>
                 <select
                   name="role"
                   value={formData.role}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="ginger-select"
                   required
                 >
                   <option value="">Select Role</option>
@@ -495,20 +518,19 @@ const UserManagement = () => {
                 </select>
               </div>
               
-              {/* Role-specific fields */}
               {getRoleSpecificFields()}
               
-              <div className="flex justify-end mt-6">
+              <div className="ginger-form-actions">
                 <button
                   type="button"
                   onClick={handleCloseForm}
-                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 mr-2"
+                  className="ginger-cancel-btn"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600"
+                  className="ginger-submit-btn"
                   disabled={loading}
                 >
                   {loading ? 'Updating...' : 'Update User'}

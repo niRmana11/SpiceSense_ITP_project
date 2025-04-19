@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { createOrder } from '../api';
+import NavigationBar from "../components/NavigationBar";
 
 
 //const user = JSON.parse(localStorage.getItem("user")); // Get user from localStorage
@@ -37,6 +38,8 @@ const OrderProcessingPage = () => {
 
   return (
     <div>
+            <NavigationBar />
+    <div>
       <h2>Order Processing</h2>
       <label>Quantity:</label>
       <input type="number" name="quantity" value={form.quantity} onChange={handleChange} />
@@ -48,6 +51,7 @@ const OrderProcessingPage = () => {
       <input type="text" name="billingAddress" value={form.billingAddress} onChange={handleChange} />
 
       <button onClick={handleSubmit}>Place Order</button>
+    </div>
     </div>
   );
 };

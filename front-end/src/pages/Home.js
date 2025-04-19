@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { fetchItems } from '../api';
 import NavigationBar from "../components/NavigationBar";
+import "../Styles/Home.css"; // Import CSS from Styles folder
 
 const Home = () => {
   const [userData, setUserData] = useState(null);
@@ -47,28 +48,33 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-100">
+    <div className="home-container">
       <NavigationBar userData={userData} />
 
-      <div className="p-8 text-center">
-        <h2 className="text-3xl font-bold text-amber-700 mb-4">
+      <div className="home-header">
+        <h2 className="home-title">
           Welcome to SpiceSense, {userData?.name || "Customer"}!
         </h2>
-        <p className="text-gray-600">Explore our range of spices and more.</p>
-        {error && <p className="text-red-500 mt-4">{error}</p>}
+        <p className="home-subtitle">Explore our range of spices and more.</p>
+        {error && <p className="home-error">{error}</p>}
       </div>
 
-      <div>
-        <h1>Spice Items</h1>
-        <ul>
+      <div className="home-items-section">
+        <h1 className="home-items-title">Spice Items</h1>
+        <div className="home-items-grid">
           {items.map((item) => (
-            <li key={item._id}>
-              <h3>{item.name}</h3>
-              <p>Price: ${item.price}</p>
-              <button onClick={() => navigate(`/item/${item._id}`)}>View Details</button>
-            </li>
+            <div key={item._id} className="home-item-card">
+              <h3 className="home-item-name">{item.name}</h3>
+              <p className="home-item-price">Price: ${item.price}</p>
+              <button 
+                onClick={() => navigate(`/item/${item._id}`)}
+                className="home-item-button"
+              >
+                View Details
+              </button>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );

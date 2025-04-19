@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
-import OrdersList from "../components/OrderList";
+import OrdersList from "../components/OrderList"; // Fixed typo in import
 import NavigationBar from "../components/NavigationBar";
+import "../Styles/UserProfileSpiced.css"; // New CSS file with spiced theme
 
 const UserProfile = () => {
   const [userData, setUserData] = useState(null);
@@ -55,7 +56,6 @@ const UserProfile = () => {
     fetchUserData();
   }, [navigate, location.state]);
 
-  // Initialize form data with user data
   const initializeFormData = (user) => {
     setFormData({
       name: user.name || "",
@@ -69,7 +69,6 @@ const UserProfile = () => {
     });
   };
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -78,26 +77,22 @@ const UserProfile = () => {
     }));
   };
 
-  // Start editing profile
   const handleEditClick = () => {
     setIsEditing(true);
     setUpdateSuccess(false);
   };
 
-  // Cancel editing and reset form
   const handleCancelClick = () => {
     setIsEditing(false);
     initializeFormData(userData);
   };
 
-  // Submit form to update user profile
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     
     try {
-      // Only send non-empty fields that have changed
       const updateData = {};
       Object.keys(formData).forEach(key => {
         if (formData[key] !== "" && formData[key] !== userData[key]) {
@@ -105,7 +100,6 @@ const UserProfile = () => {
         }
       });
       
-      // Don't proceed if no changes were made
       if (Object.keys(updateData).length === 0) {
         setIsEditing(false);
         setLoading(false);
@@ -134,7 +128,6 @@ const UserProfile = () => {
     }
   };
 
-  // Function to render role-specific fields
   const renderRoleSpecificFields = () => {
     if (!userData) return null;
 
@@ -142,22 +135,22 @@ const UserProfile = () => {
       case "customer":
         return (
           <>
-            <p><strong>Shipping Address:</strong> {userData.shippingAddress}</p>
-            <p><strong>Billing Address:</strong> {userData.billingAddress}</p>
+            <p className="profile-spiced-detail"><strong>Shipping Address:</strong> {userData.shippingAddress}</p>
+            <p className="profile-spiced-detail"><strong>Billing Address:</strong> {userData.billingAddress}</p>
           </>
         );
       case "supplier":
         return (
           <>
-            <p><strong>Company Name:</strong> {userData.companyName}</p>
-            <p><strong>Contact Person:</strong> {userData.contactPerson}</p>
+            <p className="profile-spiced-detail"><strong>Company Name:</strong> {userData.companyName}</p>
+            <p className="profile-spiced-detail"><strong>Contact Person:</strong> {userData.contactPerson}</p>
           </>
         );
       case "employee":
         return (
           <>
-            <p><strong>Job Title:</strong> {userData.jobTitle}</p>
-            <p><strong>Department:</strong> {userData.department}</p>
+            <p className="profile-spiced-detail"><strong>Job Title:</strong> {userData.jobTitle}</p>
+            <p className="profile-spiced-detail"><strong>Department:</strong> {userData.department}</p>
           </>
         );
       default:
@@ -165,7 +158,6 @@ const UserProfile = () => {
     }
   };
 
-  // Function to render role-specific form fields
   const renderRoleSpecificFormFields = () => {
     if (!userData) return null;
 
@@ -173,23 +165,23 @@ const UserProfile = () => {
       case "customer":
         return (
           <>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Shipping Address</label>
+            <div className="profile-spiced-form-group">
+              <label className="profile-spiced-label">Shipping Address</label>
               <textarea
                 name="shippingAddress"
                 value={formData.shippingAddress}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded"
+                className="profile-spiced-textarea"
                 rows="3"
               ></textarea>
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Billing Address</label>
+            <div className="profile-spiced-form-group">
+              <label className="profile-spiced-label">Billing Address</label>
               <textarea
                 name="billingAddress"
                 value={formData.billingAddress}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded"
+                className="profile-spiced-textarea"
                 rows="3"
               ></textarea>
             </div>
@@ -198,24 +190,24 @@ const UserProfile = () => {
       case "supplier":
         return (
           <>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Company Name</label>
+            <div className="profile-spiced-form-group">
+              <label className="profile-spiced-label">Company Name</label>
               <input
                 type="text"
                 name="companyName"
                 value={formData.companyName}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded"
+                className="profile-spiced-input"
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Contact Person</label>
+            <div className="profile-spiced-form-group">
+              <label className="profile-spiced-label">Contact Person</label>
               <input
                 type="text"
                 name="contactPerson"
                 value={formData.contactPerson}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded"
+                className="profile-spiced-input"
               />
             </div>
           </>
@@ -223,24 +215,24 @@ const UserProfile = () => {
       case "employee":
         return (
           <>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Job Title</label>
+            <div className="profile-spiced-form-group">
+              <label className="profile-spiced-label">Job Title</label>
               <input
                 type="text"
                 name="jobTitle"
                 value={formData.jobTitle}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded"
+                className="profile-spiced-input"
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Department</label>
+            <div className="profile-spiced-form-group">
+              <label className="profile-spiced-label">Department</label>
               <input
                 type="text"
                 name="department"
                 value={formData.department}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded"
+                className="profile-spiced-input"
               />
             </div>
           </>
@@ -251,99 +243,96 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-100">
+    <div className="profile-spiced-container">
       <NavigationBar userData={userData} />
-      <div className="p-8">
-        <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-xl p-8">
-          {userData && <h1 className="text-3xl font-bold text-amber-700 mb-6">{userData.role} Profile</h1>}
+      <div className="profile-spiced-content">
+        <div className="profile-spiced-card">
+          {userData && <h1 className="profile-spiced-title">{userData.role} Profile</h1>}
           
-          {/* Status messages */}
-          {error && <div className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</div>}
-          {updateSuccess && <div className="bg-green-100 text-green-700 p-3 rounded mb-4">Profile updated successfully!</div>}
+          {error && <div className="profile-spiced-error">{error}</div>}
+          {updateSuccess && <div className="profile-spiced-success">Profile updated successfully!</div>}
           
           {error && !userData ? (
-            <p className="text-red-500">{error}</p>
+            <p className="profile-spiced-error-text">{error}</p>
           ) : userData ? (
             <>
               {!isEditing ? (
-                <div className="space-y-4">
-                  <p><strong>Name:</strong> {userData.name}</p>
-                  <p><strong>Email:</strong> {userData.email}</p>
-                  <p><strong>Phone:</strong> {userData.phone}</p>
-                  <p><strong>Role:</strong> {userData.role}</p>
+                <div className="profile-spiced-details">
+                  <p className="profile-spiced-detail"><strong>Name:</strong> {userData.name}</p>
+                  <p className="profile-spiced-detail"><strong>Email:</strong> {userData.email}</p>
+                  <p className="profile-spiced-detail"><strong>Phone:</strong> {userData.phone}</p>
+                  <p className="profile-spiced-detail"><strong>Role:</strong> {userData.role}</p>
                   
-                  {/* Render role-specific fields */}
                   {renderRoleSpecificFields()}
                   
-                  <p><strong>Email Verified:</strong> {userData.isAccountVerified ? "Yes" : "No"}</p>
+                  <p className="profile-spiced-detail"><strong>Email Verified:</strong> {userData.isAccountVerified ? "Yes" : "No"}</p>
                   
-                  <div className="flex space-x-4 mt-6">
+                  <div className="profile-spiced-buttons">
                     <button
                       onClick={handleEditClick}
-                      className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600"
+                      className="profile-spiced-edit-btn"
                     >
                       Edit Profile
                     </button>
                   </div>
-                  
-                  <OrdersList userId={userId} />
                   <Link to="/credit-cards">
-                    <button className="mt-4 bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700">
+                    <button className="profile-spiced-credit-btn">
                       Manage My Credit Cards
                     </button>
                   </Link>
+                  <OrdersList userId={userId} />
+                  
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="mb-4">
-                    <label className="block text-gray-700 mb-2">Name</label>
+                <form onSubmit={handleSubmit} className="profile-spiced-form">
+                  <div className="profile-spiced-form-group">
+                    <label className="profile-spiced-label">Name</label>
                     <input
                       type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full p-2 border rounded"
+                      className="profile-spiced-input"
                       required
                     />
                   </div>
                   
-                  <div className="mb-4">
-                    <label className="block text-gray-700 mb-2">Email (cannot be changed)</label>
+                  <div className="profile-spiced-form-group">
+                    <label className="profile-spiced-label">Email (cannot be changed)</label>
                     <input
                       type="email"
                       value={userData.email}
-                      className="w-full p-2 border rounded bg-gray-100"
+                      className="profile-spiced-input profile-spiced-disabled"
                       disabled
                     />
                   </div>
                   
-                  <div className="mb-4">
-                    <label className="block text-gray-700 mb-2">Phone</label>
+                  <div className="profile-spiced-form-group">
+                    <label className="profile-spiced-label">Phone</label>
                     <input
                       type="text"
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className="w-full p-2 border rounded"
+                      className="profile-spiced-input"
                       required
                     />
                   </div>
                   
-                  {/* Render role-specific form fields */}
                   {renderRoleSpecificFormFields()}
                   
-                  <div className="flex justify-end space-x-4 mt-6">
+                  <div className="profile-spiced-form-buttons">
                     <button
                       type="button"
                       onClick={handleCancelClick}
-                      className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                      className="profile-spiced-cancel-btn"
                       disabled={loading}
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600"
+                      className="profile-spiced-save-btn"
                       disabled={loading}
                     >
                       {loading ? "Updating..." : "Save Changes"}
@@ -353,9 +342,9 @@ const UserProfile = () => {
               )}
             </>
           ) : (
-            <div className="flex justify-center items-center py-8">
-              <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-              <p className="ml-3">Loading profile...</p>
+            <div className="profile-spiced-loading">
+              <div className="profile-spiced-spinner"></div>
+              <p>Loading profile...</p>
             </div>
           )}
         </div>

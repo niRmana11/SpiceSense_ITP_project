@@ -2,6 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../Styles/NavigationBar.css"; // Updated import path to Styles folder
 
 const NavigationBar = ({ userData }) => {
   const navigate = useNavigate();
@@ -16,44 +17,44 @@ const NavigationBar = ({ userData }) => {
   };
 
   return (
-    <nav className="bg-amber-600 p-4 text-white flex justify-between items-center">
-      <h1 className="text-xl font-bold">SpiceSense</h1>
-      <div className="flex items-center space-x-6">
+    <nav className="nav-bar-container">
+      <h1 className="nav-bar-title">SpiceSense</h1>
+      <div className="nav-bar-links">
         <button
           onClick={() => navigate("/home", { state: { userData } })}
-          className="hover:underline"
+          className="nav-bar-link"
         >
           Home
         </button>
         <button
           onClick={() => navigate("/about-us")}
-          className="hover:underline"
+          className="nav-bar-link"
         >
           About Us
         </button>
         <button
           onClick={() => navigate("/contact-us")}
-          className="hover:underline"
+          className="nav-bar-link"
         >
           Contact Us
         </button>
         {userData ? (
-          <div className="flex items-center space-x-4">
+          <div className="nav-bar-user-section">
             <button
               onClick={() => navigate("/user-profile", { state: { userData } })}
-              className="hover:underline"
+              className="nav-bar-user-name"
             >
               {userData.name}
             </button>
             <button
               onClick={handleLogout}
-              className="bg-red-500 px-3 py-1 rounded hover:bg-red-600"
+              className="nav-bar-logout-btn"
             >
               Logout
             </button>
           </div>
         ) : (
-          <p>Loading...</p>
+          <p className="nav-bar-loading">Loading...</p>
         )}
       </div>
     </nav>

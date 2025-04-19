@@ -1,0 +1,309 @@
+/* Styles/AdminNav.css */
+
+/* Spice Color Palette */
+:root {
+    --saffron: #ff9f1c;
+    --cinnamon: #8B4513;
+    --paprika: #E25822;
+    --turmeric: #FFC107;
+    --cardamom: #F5F5F5;
+    --clove: #4A2C2A;
+  }
+  
+  /* Container */
+  .spice-dashboard-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--cardamom) 0%, #fff5e6 100%);
+    padding: 2rem;
+  }
+  
+  /* Navigation Bar */
+  .spice-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1);
+    margin-bottom: 2rem;
+    animation: spiceNavSlide 0.5s ease-out;
+  }
+  
+  @keyframes spiceNavSlide {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Logo Section */
+  .spice-nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .spice-logo-circle {
+    width: 40px;
+    height: 40px;
+    background: var(--saffron);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .spice-nav:hover .spice-logo-circle {
+    transform: rotate(360deg);
+  }
+  
+  .spice-logo-text {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+  }
+  
+  .spice-nav-title {
+    color: var(--cinnamon);
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  
+  /* Actions Section */
+  .spice-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  
+  .spice-user-greeting {
+    color: var(--clove);
+    font-weight: 500;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+  }
+  
+  .spice-nav:hover .spice-user-greeting {
+    opacity: 1;
+  }
+  
+  /* Logout Button */
+  .spice-logout-btn {
+    position: relative;
+    padding: 0.5rem 1.5rem;
+    background: var(--paprika);
+    color: #fff;
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .spice-logout-btn:hover {
+    background: var(--cinnamon);
+    transform: translateX(5px);
+  }
+  
+  .spice-logout-text {
+    position: relative;
+    z-index: 1;
+    font-weight: 500;
+  }
+  
+  .spice-logout-icon {
+    margin-left: 0.5rem;
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .spice-logout-btn:hover .spice-logout-icon {
+    transform: translateX(5px);
+  }
+  
+  /* Content Wrapper */
+  .spice-content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Error Message */
+  .spice-error-message {
+    background: rgba(226, 88, 34, 0.1);
+    color: var(--paprika);
+    padding: 1rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Main Layout */
+  .spice-main-layout {
+    display: flex;
+    gap: 1.5rem;
+  }
+  
+  /* Sidebar */
+  .spice-sidebar {
+    width: 100%;
+    max-width: 16rem;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1);
+    padding: 1rem;
+  }
+  
+  .spice-user-info {
+    margin-bottom: 1.5rem;
+  }
+  
+  .spice-user-label {
+    color: var(--clove);
+    font-weight: 500;
+  }
+  
+  .spice-user-name {
+    color: var(--cinnamon);
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+  .spice-user-email {
+    color: var(--clove);
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+  
+  .spice-sidebar-nav {
+    margin-top: 1rem;
+  }
+  
+  .spice-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .spice-nav-item {
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--clove);
+    transition: all 0.3s ease;
+  }
+  
+  .spice-nav-item:hover {
+    background: var(--cardamom);
+  }
+  
+  .spice-nav-active {
+    background: var(--saffron);
+    color: #fff;
+  }
+  
+  /* Content */
+  .spice-content {
+    flex: 1;
+  }
+  
+  .spice-dashboard-content {
+    margin-top: 1rem;
+  }
+  
+  .spice-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1);
+  }
+  
+  .spice-card-title {
+    color: var(--cinnamon);
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .spice-welcome-text {
+    color: var(--clove);
+    margin-bottom: 0.5rem;
+  }
+  
+  .spice-info-text {
+    color: var(--clove);
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+  }
+  
+  .spice-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .spice-grid-item {
+    background: var(--cardamom);
+    padding: 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(139, 69, 19, 0.1);
+  }
+  
+  .spice-grid-title {
+    color: var(--cinnamon);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .spice-grid-desc {
+    color: var(--clove);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+  }
+  
+  .spice-action-btn {
+    background: var(--saffron);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .spice-action-btn:hover {
+    background: var(--turmeric);
+  }
+  
+  /* Loading */
+  .spice-loading {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .spice-nav {
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+    }
+  
+    .spice-main-layout {
+      flex-direction: column;
+    }
+  
+    .spice-sidebar {
+      max-width: 100%;
+    }
+  }

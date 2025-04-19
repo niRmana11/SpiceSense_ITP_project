@@ -1,0 +1,88 @@
+/* Styles/Home.css */
+.home-container {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #fefce8, #f97316); /* from-amber-50 to-orange-100 */
+  }
+  
+  .home-header {
+    padding: 2rem; /* p-8 */
+    text-align: center;
+  }
+  
+  .home-title {
+    font-size: 1.875rem; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    color: #b45309; /* text-amber-700 */
+    margin-bottom: 1rem; /* mb-4 */
+  }
+  
+  .home-subtitle {
+    color: #4b5563; /* text-gray-600 */
+    font-size: 1.125rem;
+  }
+  
+  .home-error {
+    color: #ef4444; /* text-red-500 */
+    margin-top: 1rem; /* mt-4 */
+    font-size: 1rem;
+  }
+  
+  .home-items-section {
+    padding: 0 2rem 2rem; /* Consistent padding with header, bottom padding added */
+  }
+  
+  .home-items-title {
+    font-size: 1.5rem; /* Slightly smaller than main title */
+    font-weight: 600;
+    color: #1f2937; /* text-gray-800 */
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .home-items-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 items per row */
+    gap: 1.5rem; /* Space between items */
+    max-width: 64rem; /* Matches UserProfile and CreditCardPage width */
+    margin: 0 auto;
+  }
+  
+  .home-item-card {
+    background: white;
+    border-radius: 0.5rem; /* Slightly larger than buttons */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .home-item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .home-item-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937; /* text-gray-800 */
+    margin-bottom: 0.5rem;
+  }
+  
+  .home-item-price {
+    color: #4b5563; /* text-gray-600 */
+    margin-bottom: 0.75rem;
+  }
+  
+  .home-item-button {
+    background: #f59e0b; /* amber-500 */
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .home-item-button:hover {
+    background: #d97706; /* amber-600 */
+  }

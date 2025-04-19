@@ -1,0 +1,168 @@
+/* Styles/OrderConfirmationPage.css */
+.order-confirmation-container {
+    max-width: 64rem; /* Matches other pages' width */
+    margin: 2rem auto; /* Centered with top/bottom margin */
+    padding: 1.5rem;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .order-confirmation-title {
+    font-size: 1.875rem; /* text-3xl equivalent */
+    font-weight: 700;
+    color: #1f2937; /* text-gray-800 */
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .order-confirmation-subtitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #374151; /* text-gray-700 */
+    margin-bottom: 1rem;
+  }
+  
+  .order-confirmation-details-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .order-confirmation-item {
+    font-size: 1.125rem;
+    color: #4b5563; /* text-gray-600 */
+  }
+  
+  .order-confirmation-detail {
+    font-size: 1.125rem;
+    color: #4b5563; /* text-gray-600 */
+  }
+  
+  .order-confirmation-detail::before {
+    content: "• ";
+    color: #f59e0b; /* amber-500 */
+    margin-right: 0.5rem;
+  }
+  
+  .order-confirmation-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+  
+  .order-confirmation-edit-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .order-confirmation-item-edit {
+    background: #f9fafb; /* light gray background */
+    padding: 1rem;
+    border-radius: 0.25rem;
+  }
+  
+  .order-confirmation-item-name {
+    font-size: 1.125rem;
+    color: #1f2937; /* text-gray-800 */
+    margin-bottom: 0.5rem;
+  }
+  
+  .order-confirmation-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .order-confirmation-label {
+    font-size: 1rem;
+    color: #374151; /* text-gray-700 */
+    font-weight: 500;
+  }
+  
+  .order-confirmation-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db; /* border-gray-300 */
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .order-confirmation-input:focus {
+    border-color: #f59e0b; /* amber-500 */
+    outline: none;
+  }
+  
+ 
+  
+  .order-confirmation-input::-webkit-outer-spin-button,
+  .order-confirmation-input::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* Remove number input arrows in Chrome/Safari */
+    margin: 0;
+  }
+  
+  .order-confirmation-edit-btn,
+  .order-confirmation-save-btn {
+    background: #f59e0b; /* amber-500 */
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.25rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  
+  .order-confirmation-edit-btn:hover,
+  .order-confirmation-save-btn:hover {
+    background: #d97706; /* amber-600 */
+    transform: translateY(-2px);
+  }
+  
+  .order-confirmation-confirm-btn {
+    background: #10b981; /* green-500 */
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.25rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  
+  .order-confirmation-confirm-btn:hover {
+    background: #059669; /* green-600 */
+    transform: translateY(-2px);
+  }
+  
+  .order-confirmation-cancel-btn,
+  .order-confirmation-cancel-edit-btn {
+    background: #ef4444; /* red-500 */
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.25rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  
+  .order-confirmation-cancel-btn:hover,
+  .order-confirmation-cancel-edit-btn:hover {
+    background: #dc2626; /* red-600 */
+    transform: translateY(-2px);
+  }
+  
+  .order-confirmation-edit-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+  
+  .order-confirmation-loading {
+    text-align: center;
+    font-size: 1.125rem;
+    color: #4b5563; /* text-gray-600 */
+    padding: 2rem;
+  }

@@ -1,0 +1,387 @@
+/* Styles/UserManagement.css */
+
+/* Ginger Color Palette */
+:root {
+    --ginger: #DAA520;
+    --nutmeg: #8A4F2D;
+    --chili: #C41E3A;
+    --coriander: #F0EAD6;
+    --pepper: #333333;
+    --cumin: #F5F5F5;
+  }
+  
+  /* Container */
+  .ginger-container {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px rgba(138, 79, 45, 0.1);
+    animation: gingerFadeIn 0.5s ease-out;
+  }
+  
+  @keyframes gingerFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Title */
+  .ginger-title {
+    color: var(--nutmeg);
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+  }
+  
+  /* Search */
+  .ginger-search-container {
+    position: relative;
+    margin-bottom: 2rem;
+    max-width: 300px; /* Reduced width for a more compact search bar */
+  }
+  
+  .ginger-search-input {
+    width: 100%;
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    border: 1px solid var(--coriander);
+    border-radius: 2rem;
+    background: var(--cumin);
+    transition: all 0.3s ease;
+    font-size: 1rem;
+  }
+  
+  .ginger-search-input:focus {
+    border-color: var(--ginger);
+    box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2);
+  }
+  
+  .ginger-clear-btn {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--pepper);
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .ginger-clear-btn:hover {
+    color: var(--chili);
+  }
+  
+  /* Tabs */
+  .ginger-tabs {
+    display: flex;
+    border-bottom: 2px solid var(--coriander);
+    margin-bottom: 2rem;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .ginger-tab {
+    padding: 0.75rem 1.5rem;
+    color: var(--pepper);
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .ginger-tab:hover {
+    color: var(--ginger);
+  }
+  
+  .ginger-tab-active {
+    color: var(--ginger);
+    border-bottom: 2px solid var(--ginger);
+  }
+  
+  /* Messages */
+  .ginger-error, .ginger-success {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    animation: gingerMessageSlide 0.3s ease-out;
+  }
+  
+  .ginger-error {
+    background: rgba(196, 30, 58, 0.1);
+    color: var(--chili);
+  }
+  
+  .ginger-success {
+    background: rgba(34, 139, 34, 0.1);
+    color: #228B22;
+  }
+  
+  @keyframes gingerMessageSlide {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  /* Table */
+  .ginger-table-wrapper {
+    overflow-x: auto;
+  }
+  
+  .ginger-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+  }
+  
+  .ginger-table-header {
+    background: var(--coriander);
+    color: var(--nutmeg);
+  }
+  
+  .ginger-table-header th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+  }
+  
+  .ginger-table-row {
+    border-bottom: 1px solid var(--coriander);
+    transition: background 0.3s ease;
+  }
+  
+  .ginger-table-row:hover {
+    background: var(--cumin);
+  }
+  
+  .ginger-table-row td {
+    padding: 1rem;
+  }
+  
+  .ginger-no-results {
+    text-align: center;
+    padding: 2rem;
+    color: var(--pepper);
+    opacity: 0.7;
+  }
+  
+  /* Actions */
+  .ginger-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+  
+  .ginger-update-btn, .ginger-delete-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.5rem;
+    color: #fff;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+  }
+  
+  .ginger-update-btn {
+    background: var(--ginger);
+  }
+  
+  .ginger-update-btn:hover {
+    background: #e6b800;
+    transform: translateY(-2px);
+  }
+  
+  .ginger-delete-btn {
+    background: var(--chili);
+  }
+  
+  .ginger-delete-btn:hover {
+    background: #b71c1c;
+    transform: translateY(-2px);
+  }
+  
+  /* Modal */
+  .ginger-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    animation: gingerOverlayFade 0.3s ease-out;
+  }
+  
+  @keyframes gingerOverlayFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .ginger-modal {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 100%;
+    max-width: 32rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 25px rgba(138, 79, 45, 0.2);
+    animation: gingerModalPop 0.3s ease-out;
+  }
+  
+  @keyframes gingerModalPop {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .ginger-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .ginger-modal-title {
+    color: var(--nutmeg);
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .ginger-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--pepper);
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .ginger-close-btn:hover {
+    color: var(--chili);
+  }
+  
+  /* Form */
+  .ginger-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .ginger-form-group {
+    margin-bottom: 0;
+  }
+  
+  .ginger-label {
+    display: block;
+    color: var(--nutmeg);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .ginger-input, .ginger-select, .ginger-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--coriander);
+    border-radius: 0.5rem;
+    background: var(--cumin);
+    transition: all 0.3s ease;
+    font-size: 1rem;
+  }
+  
+  .ginger-input:focus, .ginger-select:focus, .ginger-textarea:focus {
+    border-color: var(--ginger);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2);
+  }
+  
+  .ginger-hint {
+    color: var(--pepper);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    opacity: 0.7;
+  }
+  
+  .ginger-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .ginger-cancel-btn, .ginger-submit-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+  }
+  
+  .ginger-cancel-btn {
+    background: var(--coriander);
+    color: var(--pepper);
+  }
+  
+  .ginger-cancel-btn:hover {
+    background: #e0e0e0;
+  }
+  
+  .ginger-submit-btn {
+    background: var(--ginger);
+    color: #fff;
+  }
+  
+  .ginger-submit-btn:hover {
+    background: #e6b800;
+  }
+  
+  .ginger-submit-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  /* Confirm Dialog Specific */
+  .ginger-confirm-message {
+    margin-bottom: 1.5rem;
+    color: var(--pepper);
+    font-size: 1rem;
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .ginger-container {
+      padding: 1rem;
+    }
+  
+    .ginger-search-container {
+      max-width: 100%;
+    }
+  
+    .ginger-tabs {
+      flex-direction: column;
+      border-bottom: none;
+    }
+  
+    .ginger-tab {
+      border-bottom: 1px solid var(--coriander);
+    }
+  
+    .ginger-tab-active {
+      border-bottom: 1px solid var(--ginger);
+    }
+  
+    .ginger-modal {
+      padding: 1.5rem;
+      max-width: 90%;
+    }
+  }

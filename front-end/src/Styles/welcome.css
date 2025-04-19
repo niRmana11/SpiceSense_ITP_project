@@ -1,0 +1,115 @@
+
+.welcome-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: url('https://w0.peakpx.com/wallpaper/514/785/HD-wallpaper-indian-spices-shallots-dal-spices-indian-cardamom-cinnamon-chilli-garlic.jpg') 
+                no-repeat center center/cover;
+    font-family: 'Arial', sans-serif;
+    padding: 4rem; 
+  }
+  
+  /* Animations */
+  @keyframes welcomeFadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes buttonPulse {
+    0% { box-shadow: 0 0 5px rgba(217, 119, 6, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(217, 119, 6, 0.8); }
+    100% { box-shadow: 0 0 5px rgba(217, 119, 6, 0.5); }
+  }
+  
+  /* Container */
+  .welcome-page .welcome-container {
+    background: rgba(255, 255, 255, 0.98); 
+    backdrop-filter: blur(100px);
+    -webkit-backdrop-filter: blur(10px); 
+    border-radius: 20px; 
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    padding: 4rem; 
+    text-align: center;
+    max-width: 600px; 
+    width: 100%;
+    animation: welcomeFadeIn 0.8s ease-out forwards;
+  }
+  
+  /* Heading */
+  .welcome-page .welcome-title {
+    font-size: 2.75rem;
+    font-weight: 700;
+    color: #d97706; 
+    margin-bottom: 2rem; 
+  }
+  
+  /* Links Container */
+  .welcome-page .welcome-links {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem; 
+    margin-top: 2.5rem; 
+  }
+  
+  /* Buttons */
+  .welcome-page .welcome-btn {
+    display: inline-block;
+    padding: 1rem 2.5rem; 
+    font-size: 1.25rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: #fff;
+    background: #d97706;
+    border-radius: 10px; 
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    animation: buttonPulse 2s infinite;
+  }
+  
+  .welcome-page .welcome-btn:hover {
+    background: #b45309; 
+    transform: translateY(-3px); 
+    box-shadow: 0 5px 15px rgba(217, 119, 6, 0.5); 
+  }
+  
+  .welcome-page .welcome-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+  
+
+  .welcome-page .welcome-btn.secondary {
+    background: #991b1b; 
+  }
+  
+  .welcome-page .welcome-btn.secondary:hover {
+    background: #7f1d1d; 
+    box-shadow: 0 5px 15px rgba(153, 27, 27, 0.5); 
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 640px) {
+    .welcome-page {
+      padding: 2rem; 
+    }
+  
+    .welcome-page .welcome-container {
+      padding: 3rem; 
+      max-width: 100%; 
+    }
+  
+    .welcome-page .welcome-title {
+      font-size: 2.25rem;
+    }
+  
+    .welcome-page .welcome-links {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+  
+    .welcome-page .welcome-btn {
+      padding: 0.875rem 2rem;
+      font-size: 1.125rem; 
+    }
+  }
