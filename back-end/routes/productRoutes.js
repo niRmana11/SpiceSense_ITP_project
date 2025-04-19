@@ -1,20 +1,6 @@
 const express = require("express");
-const multer = require("multer");
 const Product = require("../models/Product");
 const router = express.Router();
-const path = require("path");
-
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads/");  
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + "-" + file.originalname);  
-    },
-});
-
-const upload = multer({ storage: storage });
 
 // Get all products
 router.get("/", async (req, res) => {
@@ -26,8 +12,8 @@ router.get("/", async (req, res) => {
     }
 });
 
-// add a product
-router.post("/", upload.single("image"), async (req, res) => {
+// Add a product
+router.post("/", async (req, res) => {
     try {
         const { productName, category } = req.body;
 
@@ -35,10 +21,7 @@ router.post("/", upload.single("image"), async (req, res) => {
             return res.status(400).json({ error: "Product name and category are required." });
         }
 
-        
-        const imagePath = req.file ? `uploads/${req.file.filename}` : null;
-
-        const newProduct = new Product({ productName, category, image: imagePath });
+        const newProduct = new Product({ productName, category });
         await newProduct.save();
 
         res.json({ message: "Product added!", product: newProduct });
@@ -48,14 +31,10 @@ router.post("/", upload.single("image"), async (req, res) => {
 });
 
 // Update product
-router.put("/:id", upload.single("image"), async (req, res) => {
+router.put("/:id", async (req, res) => {
     try {
         const { productName, category } = req.body;
-        let updateFields = { productName, category };
-
-        if (req.file) {
-            updateFields.image = req.file.filename; 
-        }
+        const updateFields = { productName, category };
 
         const updatedProduct = await Product.findByIdAndUpdate(req.params.id, updateFields, { new: true });
 
@@ -69,9 +48,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     }
 });
 
-
-
-// delete a product
+// Delete a product
 router.delete("/:id", async (req, res) => {
     try {
         const deletedProduct = await Product.findByIdAndDelete(req.params.id);
@@ -83,6 +60,5 @@ router.delete("/:id", async (req, res) => {
         res.status(500).json({ message: "Error deleting product", error });
     }
 });
-
 
 module.exports = router;
