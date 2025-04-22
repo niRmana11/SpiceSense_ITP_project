@@ -41,7 +41,7 @@ router.get("/inventory", async (req, res) => {
 // Get all stock levels
 router.get("/", async (req, res) => {
     try {
-        
+
         const stocks = await Stock.find().populate("product");
 
 
@@ -79,7 +79,7 @@ router.post("/add", async (req, res) => {
 
         const nextBatchNumber = `B-${highestBatchNumber + 1}`;
 
-        
+
         stock.batches.push({ batchNumber: nextBatchNumber, expiryDate, quantity: Number(quantity) });
         stock.totalQuantity += Number(quantity);
 
@@ -118,7 +118,7 @@ router.put("/edit/:stockId/:batchNumber", async (req, res) => {
         batch.expiryDate = expiryDate;
         batch.quantity = Number(quantity);
 
-        
+
         stock.totalQuantity = stock.batches.reduce((sum, b) => sum + b.quantity, 0);
 
         await stock.save();
@@ -139,12 +139,12 @@ router.delete("/delete/:stockId/:batchNumber", async (req, res) => {
 
         stock.batches = stock.batches.filter(batch => batch.batchNumber !== batchNumber);
 
-        
+
         stock.totalQuantity = stock.batches.reduce((sum, b) => sum + b.quantity, 0);
 
         await stock.save();
         res.json({ message: "Batch deleted successfully", stock });
-        
+
     } catch (error) {
         res.status(400).json({ message: "Error deleting batch", error });
     }
@@ -209,7 +209,7 @@ router.post("/sell", async (req, res) => {
 router.get("/transactions", async (req, res) => {
     try {
         const transactions = await Transaction.find().populate("product", "productName category");
-      
+
 
 
 
@@ -225,14 +225,14 @@ router.get("/transactions", async (req, res) => {
 router.get("/expiry", async (req, res) => {
     try {
         const today = new Date();
-        today.setHours(0, 0, 0, 0);  
+        today.setHours(0, 0, 0, 0);
 
         const allItems = await Stock.find().populate("product", "productName category");
 
         const sortedItems = allItems.flatMap(item => {
             if (!Array.isArray(item.batches)) {
                 console.warn(`Item ${item._id} has no valid batches.`);
-                return [];  
+                return [];
             }
 
             return item.batches.map(batch => {
@@ -241,7 +241,7 @@ router.get("/expiry", async (req, res) => {
                 }
 
                 const expiry = new Date(batch.expiryDate);
-                expiry.setHours(0, 0, 0, 0);  
+                expiry.setHours(0, 0, 0, 0);
 
                 const diffDays = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
                 let status;
@@ -253,7 +253,7 @@ router.get("/expiry", async (req, res) => {
                 return {
                     batchNo: batch.batchNumber || "Unknown",
                     name: item.product?.productName || "Unknown",
-                    expiryDate: expiry.toISOString().split("T")[0], 
+                    expiryDate: expiry.toISOString().split("T")[0],
                     status
                 };
             });

@@ -62,7 +62,7 @@ const AdminProducts = () => {
             setError("All fields are required.");
             return;
         }
-        
+
         setError(""); // Reset error if all validations pass
 
         const productData = {
@@ -93,6 +93,9 @@ const AdminProducts = () => {
 
     // Delete Product
     const deleteProduct = async (id) => {
+
+        if (!window.confirm("Are you sure you want to delete this product?")) return;
+
         try {
             await axios.delete(`${API_URL}/${id}`);
             alert("Product deleted!");
