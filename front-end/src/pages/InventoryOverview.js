@@ -34,7 +34,7 @@ const InventoryOverview = () => {
                 
                 if (Array.isArray(data)) {
                     setStocks(data);
-                    setLowStockItems(data.filter(item => item.quantity < 20));
+                    setLowStockItems(data.filter(item => item.quantity < 50));
 
                     
                     const expired = data.flatMap(item => 
@@ -58,7 +58,7 @@ const InventoryOverview = () => {
             {
                 label: "Stock Levels",
                 data: stocks.map(item => item.quantity),
-                backgroundColor: stocks.map(item => (item.quantity < 20 ? "#ff4d4d" : "#36a2eb")),
+                backgroundColor: stocks.map(item => (item.quantity < 50 ? "#ff4d4d" : "#36a2eb")),
             }
         ]
     };
@@ -82,7 +82,7 @@ const InventoryOverview = () => {
                 )}
 
                 {/* 🔹 Low Stock Alert Section */}
-                {lowStockItems.length > 0 && (
+                {lowStockItems.length > 0 &&  (
                     <div className="low-stock-alert">
                         <h3>Low Stock Alert</h3>
                         <ul>
@@ -94,23 +94,24 @@ const InventoryOverview = () => {
                 )}
                 
                 <table className="stock-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Quantity (Kg)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {stocks.map(item => (
-                            <tr key={item.id} className={item.quantity < 20 ? "low-stock" : ""}>
-                                <td>{item.name}</td>
-                                <td>{item.category}</td>
-                                <td>{item.quantity}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Quantity (Kg)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {stocks.map(item => (
+            <tr key={item.id} className={item.quantity < 50 ? "low-stock" : ""}>
+                <td>{item.name || "Unknown"}</td>
+                <td>{item.category || "Unknown"}</td>
+                <td>{item.quantity || 0}</td>
+            </tr>
+        ))}
+    </tbody>
+</table>
+
 
                 <div className="chart-container">
                     <h3>Stock Levels Report</h3>

@@ -1,10 +1,23 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
     productName: { type: String, required: true },
-    category: { type: String, enum: ["Raw Material", "Finished Product"], required: true }
+    category: { type: String, required: true }
 });
 
-const Product = mongoose.model('Product', productSchema);
+const Stock = require("./Stock");
+const Transaction = require("./Transaction")
 
-module.exports = Product;
+// Middleware: when a product is removed, delete its stock
+productSchema.pre("findOneAndDelete", async function (next) {
+    const product = await this.model.findOne(this.getFilter());
+
+    if (product) {
+        await Stock.deleteMany({ product: product._id });
+        await Transaction.deleteMany({ product: product._id });
+    }
+
+    next();
+});
+
+module.exports = mongoose.model("Product", productSchema);

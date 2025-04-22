@@ -5,7 +5,7 @@ const transactionSchema = new mongoose.Schema({
     type: { type: String, enum: ["Stock In", "Stock Out"], required: true },
     quantity: { type: Number, required: true },
     date: { type: Date, default: Date.now },
-    batchNumber: { type: String }
+    batchNumber: { type: String, unique: true }
 });
 
 module.exports = mongoose.model("Transaction", transactionSchema);

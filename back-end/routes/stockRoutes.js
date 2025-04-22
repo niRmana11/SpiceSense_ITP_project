@@ -8,24 +8,25 @@ const Transaction = require("../models/Transaction");
 // fetch stock data
 router.get("/inventory", async (req, res) => {
     try {
-
         const today = new Date();
         const stockData = await Stock.find().populate("product", "productName category");
 
-        const formattedData = stockData.map(stock => {
+        const filteredStockData = stockData.filter(stock => stock.product);
+
+        const formattedData = filteredStockData.map(stock => {
             const expiredBatches = stock.batches
-                .filter(batch => new Date(batch.expiryDate) < today) 
+                .filter(batch => new Date(batch.expiryDate) < today)
                 .map(batch => ({
                     batchNumber: batch.batchNumber,
-                    name: stock.product?.productName,
+                    name: stock.product?.productName || "Unknown"
                 }));
 
             return {
                 id: stock._id,
-                name: stock.product?.productName,
-                category: stock.product.category,
+                name: stock.product?.productName || "Unknown",
+                category: stock.product?.category || "Unknown",
                 quantity: stock.totalQuantity || stock.batches.reduce((acc, batch) => acc + batch.quantity, 0),
-                expiredBatches // Store expired batch details
+                expiredBatches
             };
         });
 
@@ -34,12 +35,17 @@ router.get("/inventory", async (req, res) => {
         console.error("Error fetching inventory data:", error);
         res.status(500).json({ message: "Server error" });
     }
-})
+});
+
 
 // Get all stock levels
 router.get("/", async (req, res) => {
     try {
+        
         const stocks = await Stock.find().populate("product");
+
+
+
         res.json(stocks);
     } catch (error) {
         res.status(500).json({ message: "Error fetching stock levels", error });
@@ -203,6 +209,10 @@ router.post("/sell", async (req, res) => {
 router.get("/transactions", async (req, res) => {
     try {
         const transactions = await Transaction.find().populate("product", "productName category");
+      
+
+
+
         res.json(transactions);
     } catch (error) {
         res.status(500).json({ message: "Error fetching transactions", error });

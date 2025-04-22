@@ -44,7 +44,7 @@ const InventoryTransactions = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {transactions.map((txn) => (
+                    {transactions.filter(stock => stock.product?.productName).map((txn) => (
                         <tr key={txn._id}>
                             <td>{txn.product?.productName || "Unknown"}</td>
                             <td>{txn.product?.category || "Unknown"}</td>

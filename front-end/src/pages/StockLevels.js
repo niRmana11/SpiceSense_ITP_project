@@ -171,61 +171,64 @@ const StockLevels = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {stocks.map(stock => (
-                            <tr key={stock._id}>
-                                <td>{stock.product?.productName}</td>
-                                <td>{stock.totalQuantity} Kg</td>
-                                <td>
-                                    <div className="batch-list">
-                                        {stock.batches.map(batch => (
-                                            <div key={batch.batchNumber} className="batch-details">
-                                                <span>Batch: {batch.batchNumber}</span>
-                                                <span>Expiry: {new Date(batch.expiryDate).toLocaleDateString()}</span>
-                                                <span>Qty: {batch.quantity} Kg</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </td>
-                                <td className="action-buttons">
-                                    {stock.batches.map(batch => (
-                                        <div key={batch.batchNumber} className="batch-actions">
-                                            {editingBatch === batch.batchNumber ? (
-                                                <div className="edit-form">
-                                                    <input
-                                                        type="date"
-                                                        name="expiryDate"
-                                                        value={editFormData.expiryDate}
-                                                        onChange={handleEditChange}
-                                                        required
-                                                    />
-                                                    <input
-                                                        type="number"
-                                                        name="quantity"
-                                                        value={editFormData.quantity}
-                                                        onChange={handleEditChange}
-                                                        required
-                                                    />
-                                                    <button className="save-btn" onClick={() => handleEditBatch(stock._id, batch.batchNumber)}>Save</button>
-                                                    <button className="cancel-btn" onClick={() => setEditingBatch(null)}>Cancel</button>
-                                                </div>
-                                            ) : (
-                                                <>
-                                                    <button className="edit-btn" onClick={() => {
-                                                        setEditingBatch(batch.batchNumber);
-                                                        setEditFormData({
-                                                            expiryDate: batch.expiryDate.split("T")[0],
-                                                            quantity: batch.quantity
-                                                        });
-                                                    }}>Edit</button>
-                                                    <button className="delete-btn" onClick={() => handleDeleteBatch(stock._id, batch.batchNumber)}>Delete</button>
-                                                </>
-                                            )}
-                                        </div>
-                                    ))}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
+  {stocks
+    .filter(stock => stock.product?.productName && stock.totalQuantity > 0)
+    .map(stock => (
+      <tr key={stock._id}>
+        <td>{stock.product?.productName}</td>
+        <td>{stock.totalQuantity} Kg</td>
+        <td>
+          <div className="batch-list">
+            {stock.batches.map(batch => (
+              <div key={batch.batchNumber} className="batch-details">
+                <span>Batch: {batch.batchNumber}</span>
+                <span>Expiry: {new Date(batch.expiryDate).toLocaleDateString()}</span>
+                <span>Qty: {batch.quantity} Kg</span>
+              </div>
+            ))}
+          </div>
+        </td>
+        <td className="action-buttons">
+          {stock.batches.map(batch => (
+            <div key={batch.batchNumber} className="batch-actions">
+              {editingBatch === batch.batchNumber ? (
+                <div className="edit-form">
+                  <input
+                    type="date"
+                    name="expiryDate"
+                    value={editFormData.expiryDate}
+                    onChange={handleEditChange}
+                    required
+                  />
+                  <input
+                    type="number"
+                    name="quantity"
+                    value={editFormData.quantity}
+                    onChange={handleEditChange}
+                    required
+                  />
+                  <button className="save-btn" onClick={() => handleEditBatch(stock._id, batch.batchNumber)}>Save</button>
+                  <button className="cancel-btn" onClick={() => setEditingBatch(null)}>Cancel</button>
+                </div>
+              ) : (
+                <>
+                  <button className="edit-btn" onClick={() => {
+                    setEditingBatch(batch.batchNumber);
+                    setEditFormData({
+                      expiryDate: batch.expiryDate.split("T")[0],
+                      quantity: batch.quantity
+                    });
+                  }}>Edit</button>
+                  <button className="delete-btn" onClick={() => handleDeleteBatch(stock._id, batch.batchNumber)}>Delete</button>
+                </>
+              )}
+            </div>
+          ))}
+        </td>
+      </tr>
+  ))}
+</tbody>
+
                 </table>
             </div>
         </div>
