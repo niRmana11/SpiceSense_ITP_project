@@ -155,7 +155,7 @@ router.delete("/delete/:stockId/:batchNumber", async (req, res) => {
 router.post("/sell", async (req, res) => {
     try {
         const { soldProductId, soldQuantity } = req.body;
-        const quantityToDeduct = parseInt(soldQuantity);
+        const quantityToDeduct = soldQuantity;
 
         const stock = await Stock.findOne({ product: soldProductId }).populate("product");
         if (!stock) return res.status(404).json({ message: "Stock not found" });

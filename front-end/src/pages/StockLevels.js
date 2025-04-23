@@ -131,6 +131,8 @@ const StockLevels = () => {
   const handleStockOut = async (e) => {
     e.preventDefault();
 
+    console.log("Sell button clicked");
+
     if (stockOutData.soldQuantity <= 0) {
       alert("Quantity must be a positive number.");
       return;
@@ -214,7 +216,7 @@ const StockLevels = () => {
           </thead>
           <tbody>
             {stocks
-              .filter(stock => stock.product?.productName && stock.totalQuantity > 0)
+              .filter(stock => stock.totalQuantity > 0)
               .map(stock => (
                 <tr key={stock._id}>
                   <td>{stock.product?.productName}</td>
