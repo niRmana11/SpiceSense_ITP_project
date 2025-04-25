@@ -1,0 +1,476 @@
+/* AdminTransactions.css */
+
+.at-container {
+    padding: 20px;
+    width: 100%;
+  }
+  
+  .at-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+  }
+  
+  .at-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f3f4f6;
+    padding-bottom: 15px;
+  }
+  
+  .at-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #4b5563;
+    margin: 0;
+  }
+  
+  .at-create-btn {
+    background-color: #8b5cf6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .at-create-btn:hover {
+    background-color: #7c3aed;
+  }
+  
+  .at-create-btn:disabled {
+    background-color: #d1d5db;
+    cursor: not-allowed;
+  }
+  
+  .at-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 25px;
+    background-color: #f9fafb;
+    padding: 15px;
+    border-radius: 6px;
+  }
+  
+  .at-filter-group {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .at-search {
+    flex: 2;
+  }
+  
+  .at-label {
+    font-weight: 500;
+    margin-right: 10px;
+    color: #4b5563;
+    white-space: nowrap;
+  }
+  
+  .at-select, .at-input {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    flex-grow: 1;
+    background-color: #fff;
+    font-size: 14px;
+  }
+  
+  .at-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+  }
+  
+  .at-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid #8b5cf6;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .at-error {
+    background-color: #fee2e2;
+    border-left: 4px solid #ef4444;
+    color: #b91c1c;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+  
+  .at-empty {
+    background-color: #f9fafb;
+    border-radius: 6px;
+    padding: 30px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 16px;
+    margin: 20px 0;
+  }
+  
+  /* Table styles */
+  .at-table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+  }
+  
+  .at-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  
+  .at-table thead {
+    background-color: #f9fafb;
+  }
+  
+  .at-table th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #4b5563;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .at-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #374151;
+  }
+  
+  .at-table-row:hover {
+    background-color: #f9fafb;
+  }
+  
+  /* Status badge styles */
+  .at-status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+  }
+  
+  .at-status-pending {
+    background-color: #fff7ed;
+    color: #c2410c;
+    border: 1px solid #fed7aa;
+  }
+  
+  .at-status-processing {
+    background-color: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+  }
+  
+  .at-status-paid {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+  }
+  
+  .at-status-completed {
+    background-color: #f0fdf4;
+    color: #166534;
+    border: 1px solid #86efac;
+  }
+  
+  .at-status-cancelled {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+  }
+  
+  .at-status-refunded {
+    background-color: #f5f3ff;
+    color: #6d28d9;
+    border: 1px solid #ddd6fe;
+  }
+  
+  /* Action buttons styles */
+  .at-actions {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .at-view-btn, .at-update-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .at-view-btn {
+    background-color: #6b7280;
+    color: white;
+  }
+  
+  .at-view-btn:hover {
+    background-color: #4b5563;
+  }
+  
+  .at-update-btn {
+    background-color: #8b5cf6;
+    color: white;
+  }
+  
+  .at-update-btn:hover {
+    background-color: #7c3aed;
+  }
+  
+  /* Modal styles */
+  .at-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .at-modal-content {
+    background-color: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  
+  .at-modal-large {
+    max-width: 800px;
+  }
+  
+  .at-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .at-modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+  }
+  
+  .at-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    color: #6b7280;
+    cursor: pointer;
+  }
+  
+  .at-modal-body {
+    padding: 20px;
+  }
+  
+  .at-transaction-info {
+    background-color: #f9fafb;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .at-transaction-invoice {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 8px;
+  }
+  
+  .at-transaction-supplier {
+    font-size: 14px;
+    color: #4b5563;
+    margin: 0 0 5px;
+  }
+  
+  .at-transaction-amount {
+    font-size: 14px;
+    color: #4b5563;
+    margin: 0 0 5px;
+  }
+  
+  .at-transaction-status {
+    font-size: 14px;
+    color: #4b5563;
+    margin: 0;
+  }
+  
+  .at-form-group {
+    margin-bottom: 15px;
+  }
+  
+  .at-form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 5px;
+  }
+  
+  .at-form-input, .at-form-select, .at-form-textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .at-form-textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  .at-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 25px;
+  }
+  
+  .at-invoice-number {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 5px;
+  }
+  
+  .at-product-name {
+    font-size: 16px;
+    color: #4b5563;
+    margin: 0;
+  }
+  
+  .at-status-large {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .at-detail-section {
+    margin-bottom: 25px;
+  }
+  
+  .at-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+    margin: 0 0 15px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 8px;
+  }
+  
+  .at-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+  }
+  
+  .at-detail-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .at-detail-label {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 4px;
+  }
+  
+  .at-detail-value {
+    font-size: 15px;
+    font-weight: 500;
+    color: #111827;
+  }
+  
+  .at-notes-text {
+    font-size: 14px;
+    color: #4b5563;
+    margin: 0;
+    line-height: 1.5;
+  }
+  
+  .at-detail-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  
+  .at-modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .at-button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .at-button-cancel {
+    background-color: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+  }
+  
+  .at-button-cancel:hover {
+    background-color: #e5e7eb;
+  }
+  
+  .at-button-submit {
+    background-color: #8b5cf6;
+    color: white;
+    border: 1px solid #8b5cf6;
+  }
+  
+  .at-button-submit:hover {
+    background-color: #7c3aed;
+  }
+  
+  .at-button-update {
+    background-color: #8b5cf6;
+    color: white;
+    border: 1px solid #8b5cf6;
+  }
