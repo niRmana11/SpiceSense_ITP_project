@@ -49,3 +49,5 @@ productSupplierSchema.index({ productName: "text", productCategory: "text" });
 const ProductSupplier = mongoose.model("ProductSupplier", productSupplierSchema);
 
 export default ProductSupplier;
+
+// dgadyuadbyua
