@@ -1,0 +1,408 @@
+.admin-orders-container {
+    padding: 20px;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  
+  .admin-orders-container h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+  
+  /* Filter Section */
+  .orders-filter-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+  }
+  
+  .orders-filter-section label {
+    font-weight: 500;
+    margin-right: 10px;
+  }
+  
+  .status-filter-select {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+    min-width: 180px;
+  }
+  
+  /* Orders Table */
+  .orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .orders-table th, 
+  .orders-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .orders-table th {
+    background-color: #f4f6f8;
+    font-weight: 600;
+    color: #333;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  .orders-table tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  /* Status Badge Styles */
+  .status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+  
+  .status-badge.status-pending {
+    background-color: #ffe6cc;
+    color: #d68000;
+  }
+  
+  .status-badge.status-paid {
+    background-color: #cce5ff;
+    color: #0066cc;
+  }
+  
+  .status-badge.status-ready-for-shipment {
+    background-color: #dff0d8;
+    color: #3c763d;
+  }
+  
+  .status-badge.status-shipped {
+    background-color: #d9edf7;
+    color: #31708f;
+  }
+  
+  .status-badge.status-in-transit {
+    background-color: #d0e1fd;
+    color: #2850a7;
+  }
+  
+  .status-badge.status-delivered {
+    background-color: #e0f7e6;
+    color: #2d8d3b;
+  }
+  
+  /* Buttons */
+  .view-btn {
+    background-color: #4a6cf7;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+  }
+  
+  .view-btn:hover {
+    background-color: #3a5ce5;
+  }
+  
+  /* Loading and Error States */
+  .orders-loading,
+  .orders-error,
+  .no-orders {
+    text-align: center;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    color: #666;
+    font-size: 16px;
+  }
+  
+  .orders-error {
+    color: #d9534f;
+    background-color: #fdf7f7;
+  }
+  
+  /* Modal Styles */
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 10;
+  }
+  
+  .modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+  }
+  
+  .close-btn:hover {
+    color: #333;
+  }
+  
+  .modal-body {
+    padding: 20px;
+  }
+  
+  .modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  /* Order Detail Modal */
+  .items-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+  }
+  
+  .items-table th,
+  .items-table td {
+    padding: 8px 10px;
+    border: 1px solid #eee;
+  }
+  
+  .items-table th {
+    background-color: #f4f6f8;
+  }
+  
+  .order-summary {
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 6px;
+  }
+  
+  .delivery-info-section {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #fafafa;
+  }
+  
+  .no-delivery-info {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 6px;
+    text-align: center;
+    color: #777;
+  }
+  
+  /* Action Buttons */
+  .ready-shipment-btn,
+  .update-status-btn,
+  .close-modal-btn,
+  .create-btn,
+  .cancel-btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .ready-shipment-btn {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .ready-shipment-btn:hover {
+    background-color: #218838;
+  }
+  
+  .update-status-btn {
+    background-color: #17a2b8;
+    color: white;
+  }
+  
+  .update-status-btn:hover {
+    background-color: #138496;
+  }
+  
+  .close-modal-btn {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .close-modal-btn:hover {
+    background-color: #5a6268;
+  }
+  
+  .create-btn {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .create-btn:hover {
+    background-color: #218838;
+  }
+  
+  .cancel-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #c82333;
+  }
+  
+  /* Form Styles */
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+  
+  /* Status Update Modal */
+  .status-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .status-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .status-btn.ready-btn {
+    background-color: #dff0d8;
+    color: #3c763d;
+  }
+  
+  .status-btn.ready-btn:hover {
+    background-color: #c6e6c3;
+  }
+  
+  .status-btn.shipped-btn {
+    background-color: #d9edf7;
+    color: #31708f;
+  }
+  
+  .status-btn.shipped-btn:hover {
+    background-color: #c4e3f3;
+  }
+  
+  .status-btn.transit-btn {
+    background-color: #d0e1fd;
+    color: #2850a7;
+  }
+  
+  .status-btn.transit-btn:hover {
+    background-color: #bfd4f8;
+  }
+  
+  .status-btn.delivered-btn {
+    background-color: #e0f7e6;
+    color: #2d8d3b;
+  }
+  
+  .status-btn.delivered-btn:hover {
+    background-color: #c7f0d0;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .orders-filter-section {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .status-filter-select {
+      width: 100%;
+    }
+    
+    .modal-content {
+      width: 95%;
+      max-width: none;
+    }
+    
+    .status-buttons {
+      flex-direction: column;
+    }
+    
+    .status-btn {
+      width: 100%;
+    }
+  }
+  

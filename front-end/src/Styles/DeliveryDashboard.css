@@ -1,0 +1,215 @@
+.delivery-dashboard-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 15px;
+  }
+  
+  .delivery-dashboard-title {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+  
+  /* Status filter styles */
+  .delivery-status-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+  
+  .filter-btn {
+    padding: 8px 16px;
+    border: 1px solid #e0e0e0;
+    background-color: #f5f5f5;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .filter-btn:hover {
+    background-color: #e8e8e8;
+  }
+  
+  .filter-btn.active {
+    background-color: #4a6cf7;
+    color: white;
+    border-color: #4a6cf7;
+  }
+  
+  /* Delivery card styles */
+  .deliveries-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+  }
+  
+  .delivery-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .delivery-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .delivery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .delivery-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  /* Status badge styles */
+  .status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+  
+  .status-badge-ready {
+    background-color: #dff0d8;
+    color: #3c763d;
+  }
+  
+  .status-badge-shipped {
+    background-color: #d9edf7;
+    color: #31708f;
+  }
+  
+  .status-badge-transit {
+    background-color: #d0e1fd;
+    color: #2850a7;
+  }
+  
+  .status-badge-delivered {
+    background-color: #e0f7e6;
+    color: #2d8d3b;
+  }
+  
+  .status-badge-default {
+    background-color: #f8f9fa;
+    color: #6c757d;
+  }
+  
+  /* Delivery details section */
+  .delivery-details {
+    padding: 15px 20px;
+  }
+  
+  .delivery-info p {
+    margin: 10px 0;
+    color: #444;
+    font-size: 14px;
+  }
+  
+  .delivery-info p strong {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  /* Actions section */
+  .delivery-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .view-details-btn {
+    padding: 8px 16px;
+    background-color: #4a6cf7;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .view-details-btn:hover {
+    background-color: #3a5ce5;
+  }
+  
+  /* Delivery notes section */
+  .delivery-notes {
+    padding: 0 20px 15px;
+    font-size: 14px;
+    color: #666;
+    border-top: 1px dashed #eee;
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+  
+  /* Loading, error, and empty state styles */
+  .delivery-loading,
+  .delivery-error,
+  .no-deliveries {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    margin: 20px 0;
+  }
+  
+  .delivery-loading {
+    color: #666;
+  }
+  
+  .delivery-error {
+    color: #dc3545;
+  }
+  
+  .no-deliveries {
+    color: #6c757d;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .delivery-dashboard-title {
+      font-size: 24px;
+    }
+    
+    .delivery-status-filters {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .filter-btn {
+      width: 100%;
+      text-align: center;
+    }
+    
+    .deliveries-list {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .delivery-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    
+    .status-badge {
+      align-self: flex-start;
+    }
+  }
+  

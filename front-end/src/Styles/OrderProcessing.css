@@ -1,0 +1,201 @@
+/* OrderProcessing.css - Styles for the Order Processing page */
+
+.order-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 32px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+  }
+  
+  .order-container:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  }
+  
+  .order-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 24px;
+    text-align: center;
+    letter-spacing: -0.02em;
+  }
+  
+  .form-group {
+    margin-bottom: 24px;
+    position: relative;
+  }
+  
+  .form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4b5563;
+    margin-bottom: 8px;
+    transition: color 0.2s ease;
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    color: #1f2937;
+    transition: all 0.2s ease;
+    outline: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .form-input:focus {
+    border-color: #0070f3;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1);
+  }
+  
+  .form-input:hover:not(:focus) {
+    border-color: #d1d5db;
+  }
+  
+  .form-input.error {
+    border-color: #ef4444;
+    background-color: #fff5f5;
+  }
+  
+  .form-input.error:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+  
+  .error-message {
+    color: #ef4444;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    animation: fadeIn 0.2s ease-in-out;
+  }
+  
+  .error-message::before {
+    content: "⚠️";
+    margin-right: 6px;
+    font-size: 12px;
+  }
+  
+  .order-button {
+    width: 100%;
+    padding: 14px 24px;
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 112, 243, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .order-button:hover {
+    background-color: #005ad1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 112, 243, 0.4);
+  }
+  
+  .order-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 112, 243, 0.2);
+  }
+  
+  .order-button:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+  }
+  
+  .order-button:focus:not(:active)::after {
+    animation: ripple 0.5s ease-out;
+  }
+  
+  /* General error message for form submission */
+  .submit-error {
+    background-color: #fee2e2;
+    border-left: 4px solid #ef4444;
+    color: #b91c1c;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+  }
+  
+  .submit-error::before {
+    content: "⚠️";
+    margin-right: 10px;
+    font-size: 16px;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes ripple {
+    0% {
+      transform: scale(0, 0);
+      opacity: 0.5;
+    }
+    20% {
+      transform: scale(25, 25);
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 0;
+      transform: scale(40, 40);
+    }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .order-container {
+      max-width: 100%;
+      margin: 20px;
+      padding: 24px;
+      border-radius: 8px;
+    }
+  
+    .order-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+  
+    .form-input {
+      padding: 10px 14px;
+    }
+  
+    .order-button {
+      padding: 12px 20px;
+    }
+  }
