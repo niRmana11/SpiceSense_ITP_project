@@ -280,6 +280,13 @@ const UserProfile = () => {
                       Manage My Credit Cards
                     </button>
                   </Link>
+
+                  <Link to="/delivery-tracking">
+                    <button className="profile-spiced-credit-btn">
+                      Delivery Tracking
+                    </button>
+                  </Link>
+
                   <OrdersList userId={userId} />
                   
                 </div>
