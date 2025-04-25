@@ -50,4 +50,4 @@ const ProductSupplier = mongoose.model("ProductSupplier", productSupplierSchema)
 
 export default ProductSupplier;
 
-// dgadyuadbyua
+
