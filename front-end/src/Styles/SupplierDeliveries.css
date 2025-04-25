@@ -1,0 +1,357 @@
+/* SupplierDeliveries.css */
+
+.sd-container {
+    padding: 20px;
+    width: 100%;
+  }
+  
+  .sd-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+  }
+  
+  .sd-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f3f4f6;
+    padding-bottom: 15px;
+  }
+  
+  .sd-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #4b5563;
+    margin: 0;
+  }
+  
+  .sd-create-btn {
+    background-color: #10b981;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .sd-create-btn:hover {
+    background-color: #059669;
+  }
+  
+  .sd-create-btn:disabled {
+    background-color: #d1d5db;
+    cursor: not-allowed;
+  }
+  
+  .sd-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+  }
+  
+  .sd-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid #10b981;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .sd-error {
+    background-color: #fee2e2;
+    border-left: 4px solid #ef4444;
+    color: #b91c1c;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+  
+  .sd-filter {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .sd-label {
+    font-weight: 500;
+    margin-right: 10px;
+    color: #4b5563;
+  }
+  
+  .sd-select {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    min-width: 180px;
+    background-color: #fff;
+    font-size: 14px;
+  }
+  
+  .sd-empty {
+    background-color: #f9fafb;
+    border-radius: 6px;
+    padding: 30px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 16px;
+    margin: 20px 0;
+  }
+  
+  /* Shipment styles */
+  .sd-shipments {
+    margin-top: 20px;
+  }
+  
+  .sd-shipment-card {
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+  
+  .sd-shipment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .sd-shipment-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    color: #111827;
+  }
+  
+  .sd-shipment-subtext {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 5px 0 0;
+  }
+  
+  .sd-status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  
+  .sd-status-preparing {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+  }
+  
+  .sd-status-shipped {
+    background-color: #f0f9ff;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+  }
+  
+  .sd-status-transit {
+    background-color: #f5f3ff;
+    color: #6d28d9;
+    border: 1px solid #ddd6fe;
+  }
+  
+  .sd-status-out {
+    background-color: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
+  }
+  
+  .sd-status-delivered {
+    background-color: #f0fdf4;
+    color: #166534;
+    border: 1px solid #86efac;
+  }
+  
+  .sd-status-failed {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+  }
+  
+  .sd-shipment-details {
+    padding: 20px;
+  }
+  
+  .sd-shipment-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .sd-shipment-info-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sd-shipment-label {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 5px;
+  }
+  
+  .sd-shipment-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .sd-shipment-notes {
+    background-color: #f9fafb;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+  
+  .sd-shipment-actions {
+    padding: 15px 20px;
+    border-top: 1px solid #e5e7eb;
+    text-align: right;
+  }
+  
+  .sd-update-btn {
+    background-color: #10b981;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .sd-update-btn:hover {
+    background-color: #059669;
+  }
+  
+  /* Modal styles */
+  .sd-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .sd-modal-content {
+    background-color: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  
+  .sd-modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .sd-modal-info {
+    background-color: #f9fafb;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+  
+  .sd-modal-product {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 0 5px;
+    color: #111827;
+  }
+  
+  .sd-modal-status {
+    font-size: 14px;
+    color: #4b5563;
+    margin: 0;
+  }
+  
+  .sd-form-group {
+    margin-bottom: 15px;
+  }
+  
+  .sd-input, .sd-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .sd-textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  .sd-modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .sd-button {
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .sd-button-cancel {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    border: 1px solid #d1d5db;
+  }
+  
+  .sd-button-cancel:hover {
+    background-color: #e5e7eb;
+  }
+  
+  .sd-button-submit {
+    background-color: #10b981;
+    color: white;
+    border: 1px solid #10b981;
+  }
+  
+  .sd-button-submit:hover {
+    background-color: #059669;
+  }

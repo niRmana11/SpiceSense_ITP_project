@@ -1,0 +1,407 @@
+/* SupplierOrders.css */
+
+.so-container {
+    padding: 20px;
+    width: 100%;
+  }
+  
+  .so-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+  }
+  
+  .so-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #4b5563;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f3f4f6;
+    padding-bottom: 15px;
+  }
+  
+  .so-section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #4b5563;
+    margin: 20px 0 15px;
+  }
+  
+  .so-filter {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .so-label {
+    font-weight: 500;
+    margin-right: 10px;
+    color: #4b5563;
+  }
+  
+  .so-select {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    min-width: 180px;
+    background-color: #fff;
+    font-size: 14px;
+  }
+  
+  .so-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+  }
+  
+  .so-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .so-error {
+    background-color: #fee2e2;
+    border-left: 4px solid #ef4444;
+    color: #b91c1c;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+  }
+  
+  .so-empty {
+    background-color: #f9fafb;
+    border-radius: 6px;
+    padding: 30px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 16px;
+    margin: 20px 0;
+  }
+  
+  /* Approved messages styles */
+  .so-approved-messages {
+    margin: 15px 0 25px;
+  }
+  
+  .so-message-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+  }
+  
+  .so-message-card {
+    background-color: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 6px;
+    padding: 15px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .so-message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  
+  .so-message-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0369a1;
+    margin: 0;
+  }
+  
+  .so-message-badge {
+    background-color: #0ea5e9;
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 12px;
+  }
+  
+  .so-message-details {
+    margin-bottom: 15px;
+  }
+  
+  .so-message-text {
+    font-size: 14px;
+    margin: 5px 0;
+    color: #374151;
+  }
+  
+  .so-message-action {
+    text-align: right;
+  }
+  
+  .so-create-order-btn {
+    background-color: #0ea5e9;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .so-create-order-btn:hover {
+    background-color: #0284c7;
+  }
+  
+  /* Orders styles */
+  .so-orders {
+    margin-top: 20px;
+  }
+  
+  .so-order-card {
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+  
+  .so-order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .so-order-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    color: #111827;
+  }
+  
+  .so-order-subtext {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 5px 0 0;
+  }
+  
+  .so-status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  
+  .so-status-approved {
+    background-color: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+  }
+  
+  .so-status-ready {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+  }
+  
+  .so-status-shipped {
+    background-color: #f0f9ff;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+  }
+  
+  .so-status-delivered {
+    background-color: #f0fdf4;
+    color: #166534;
+    border: 1px solid #86efac;
+  }
+  
+  .so-status-cancelled {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+  }
+  
+  .so-order-details {
+    padding: 20px;
+  }
+  
+  .so-order-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .so-order-info-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .so-order-label {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 5px;
+  }
+  
+  .so-order-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .so-order-tracking, .so-order-notes {
+    background-color: #f9fafb;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+  
+  .so-order-actions {
+    padding: 15px 20px;
+    border-top: 1px solid #e5e7eb;
+    text-align: right;
+  }
+  
+  .so-update-btn {
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .so-update-btn:hover {
+    background-color: #4338ca;
+  }
+  
+  /* Modal styles */
+  .so-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .so-modal-content {
+    background-color: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  
+  .so-modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .so-modal-info {
+    background-color: #f9fafb;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+  
+  .so-modal-product {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 0 5px;
+    color: #111827;
+  }
+  
+  .so-modal-status {
+    font-size: 14px;
+    color: #4b5563;
+    margin: 0;
+  }
+  
+  .so-form-group {
+    margin-bottom: 15px;
+  }
+  
+  .so-input, .so-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .so-textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  .so-modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .so-button {
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .so-button-cancel {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    border: 1px solid #d1d5db;
+  }
+  
+  .so-button-cancel:hover {
+    background-color: #e5e7eb;
+  }
+  
+  .so-button-submit {
+    background-color: #4f46e5;
+    color: white;
+    border: 1px solid #4f46e5;
+  }
+  
+  .so-button-submit:hover {
+    background-color: #4338ca;
+  }
+  
+  .so-bold {
+    font-weight: 600;
+  }

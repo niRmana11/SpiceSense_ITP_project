@@ -1,0 +1,418 @@
+/* src/Styles/SupplierDashboard.css */
+
+/* Spice-inspired color palette */
+:root {
+    --sd-saffron: #ffaa33; /* Vibrant yellow-orange */
+    --sd-turmeric: #e69b00; /* Warm golden yellow */
+    --sd-cinnamon: #8b4513; /* Rich brown */
+    --sd-paprika: #d2691e; /* Spicy orange-red */
+    --sd-cream: #fff8e6; /* Light creamy background */
+    --sd-shadow: rgba(139, 69, 19, 0.2); /* Subtle cinnamon shadow */
+    --sd-gray: #6b4e31; /* Muted brown-gray for text */
+  }
+  
+  /* Main container */
+  .sd-container {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, var(--sd-cream), var(--sd-saffron));
+    padding: 2rem 1rem;
+    animation: sdFadeIn 0.5s ease-in;
+  }
+  
+  /* Content wrapper */
+  .sd-content {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  
+  /* Header */
+  .sd-header {
+    background: #fff;
+    box-shadow: 0 4px 12px var(--sd-shadow);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .sd-header:hover {
+    transform: translateY(-2px);
+  }
+  
+  .sd-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--sd-cinnamon);
+    margin-bottom: 1rem;
+  }
+  
+  .sd-nav-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .sd-tab-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    background: var(--sd-cream);
+    color: var(--sd-gray);
+    transition: all 0.3s ease;
+  }
+  
+  .sd-tab-btn:hover {
+    background: var(--sd-turmeric);
+    color: #fff;
+  }
+  
+  .sd-tab-active {
+    background: var(--sd-paprika);
+    color: #fff;
+  }
+
+  /* Scrollable dropdown for Product Name */
+.supplier-form-group {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+  
+  .sd-logout-btn {
+    background: var(--sd-cinnamon);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: background 0.3s ease;
+  }
+  
+  .sd-logout-btn:hover {
+    background: #a0522d;
+  }
+  
+  /* Loading state */
+  .sd-loading {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .sd-loading-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--sd-paprika);
+    margin-bottom: 1rem;
+  }
+  
+  .sd-spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 4px solid var(--sd-turmeric);
+    border-top: 4px solid transparent;
+    border-radius: 50%;
+    animation: sdSpin 1s linear infinite;
+  }
+  
+  /* Error message */
+  .sd-error {
+    background: rgba(210, 105, 30, 0.1);
+    border: 1px solid var(--sd-paprika);
+    color: var(--sd-cinnamon);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Grid layout */
+  .sd-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  @media (min-width: 1024px) {
+    .sd-grid {
+      grid-template-columns: 1fr 2fr;
+    }
+  }
+  
+  /* Account Info */
+  .sd-account-info {
+    background: #fff;
+    box-shadow: 0 4px 12px var(--sd-shadow);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .sd-account-info:hover {
+    transform: translateY(-2px);
+  }
+  
+  .sd-section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--sd-cinnamon);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--sd-saffron);
+  }
+  
+  .sd-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .sd-info-item {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sd-info-label {
+    font-size: 0.875rem;
+    color: var(--sd-gray);
+  }
+  
+  .sd-info-value {
+    font-weight: 500;
+    color: var(--sd-cinnamon);
+  }
+  
+  /* Main content */
+  .sd-main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  /* Product Management */
+  .sd-product-management {
+    background: #fff;
+    box-shadow: 0 4px 12px var(--sd-shadow);
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .sd-product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .sd-add-btn,
+  .sd-cancel-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .sd-add-btn {
+    background: var(--sd-turmeric);
+    color: #fff;
+  }
+  
+  .sd-add-btn:hover {
+    background: var(--sd-paprika);
+  }
+  
+  .sd-cancel-btn {
+    background: var(--sd-gray);
+    color: #fff;
+  }
+  
+  .sd-cancel-btn:hover {
+    background: #8b5a2b;
+  }
+  
+  /* Product Form */
+  .sd-product-form {
+    background: var(--sd-cream);
+    padding: 1rem;
+    border-radius: 0.75rem;
+  }
+  
+  .sd-form-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--sd-cinnamon);
+    margin-bottom: 1rem;
+  }
+  
+  .sd-form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .sd-form-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .sd-form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sd-form-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--sd-gray);
+    margin-bottom: 0.25rem;
+  }
+  
+  .sd-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--sd-saffron);
+    border-radius: 0.375rem;
+    transition: all 0.3s ease;
+  }
+  
+  .sd-input:focus {
+    outline: none;
+    border-color: var(--sd-paprika);
+    box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.2);
+  }
+  
+  .sd-form-actions {
+    margin-top: 1.5rem;
+  }
+  
+  .sd-submit-btn {
+    background: var(--sd-turmeric);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: background 0.3s ease;
+  }
+  
+  .sd-submit-btn:hover {
+    background: var(--sd-paprika);
+  }
+  
+  /* Products List */
+  .sd-products-list {
+    background: #fff;
+    box-shadow: 0 4px 12px var(--sd-shadow);
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .sd-table-container {
+    overflow-x: auto;
+  }
+  
+  .sd-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .sd-table-header {
+    background: var(--sd-cream);
+  }
+  
+  .sd-table-th {
+    padding: 0.75rem 1.5rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--sd-gray);
+    text-transform: uppercase;
+  }
+  
+  .sd-table-row {
+    border-bottom: 1px solid var(--sd-saffron);
+  }
+  
+  .sd-table-td {
+    padding: 1rem 1.5rem;
+    font-size: 0.875rem;
+    color: var(--sd-cinnamon);
+  }
+  
+  .sd-stock-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  
+  .sd-stock-high {
+    background: rgba(34, 139, 34, 0.2);
+    color: #228b22;
+  }
+  
+  .sd-stock-low {
+    background: rgba(255, 165, 0, 0.2);
+    color: #ffa500;
+  }
+  
+  .sd-stock-out {
+    background: rgba(178, 34, 34, 0.2);
+    color: #b22222;
+  }
+  
+  .sd-edit-btn {
+    color: var(--sd-turmeric);
+    font-weight: 500;
+    margin-right: 1rem;
+    transition: color 0.3s ease;
+  }
+  
+  .sd-edit-btn:hover {
+    color: var(--sd-paprika);
+  }
+  
+  .sd-delete-btn {
+    color: var(--sd-cinnamon);
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .sd-delete-btn:hover {
+    color: #a0522d;
+  }
+  
+  /* Empty state */
+  .sd-empty-state {
+    text-align: center;
+    padding: 2rem;
+    background: var(--sd-cream);
+    border-radius: 0.75rem;
+  }
+  
+  .sd-empty-text {
+    color: var(--sd-gray);
+    margin-bottom: 1rem;
+  }
+  
+  /* Animations */
+  @keyframes sdFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes sdSpin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
