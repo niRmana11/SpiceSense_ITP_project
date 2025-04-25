@@ -1,14 +1,16 @@
 // pages/OrderConfirmationPage.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Import axios for direct API call
 import { fetchOrder, updateOrder, deleteOrder } from '../api';
-import "../Styles/OrderConfirmationPage.css"; // Import CSS from Styles folder
+import "../Styles/OrderConfirmationPage.css"; 
 import NavigationBar from "../components/NavigationBar";
 
 const OrderConfirmationPage = () => {
   const { orderId } = useParams();
   const [order, setOrder] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,6 +54,58 @@ const OrderConfirmationPage = () => {
     } catch (err) {
       console.error('Error updating order:', err.response?.data || err.message);
       alert(`Failed to update order: ${err.response?.data?.message || err.message}`);
+    }
+  };
+
+  const handleConfirm = async () => {
+    setIsLoading(true);
+    try {
+      // Step 1: Update order status to "paid"
+      const orderResponse = await axios.put(`http://localhost:5000/api/order/${orderId}`, {
+        status: 'paid'
+      });
+      
+      console.log('Order confirmed:', orderResponse.data);
+      
+      // Step 2: Create a delivery record for this order
+      const deliveryData = {
+        orderId: orderId,
+        status: 'ready for shipment',
+        // You can add default values for tracking if needed
+        trackingNumber: '',
+        carrier: '',
+        estimatedDeliveryDate: '',
+        deliveryNotes: 'Order automatically processed'
+      };
+      
+      const deliveryResponse = await axios.post('http://localhost:5000/api/deliveries/create', deliveryData);
+      
+      console.log('Delivery created:', deliveryResponse.data);
+      
+      // Step 3: Redirect to the specific delivery tracking page
+      const deliveryId = deliveryResponse.data.delivery._id;
+      alert('Order confirmed successfully! Redirecting to delivery tracking...');
+      
+      // Navigate to the delivery tracking page with the new delivery ID
+      navigate(`/delivery-tracking/${deliveryId}`);
+      
+    } catch (err) {
+      console.error('Error confirming order:', err.response?.data || err.message);
+      
+      // Check if we already have a delivery for this order
+      try {
+        const deliveryCheckResponse = await axios.get(`http://localhost:5000/api/deliveries/order/${orderId}`);
+        if (deliveryCheckResponse.data && deliveryCheckResponse.data._id) {
+          // If a delivery already exists, just redirect to it
+          navigate(`/delivery-tracking/${deliveryCheckResponse.data._id}`);
+          return;
+        }
+      } catch (deliveryErr) {
+        // If no delivery exists, show the error
+        alert(`Failed to confirm order: ${err.response?.data?.message || err.message}`);
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -130,11 +184,26 @@ const OrderConfirmationPage = () => {
           <p className="order-confirmation-detail">Shipping Address: {order.shippingAddress}</p>
           <p className="order-confirmation-detail">Billing Address: {order.billingAddress}</p>
           <p className="order-confirmation-detail">Total: ${order.total}</p>
+          <div className="order-confirmation-status">
+            <p>Status: <span className={`status-${order.status}`}>{order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span></p>
+          </div>
           <div className="order-confirmation-buttons">
             <button onClick={handleEdit} className="order-confirmation-edit-btn">Edit</button>
-            <button onClick={() => navigate('/home')} className="order-confirmation-confirm-btn">Confirm</button>
+            <button 
+              onClick={handleConfirm} 
+              disabled={isLoading || order.status === 'paid'}
+              className="order-confirmation-confirm-btn"
+            >
+              {isLoading ? 'Processing...' : order.status === 'paid' ? 'Order Confirmed' : 'Confirm Order'}
+            </button>
             <button onClick={handleCancel} className="order-confirmation-cancel-btn">Cancel Order</button>
           </div>
+          
+          {order.status === 'paid' && (
+            <div className="order-confirmation-next-steps">
+              <p>Your order has been confirmed. You can now track your delivery status.</p>
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -142,4 +211,9 @@ const OrderConfirmationPage = () => {
   );
 };
 
+
+
+
+
 export default OrderConfirmationPage;
+
