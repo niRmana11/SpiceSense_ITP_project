@@ -15,9 +15,10 @@ const VerifyEmail = () => {
     if (storedUserId) {
       setUserId(storedUserId);
     } else {
-      setError("User ID not found. Please login again.");
+      setError("User ID not found. Please register or login again.");
+      navigate("/register");
     }
-  }, []);
+  }, [navigate]);
 
   const handleOtpChange = (index, value) => {
     if (!/^\d*$/.test(value)) return;
@@ -36,8 +37,8 @@ const VerifyEmail = () => {
       return;
     }
     if (!userId) {
-      setError("User ID not found. Please login again.");
-      navigate("/login");
+      setError("User ID not found. Please register or login again.");
+      navigate("/register");
       return;
     }
     setLoading(true);
@@ -48,11 +49,8 @@ const VerifyEmail = () => {
         { withCredentials: true }
       );
       if (response.data.success) {
-        alert("Email verified successfully!");
-        if (response.data.token) {
-          localStorage.setItem("authToken", response.data.token);
-        }
-        navigate("/dashboard");
+        alert("Email verified successfully! Please log in.");
+        navigate("/login");
       } else {
         setError(response.data.message);
       }
@@ -101,3 +99,4 @@ const VerifyEmail = () => {
 };
 
 export default VerifyEmail;
+
