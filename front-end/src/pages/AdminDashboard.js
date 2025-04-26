@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import UserManagement from "../components/UserManagement";
 import AdminOrdersManagement from "../components/AdminOrdersManagement";
+import FinancialReports from "../pages/FinancialReports"; // Import FinancialReports component
 import "../Styles/AdminNav.css";
 
 const AdminDashboard = () => {
@@ -60,6 +61,8 @@ const AdminDashboard = () => {
         return <UserManagement />;
       case "orders":
         return <AdminOrdersManagement />;
+      case "reports": // New case for reports tab
+        return <FinancialReports />;
       case "dashboard":
       default:
         return (
@@ -107,7 +110,7 @@ const AdminDashboard = () => {
                   <h3 className="spice-grid-title">Financial Reports</h3>
                   <p className="spice-grid-desc">View financial reports and sales data.</p>
                   <button
-                    onClick={() => navigate("/financial-reports")}
+                    onClick={() => switchTab("reports")} // Switch to reports tab
                     className="spice-action-btn"
                   >
                     View Reports
@@ -203,9 +206,9 @@ const AdminDashboard = () => {
                   </li>
                   <li>
                     <button
-                      onClick={() => navigate("/financial-reports")}
+                      onClick={() => switchTab("reports")} // Switch to reports tab
                       className={`spice-nav-item ${
-                        location.pathname === "/financial-reports" ? "spice-nav-active" : ""
+                        activeTab === "reports" ? "spice-nav-active" : ""
                       }`}
                     >
                       Reports
