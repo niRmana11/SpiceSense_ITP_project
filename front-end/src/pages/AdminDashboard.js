@@ -211,7 +211,7 @@ const AdminDashboard = () => {
                         activeTab === "reports" ? "spice-nav-active" : ""
                       }`}
                     >
-                      Reports
+                      Financial Reports
                     </button>
                   </li>
                 </ul>
