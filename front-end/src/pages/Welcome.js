@@ -28,7 +28,7 @@ const Welcome = () => {
         </div>
         <div className="spicesense-slide">
           <img
-            src="..\assets\spisesenselogo.png"
+            src="https://c4.wallpaperflare.com/wallpaper/246/454/348/spices-chile-cardamom-cuts-wallpaper-preview.jpg"
             alt="Spices 3"
           />
         </div>
