@@ -3,6 +3,14 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import UserManagement from "../components/UserManagement";
 import AdminOrdersManagement from "../components/AdminOrdersManagement";
+
+import SupplierProducts from "../components/SupplierProducts";
+import AdminMessages from "../components/AdminMessages";
+import AdminDeliveries from "../components/AdminDeliveries";
+import AdminTransactions from "../components/AdminTransactions";
+
+import FinancialReports from "../pages/FinancialReports"; // Import FinancialReports component
+
 import "../Styles/AdminNav.css";
 
 const AdminDashboard = () => {
@@ -60,6 +68,18 @@ const AdminDashboard = () => {
         return <UserManagement />;
       case "orders":
         return <AdminOrdersManagement />;
+        case "suppliers":
+        return <SupplierProducts />;
+      case "messages":
+        return <AdminMessages />;
+      case "deliveries":
+        return <AdminDeliveries />;
+      case "transactions": 
+        return <AdminTransactions />;
+
+      case "reports": // New case for reports tab
+        return <FinancialReports />;
+
       case "dashboard":
       default:
         return (
