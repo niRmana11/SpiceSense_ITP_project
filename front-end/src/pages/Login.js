@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import '../Styles/auth.css'; // Import the CSS
+import '../Styles/auth.css';
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [apiResponse, setApiResponse] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    setApiResponse(null);
 
     if (!email.trim() || !password.trim()) {
       setError("Email and password are required.");
@@ -30,15 +28,39 @@ const Login = () => {
         { withCredentials: true }
       );
 
-      setApiResponse(response.data);
-
       if (response.data.success) {
         sessionStorage.setItem("userId", response.data.userId);
         if (response.data.role) {
           sessionStorage.setItem("userRole", response.data.role);
         }
-        alert("Login successful! Please verify your email.");
-        navigate("/verify-account");
+
+        if (response.data.message.includes("OTP sent")) {
+          // Account not verified, navigate to verification
+          alert("Please verify your email.");
+          navigate("/verify-account");
+        } else {
+          // Account verified, store token and navigate to dashboard
+          localStorage.setItem("authToken", response.data.token);
+          alert("Login successful!");
+
+          // Navigate based on role
+          switch (response.data.role) {
+            case "admin":
+              navigate("/admin-dashboard");
+              break;
+            case "supplier":
+              navigate("/supplier-dashboard");
+              break;
+            case "employee":
+              navigate("/employee-dashboard");
+              break;
+            case "customer":
+              navigate("/dashboard");
+              break;
+            default:
+              navigate("/dashboard");
+          }
+        }
       } else {
         setError(response.data.message || "An unknown error occurred.");
       }
@@ -62,13 +84,6 @@ const Login = () => {
         </div>
 
         {error && <div className="auth-error">{error}</div>}
-
-        {apiResponse && (
-          <div className="auth-error" style={{ background: '#dbeafe', borderColor: '#60a5fa', color: '#1e3a8a' }}>
-            <p>Debug Response:</p>
-            <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="auth-form-group">
