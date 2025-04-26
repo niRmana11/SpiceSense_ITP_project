@@ -19,7 +19,7 @@ import stockRoutes from "./routes/stockRoutes.js";
 
 
 
-import productRouter from "./routes/productSupRoutes.js"; 
+import productRouter from "./routes/productSupRoutes.js";
 import orderDeliveryRouter from "./routes/orderDeliveryRoutes.js";
 import shipmentDeliveryRouter from "./routes/shipmentDeliveryRoutes.js";
 import transactionRouter from "./routes/transactionRoutes.js";
@@ -87,7 +87,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/stocks", stockRoutes);
 
 
-app.use("/api/products", productRouter); 
+app.use("/api/supProducts", productRouter);
 app.use("/api/messages", messageRouter);
 app.use("/api/orderdelivers", orderDeliveryRouter);
 app.use("/api/deliveries", shipmentDeliveryRouter);

@@ -5,7 +5,7 @@ import SupplierMessages from "../components/SupplierMessages";
 import SupplierOrders from "../components/SupplierOrders";
 import SupplierDeliveries from "../components/SupplierDeliveries";
 import SupplierTransactions from "../components/SupplierTransactions";
-import "../Styles/SupplierDashboard.css"; 
+import "../Styles/SupplierDashboard.css";
 
 const SupplierDashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -78,17 +78,17 @@ const SupplierDashboard = () => {
     if (formData.productCategory) {
       // Get products from the selected category
       const categoryProducts = productsByCategory[formData.productCategory] || [];
-      
+
       // Filter out products that are already added
       const alreadyAddedProductNames = products
         .filter(product => product.productCategory === formData.productCategory)
         .map(product => product.productName);
-      
+
       // Set available products, excluding already added ones
       const filteredProducts = categoryProducts.filter(
         product => !alreadyAddedProductNames.includes(product)
       );
-      
+
       setAvailableProducts(filteredProducts);
     } else {
       setAvailableProducts([]);
@@ -97,10 +97,10 @@ const SupplierDashboard = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/products/supplier", {
+      const response = await axios.get("http://localhost:5000/api/supProducts/supplier", {
         withCredentials: true,
       });
-      
+
       if (response.data.success) {
         setProducts(response.data.products || []);
       }
@@ -137,39 +137,39 @@ const SupplierDashboard = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Check for duplicate products
-    const isDuplicate = products.some(product => 
+    const isDuplicate = products.some(product =>
       product.productName === formData.productName &&
       (editProduct ? product._id !== editProduct._id : true)
     );
-    
+
     if (isDuplicate) {
       setError("You have already added this product. Please choose a different one.");
       return; // Prevent form submission
     }
-    
+
     try {
       if (editProduct) {
         const response = await axios.put(
-          `http://localhost:5000/api/products/${editProduct._id}`,
+          `http://localhost:5000/api/supProducts/${editProduct._id}`,
           formData,
           { withCredentials: true }
         );
-        
+
         if (response.data.success) {
-          setProducts(products.map(p => 
+          setProducts(products.map(p =>
             p._id === editProduct._id ? response.data.product : p
           ));
           resetForm();
         }
       } else {
         const response = await axios.post(
-          "http://localhost:5000/api/products",
+          "http://localhost:5000/api/supProducts",
           formData,
           { withCredentials: true }
         );
-        
+
         if (response.data.success) {
           setProducts([...products, response.data.product]);
           resetForm();
@@ -198,10 +198,10 @@ const SupplierDashboard = () => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
         const response = await axios.delete(
-          `http://localhost:5000/api/products/${productId}`,
+          `http://localhost:5000/api/supProducts/${productId}`,
           { withCredentials: true }
         );
-        
+
         if (response.data.success) {
           setProducts(products.filter(p => p._id !== productId));
         }
@@ -373,7 +373,7 @@ const SupplierDashboard = () => {
                             <option value="Organic Spices">Organic Spices</option>
                           </select>
                         </div>
-                        
+
                         <div className="sd-form-group">
                           <label className="sd-form-label">Product Name *</label>
                           {editProduct ? (
@@ -416,7 +416,7 @@ const SupplierDashboard = () => {
                             )
                           )}
                         </div>
-                        
+
                         <div className="sd-form-group">
                           <label className="sd-form-label">Price (Rs) *</label>
                           <input
@@ -494,13 +494,12 @@ const SupplierDashboard = () => {
                               <td className="sd-table-td">Rs{product.price}</td>
                               <td className="sd-table-td">
                                 <span
-                                  className={`sd-stock-badge ${
-                                    product.stockQuantity > 10
+                                  className={`sd-stock-badge ${product.stockQuantity > 10
                                       ? "sd-stock-high"
                                       : product.stockQuantity > 0
-                                      ? "sd-stock-low"
-                                      : "sd-stock-out"
-                                  }`}
+                                        ? "sd-stock-low"
+                                        : "sd-stock-out"
+                                    }`}
                                 >
                                   {product.stockQuantity}
                                 </span>

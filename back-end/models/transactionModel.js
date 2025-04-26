@@ -67,6 +67,6 @@ transactionSchema.index({ orderDeliveryId: 1 });
 transactionSchema.index({ invoiceNumber: 1 });
 transactionSchema.index({ status: 1 });
 
-const Transaction = mongoose.model("Transaction", transactionSchema);
+const transactionModel = mongoose.model("transactionModel", transactionSchema);
 
-export default Transaction;
+export default transactionModel;
