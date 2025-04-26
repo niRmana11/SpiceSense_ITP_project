@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../Styles/AdminMessages.css"; 
+import "../Styles/AdminMessages.css";
 
 const AdminMessages = () => {
   const [products, setProducts] = useState([]);
@@ -8,7 +8,7 @@ const AdminMessages = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [productLoading, setProductLoading] = useState(false);
-  
+
   const [selectedProduct, setSelectedProduct] = useState("");
   const [requestedQuantity, setRequestedQuantity] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -21,14 +21,14 @@ const AdminMessages = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
+
         console.log("Fetching products...");
-        const productsResponse = await axios.get("http://localhost:5000/api/products/all", {
+        const productsResponse = await axios.get("http://localhost:5000/api/supProducts/all", {
           withCredentials: true,
         });
-        
+
         console.log("Products response:", productsResponse.data);
-        
+
         if (productsResponse.data.success) {
           const formattedProducts = productsResponse.data.products.map(product => ({
             _id: product._id?.$oid || product._id,
@@ -39,18 +39,18 @@ const AdminMessages = () => {
             minimumOrderQuantity: parseInt(product.minimumOrderQuantity?.$numberInt) || parseInt(product.minimumOrderQuantity) || 1,
             supplierId: product.supplierId?.$oid || product.supplierId
           }));
-          
+
           console.log("Formatted products:", formattedProducts);
           setProducts(formattedProducts);
           setDebugInfo(`Loaded ${formattedProducts.length} products`);
         } else {
           setError("Failed to load products: " + (productsResponse.data.message || "Unknown error"));
         }
-        
+
         const messagesResponse = await axios.get("http://localhost:5000/api/messages/admin", {
           withCredentials: true,
         });
-        
+
         if (messagesResponse.data.success) {
           setMessages(messagesResponse.data.messages);
         } else {
@@ -63,26 +63,26 @@ const AdminMessages = () => {
         setLoading(false);
       }
     };
-    
+
     fetchData();
   }, []);
-  
-  const filteredProducts = products.filter(product => 
+
+  const filteredProducts = products.filter(product =>
     product.productName.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
-  const filteredMessages = messages.filter(message => 
+
+  const filteredMessages = messages.filter(message =>
     statusFilter === "all" || message.status === statusFilter
   );
-  
+
   const handleCreateMessage = async (e) => {
     e.preventDefault();
-    
+
     if (!selectedProduct || !requestedQuantity || requestedQuantity < 1) {
       setError("Please select a product and enter a valid quantity");
       return;
     }
-    
+
     try {
       setProductLoading(true);
       const response = await axios.post(
@@ -93,16 +93,16 @@ const AdminMessages = () => {
         },
         { withCredentials: true }
       );
-      
+
       if (response.data.success) {
         const messagesResponse = await axios.get("http://localhost:5000/api/messages/admin", {
           withCredentials: true,
         });
-        
+
         if (messagesResponse.data.success) {
           setMessages(messagesResponse.data.messages);
         }
-        
+
         setSelectedProduct("");
         setRequestedQuantity("");
         setShowCreateForm(false);
@@ -115,7 +115,7 @@ const AdminMessages = () => {
       setProductLoading(false);
     }
   };
-  
+
   const getStatusClass = (status) => {
     switch (status) {
       case "pending":
@@ -128,11 +128,11 @@ const AdminMessages = () => {
         return "am-status-default";
     }
   };
-  
+
   const formatDate = (dateString) => {
-    const options = { 
-      year: 'numeric', 
-      month: 'short', 
+    const options = {
+      year: 'numeric',
+      month: 'short',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
@@ -161,19 +161,19 @@ const AdminMessages = () => {
             {showCreateForm ? "Cancel" : "New Request"}
           </button>
         </div>
-        
+
         {error && (
           <div className="am-error">
             {error}
           </div>
         )}
-        
+
         {debugInfo && (
           <div className="am-debug">
             {debugInfo}
           </div>
         )}
-        
+
         {showCreateForm && (
           <div className="am-form-container">
             <h3 className="am-form-title">Send Product Request to Supplier</h3>
@@ -201,7 +201,7 @@ const AdminMessages = () => {
                   <p className="am-error-text">No products match your search. Try a different term.</p>
                 )}
               </div>
-              
+
               <div className="am-form-group">
                 <label className="am-label">Request Quantity *</label>
                 <input
@@ -213,7 +213,7 @@ const AdminMessages = () => {
                   className="am-input"
                 />
               </div>
-              
+
               <div>
                 <button
                   type="submit"
@@ -226,7 +226,7 @@ const AdminMessages = () => {
             </form>
           </div>
         )}
-        
+
         <div className="am-filter">
           <label className="am-label">Filter by status:</label>
           <select
@@ -240,7 +240,7 @@ const AdminMessages = () => {
             <option value="rejected">Rejected</option>
           </select>
         </div>
-        
+
         {filteredMessages.length === 0 ? (
           <div className="am-empty">
             <p>No messages found.</p>
@@ -248,8 +248,8 @@ const AdminMessages = () => {
         ) : (
           <div className="am-messages">
             {filteredMessages.map((message) => (
-              <div 
-                key={message._id} 
+              <div
+                key={message._id}
                 className={`am-message ${message.seen ? "am-message-seen" : "am-message-unseen"}`}
               >
                 <div className="am-message-header">
@@ -258,7 +258,7 @@ const AdminMessages = () => {
                       {message.productId?.productName || "Product Unavailable"}
                     </h3>
                     <p className="am-message-subtext">
-                      Category: {message.productId?.productCategory || "N/A"} | 
+                      Category: {message.productId?.productCategory || "N/A"} |
                       Original Price: Rs{message.productId?.price || "N/A"}
                     </p>
                   </div>
@@ -268,7 +268,7 @@ const AdminMessages = () => {
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="am-message-body">
                   <div>
                     <p className="am-message-text">
@@ -283,7 +283,7 @@ const AdminMessages = () => {
                     {formatDate(message.createdAt)}
                   </div>
                 </div>
-                
+
                 {message.status !== "pending" && (
                   <div className="am-message-footer">
                     {message.status === "approved" ? (
@@ -307,7 +307,7 @@ const AdminMessages = () => {
                     )}
                   </div>
                 )}
-                
+
                 {!message.seen && (
                   <div className="am-new-response">
                     <span className="am-new-badge">New Response</span>

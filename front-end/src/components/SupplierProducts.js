@@ -19,7 +19,7 @@ const SupplierProducts = () => {
   });
   const [showEditForm, setShowEditForm] = useState(false);
   const [formErrors, setFormErrors] = useState({});
-  
+
   // Predefined product lists by category
   const [productsByCategory, setProductsByCategory] = useState({
     "Whole Spices": ["Black Pepper", "Cardamom", "Cinnamon", "Cloves", "Cumin Seeds", "Fennel Seeds"],
@@ -30,7 +30,7 @@ const SupplierProducts = () => {
     "Exotic Spices": ["Saffron", "Star Anise", "Vanilla Beans", "Sumac", "Za'atar"],
     "Organic Spices": ["Organic Turmeric", "Organic Ginger", "Organic Cinnamon", "Organic Cloves"]
   });
-  
+
   // Available product options based on selected category
   const [availableProducts, setAvailableProducts] = useState([]);
 
@@ -39,7 +39,7 @@ const SupplierProducts = () => {
       try {
         setLoading(true);
 
-        const productsResponse = await axios.get("http://localhost:5000/api/products/all", {
+        const productsResponse = await axios.get("http://localhost:5000/api/supProducts/all", {
           withCredentials: true,
         });
 
@@ -78,21 +78,21 @@ const SupplierProducts = () => {
     if (formData.productCategory) {
       // Get products from the selected category
       const categoryProducts = productsByCategory[formData.productCategory] || [];
-      
+
       // Filter out products that the current supplier has already added
       const currentSupplierProducts = products.filter(
         product => product.supplierId === getCurrentSupplierId()
       );
-      
+
       const alreadyAddedProductNames = currentSupplierProducts
         .filter(product => product.productCategory === formData.productCategory)
         .map(product => product.productName);
-      
+
       // Set available products, excluding already added ones
       const filteredProducts = categoryProducts.filter(
         product => !alreadyAddedProductNames.includes(product)
       );
-      
+
       setAvailableProducts(filteredProducts);
     } else {
       setAvailableProducts([]);
@@ -112,9 +112,9 @@ const SupplierProducts = () => {
       ...formData,
       [name]: value
     });
-  
+
     setFormErrors({ ...formErrors, [name]: "" });
-    
+
     // If changing product category, reset product name
     if (name === "productCategory") {
       setFormData(prev => ({
@@ -133,12 +133,12 @@ const SupplierProducts = () => {
     if (!formData.minimumOrderQuantity || formData.minimumOrderQuantity < 1) errors.minimumOrderQuantity = "Minimum order must be at least 1.";
 
     // Check if product already exists for this supplier
-    const isDuplicate = products.some(product => 
-      product.supplierId === getCurrentSupplierId() && 
+    const isDuplicate = products.some(product =>
+      product.supplierId === getCurrentSupplierId() &&
       product.productName === formData.productName &&
       (editingProduct ? product._id !== editingProduct._id : true)
     );
-    
+
     if (isDuplicate) {
       errors.productName = "You have already added this product. Please choose a different one.";
     }
@@ -165,7 +165,7 @@ const SupplierProducts = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/products/${editingProduct._id}`,
+        `http://localhost:5000/api/supProducts/${editingProduct._id}`,
         formData,
         { withCredentials: true }
       );
@@ -174,10 +174,10 @@ const SupplierProducts = () => {
         setProducts(products.map(product =>
           product._id === editingProduct._id
             ? {
-                ...response.data.product,
-                supplierName: product.supplierName,
-                companyName: product.companyName
-              }
+              ...response.data.product,
+              supplierName: product.supplierName,
+              companyName: product.companyName
+            }
             : product
         ));
 
@@ -196,7 +196,7 @@ const SupplierProducts = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/products",
+        "http://localhost:5000/api/supProducts",
         {
           ...formData,
           supplierId: getCurrentSupplierId() // Make sure to include the supplier ID
@@ -211,9 +211,9 @@ const SupplierProducts = () => {
           supplierName: suppliers.find(s => s._id === getCurrentSupplierId())?.name || "Unknown",
           companyName: suppliers.find(s => s._id === getCurrentSupplierId())?.companyName || "Unknown"
         };
-        
+
         setProducts([...products, newProduct]);
-        
+
         // Reset form
         setFormData({
           productName: "",
@@ -232,7 +232,7 @@ const SupplierProducts = () => {
   return (
     <div className="supplier-container">
       <h2 className="supplier-title">Manage Products</h2>
-      
+
       {/* Add Product Form */}
       <div className="supplier-add-form">
         <h3 className="supplier-form-title">Add New Product</h3>
@@ -341,7 +341,7 @@ const SupplierProducts = () => {
           </div>
         </form>
       </div>
-      
+
       {/* Edit Product Form */}
       {showEditForm && (
         <div className="supplier-edit-form">
@@ -449,8 +449,8 @@ const SupplierProducts = () => {
 
             <div className="supplier-form-actions">
               <button type="submit" className="supplier-update-button">Update Product</button>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="supplier-cancel-button"
                 onClick={() => {
                   setShowEditForm(false);
@@ -463,7 +463,7 @@ const SupplierProducts = () => {
           </form>
         </div>
       )}
-      
+
       {/* Products List - You can add this if needed */}
       {/* Error display */}
       {error && <div className="supplier-error-message">{error}</div>}
