@@ -3,6 +3,10 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import UserManagement from "../components/UserManagement";
 import AdminOrdersManagement from "../components/AdminOrdersManagement";
+import SupplierProducts from "../components/SupplierProducts";
+import AdminMessages from "../components/AdminMessages";
+import AdminDeliveries from "../components/AdminDeliveries";
+import AdminTransactions from "../components/AdminTransactions";
 import "../Styles/AdminNav.css";
 
 const AdminDashboard = () => {
@@ -60,6 +64,14 @@ const AdminDashboard = () => {
         return <UserManagement />;
       case "orders":
         return <AdminOrdersManagement />;
+        case "suppliers":
+        return <SupplierProducts />;
+      case "messages":
+        return <AdminMessages />;
+      case "deliveries":
+        return <AdminDeliveries />;
+      case "transactions": 
+        return <AdminTransactions />;
       case "dashboard":
       default:
         return (
@@ -111,6 +123,38 @@ const AdminDashboard = () => {
                     className="spice-action-btn"
                   >
                     View Reports
+                  </button>
+                </div>
+
+                <div className="spice-grid-item">
+                  <h3 className="spice-grid-title">Product Requests</h3>
+                  <p className="spice-grid-desc">Send and manage product requests to suppliers.</p>
+                  <button 
+                    onClick={() => switchTab("messages")}
+                    className="spice-action-btn"
+                  >
+                    Manage Product Requests
+                  </button>
+                </div>
+                
+                <div className="spice-grid-item">
+                  <h3 className="spice-grid-title">Delivery Tracking</h3>
+                  <p className="spice-grid-desc">Monitor shipments and deliveries from suppliers.</p>
+                  <button 
+                    onClick={() => switchTab("deliveries")}
+                    className="spice-action-btn"
+                  >
+                    Track Supplier Deliveries
+                  </button>
+                </div>
+                <div className="spice-grid-item">
+                  <h3 className="spice-grid-title">Financial Transactions</h3>
+                  <p className="aspice-grid-desc">Manage payments and invoices for suppliers.</p>
+                  <button 
+                    onClick={() => switchTab("transactions")}
+                    className="spice-action-btn"
+                  >
+                    Manage Supplier Transactions
                   </button>
                 </div>
               </div>
@@ -201,6 +245,32 @@ const AdminDashboard = () => {
                       Inventory
                     </button>
                   </li>
+                  <li> 
+                    <button
+                      onClick={() => switchTab("messages")}
+                      className={`spice-nav-item ${activeTab === "messages" ? "spice-nav-active" : ""}`}
+                    >
+                      Product Requests
+                    </button>
+                  </li>
+      
+                  <li>
+                    <button
+                      onClick={() => switchTab("deliveries")}
+                      className={`spice-nav-item ${activeTab === "deliveries" ? "spice-nav-active" : ""}`}
+                    >
+                      Supplier Deliveries
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => switchTab("transactions")}
+                      className={`spice-nav-item ${activeTab === "transactions" ? "spice-nav-active" : ""}`}
+                    >
+                      Supplier Transactions
+                    </button>
+                  </li>
+                  
                   <li>
                     <button
                       onClick={() => navigate("/financial-reports")}
