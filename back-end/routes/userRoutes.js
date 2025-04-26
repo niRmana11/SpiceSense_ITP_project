@@ -5,7 +5,9 @@ import {
   getUsersByRole, 
   updateUser, 
   deleteUser, 
-  updateUserProfile
+  updateUserProfile,
+  toggleAccountStatus,
+  getUserSummaryReport
 } from '../controllers/userController.js';
 import userAuth from '../middleware/userAuth.js';
 
@@ -20,5 +22,7 @@ userRouter.get('/role/:role', userAuth, getUsersByRole); // Get users by role (a
 userRouter.put('/update/:userId', userAuth, updateUser); // Update a user (admin only)
 userRouter.delete('/delete/:userId', userAuth, deleteUser); // Delete a user (admin only)
 userRouter.put('/update-profile', userAuth, updateUserProfile);
+userRouter.put('/toggle-status/:userId', userAuth,toggleAccountStatus);
+userRouter.get("/reports/summary", userAuth, getUserSummaryReport); 
 
 export default userRouter;
