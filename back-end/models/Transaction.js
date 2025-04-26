@@ -8,4 +8,5 @@ const transactionSchema = new mongoose.Schema({
     batchNumber: { type: String }
 });
 
-module.exports = mongoose.model("Transaction", transactionSchema);
+module.exports = mongoose.model("Transactionnormal", transactionSchema);//this was originally Transaction
+//changed cause back-end would start because transactionModel is also exported with the same name

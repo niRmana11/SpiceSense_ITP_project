@@ -1,0 +1,231 @@
+/* src/Styles/FinancialReports.css */
+
+/* Inherit Spice Color Palette from AdminNav.css */
+:root {
+    --saffron: #ff9f1c;
+    --cinnamon: #8B4513;
+    --paprika: #E25822;
+    --turmeric: #FFC107;
+    --cardamom: #F5F5F5;
+    --clove: #4A2C2A;
+  }
+  
+  /* Container */
+  .financial-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--cardamom) 0%, #fff5e6 100%);
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Main Title */
+  .financial-title {
+    text-align: center;
+    color: var(--cinnamon);
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+  }
+  
+  /* Card (used for each section) */
+  .financial-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1);
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Section Titles */
+  .financial-section-title {
+    color: var(--cinnamon);
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  /* Summary Statistics */
+  .financial-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .financial-stat-card {
+    background: var(--cardamom);
+    padding: 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(139, 69, 19, 0.1);
+    text-align: center;
+  }
+  
+  .financial-stat-title {
+    color: var(--cinnamon);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .financial-stat-value {
+    color: var(--clove);
+    font-size: 1.2em;
+    opacity: 0.8;
+  }
+  
+  /* Top Selling Items */
+  .financial-top-items {
+    margin-bottom: 1.5rem;
+  }
+  
+  .financial-item-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .financial-item {
+    background: var(--cardamom);
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(139, 69, 19, 0.1);
+    color: var(--clove);
+  }
+  
+  .financial-no-data {
+    color: var(--clove);
+    opacity: 0.8;
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  /* Download Reports */
+  .financial-download-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .financial-download-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+  
+  .financial-download-item {
+    text-align: center;
+  }
+  
+  .financial-download-title {
+    color: var(--cinnamon);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Date Filter */
+  .financial-date-filter {
+    margin-bottom: 1.5rem;
+  }
+  
+  .financial-filter-inputs {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  .financial-date-input {
+    padding: 0.5rem;
+    border: 1px solid rgba(139, 69, 19, 0.1);
+    border-radius: 0.5rem;
+    background: #fff;
+    color: var(--clove);
+    font-size: 0.9rem;
+  }
+  
+  /* Action Buttons (PDF, Excel, Apply Filter) */
+  .financial-action-btn {
+    background: var(--saffron);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0.25rem;
+  }
+  
+  .financial-action-btn:hover {
+    background: var(--turmeric);
+  }
+  
+  /* Payment Logs Table */
+  .financial-payment-logs {
+    overflow-x: auto;
+  }
+  
+  .financial-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+  }
+  
+  .financial-table th,
+  .financial-table td {
+    border: 1px solid rgba(139, 69, 19, 0.1);
+    padding: 0.75rem;
+    text-align: left;
+    color: var(--clove);
+  }
+  
+  .financial-table th {
+    background: var(--cardamom);
+    color: var(--cinnamon);
+    font-weight: bold;
+  }
+  
+  .financial-table tr:nth-child(even) {
+    background: #fafafa;
+  }
+  
+  .financial-item-detail {
+    margin: 0.25rem 0;
+  }
+  
+  .financial-no-data {
+    text-align: center;
+    padding: 1rem;
+    color: var(--clove);
+    opacity: 0.8;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .financial-container {
+      padding: 1rem;
+    }
+  
+    .financial-stats-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .financial-stat-card {
+      width: 100%;
+    }
+  
+    .financial-download-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .financial-download-item {
+      margin-bottom: 1rem;
+    }
+  
+    .financial-filter-inputs {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .financial-date-input,
+    .financial-action-btn {
+      width: 100%;
+    }
+  }

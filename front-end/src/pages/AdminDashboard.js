@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import UserManagement from "../components/UserManagement";
-import AdminOrdersManagement from "../components/AdminOrdersManagement"; // Import the new component
+import AdminOrdersManagement from "../components/AdminOrdersManagement";
 import "../Styles/AdminNav.css";
 
 const AdminDashboard = () => {
@@ -58,7 +58,7 @@ const AdminDashboard = () => {
     switch (activeTab) {
       case "users":
         return <UserManagement />;
-      case "orders": // New case for orders management
+      case "orders":
         return <AdminOrdersManagement />;
       case "dashboard":
       default:
@@ -68,7 +68,7 @@ const AdminDashboard = () => {
               <h2 className="spice-card-title">Dashboard Overview</h2>
               <p className="spice-welcome-text">Welcome to your admin dashboard, {userData?.name}!</p>
               <p className="spice-info-text">From here you can manage users, view reports, and control system settings.</p>
-             
+              
               <div className="spice-grid">
                 <div className="spice-grid-item">
                   <h3 className="spice-grid-title">User Management</h3>
@@ -80,7 +80,7 @@ const AdminDashboard = () => {
                     Manage Users
                   </button>
                 </div>
-               
+                
                 <div className="spice-grid-item">
                   <h3 className="spice-grid-title">Inventory</h3>
                   <p className="spice-grid-desc">Manage product inventory and stock levels.</p>
@@ -91,15 +91,26 @@ const AdminDashboard = () => {
                     View Inventory
                   </button>
                 </div>
-               
+                
                 <div className="spice-grid-item">
                   <h3 className="spice-grid-title">Orders</h3>
                   <p className="spice-grid-desc">View and manage customer orders.</p>
-                  <button 
-                    onClick={() => switchTab("orders")} // Updated to use switchTab
+                  <button
+                    onClick={() => switchTab("orders")}
                     className="spice-action-btn"
                   >
                     View Orders
+                  </button>
+                </div>
+                
+                <div className="spice-grid-item">
+                  <h3 className="spice-grid-title">Financial Reports</h3>
+                  <p className="spice-grid-desc">View financial reports and sales data.</p>
+                  <button
+                    onClick={() => navigate("/financial-reports")}
+                    className="spice-action-btn"
+                  >
+                    View Reports
                   </button>
                 </div>
               </div>
@@ -147,7 +158,7 @@ const AdminDashboard = () => {
                 <p className="spice-user-name">{userData.name}</p>
                 <p className="spice-user-email">{userData.email}</p>
               </div>
-             
+              
               <nav className="spice-sidebar-nav">
                 <ul className="spice-nav-list">
                   <li>
@@ -183,20 +194,27 @@ const AdminDashboard = () => {
                   <li>
                     <button
                       onClick={() => navigate("/inventory-overview")}
-                      className="spice-nav-item"
+                      className={`spice-nav-item ${
+                        location.pathname === "/inventory-overview" ? "spice-nav-active" : ""
+                      }`}
                     >
                       Inventory
                     </button>
                   </li>
                   <li>
-                    <button className="spice-nav-item">
+                    <button
+                      onClick={() => navigate("/financial-reports")}
+                      className={`spice-nav-item ${
+                        location.pathname === "/financial-reports" ? "spice-nav-active" : ""
+                      }`}
+                    >
                       Reports
                     </button>
                   </li>
                 </ul>
               </nav>
             </div>
-           
+            
             {/* Main Content */}
             <div className="spice-content">
               {renderContent()}
