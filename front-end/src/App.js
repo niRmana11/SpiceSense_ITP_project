@@ -30,7 +30,7 @@ import InventoryTransactions from "./pages/InventoryTransactions.js";
 import SearchFilter from "./pages/SearchFilter.js";
 import AdminProducts from "./pages/AdminProducts.js";
 import FinancialReports from "./pages/FinancialReports.js"; // Added
-
+import AccountManagement from "./pages/AccountManagement"; 
 
 function App() {
 
@@ -70,6 +70,8 @@ function App() {
         <Route path="/search-filter" element={<SearchFilter />}></Route>
         <Route path="/admin-products" element={<AdminProducts />}></Route>
         <Route path="/financial-reports" element={<FinancialReports />} /> {/* Added */}
+        <Route path="/account-management" element={<AccountManagement />} /> {/* New route */}
+
       </Routes>
     </Router>
     </CookiesProvider>
