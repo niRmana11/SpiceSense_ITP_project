@@ -25,7 +25,7 @@
 /* Container */
 .spice-dashboard-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #F7F7F7 0%, #F1ECE4 100%);
+  background: linear-gradient(135deg, #f0cdcd 0%, #f5d9ac 100%);
   padding: 2rem;
 }
 
@@ -170,7 +170,7 @@
   background: #fff;
   border-radius: 1rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
+  padding: 1.5rem 2rem;
 }
 
 .spice-user-info {
@@ -222,6 +222,11 @@
 
 .spice-nav-active {
   background: var(--primary);
+  color: #fff;
+}
+
+.spice-nav-active:hover {
+  background: var(--secondary);
   color: #fff;
 }
 
