@@ -201,9 +201,6 @@ export const deleteUser = async (req, res) => {
   }
 };
 
-
-
-
 export const updateUserProfile = async (req, res) => {
   try {
     
