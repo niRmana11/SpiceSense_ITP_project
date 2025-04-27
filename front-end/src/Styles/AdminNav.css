@@ -1,19 +1,31 @@
 /* Styles/AdminNav.css */
 
-/* Spice Color Palette */
+/* Professional Color Palette */
 :root {
-  --saffron: #ff9f1c;
-  --cinnamon: #8B4513;
-  --paprika: #E25822;
-  --turmeric: #FFC107;
-  --cardamom: #F5F5F5;
-  --clove: #4A2C2A;
+  --primary: #e79c51;
+  /* Soft Golden Brown */
+  --secondary: #6B4226;
+  /* Rich Brown */
+  --accent: #b25716;
+  /* Burnt Orange */
+  --background-light: #F1ECE4;
+  /* Light Beige */
+  --background-dark: #40302a;
+  /* Deep Cocoa */
+  --text-primary: #212121;
+  /* Darker Text for Better Contrast */
+  --text-secondary: #3c3c3c;
+  /* Slightly Lighter Gray for Secondary Text */
+  --card-background: #FFFFFF;
+  /* White for Cards */
+  --card-border: rgba(0, 0, 0, 0.1);
+  /* Slightly Lighter Border */
 }
 
 /* Container */
 .spice-dashboard-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8e5d0 0%, #f9dbbd 100%);
+  background: linear-gradient(135deg, #F7F7F7 0%, #F1ECE4 100%);
   padding: 2rem;
 }
 
@@ -25,7 +37,7 @@
   background: #fff;
   padding: 1rem 2rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
   animation: spiceNavSlide 0.5s ease-out;
 }
@@ -52,7 +64,7 @@
 .spice-logo-circle {
   width: 40px;
   height: 40px;
-  background: var(--saffron);
+  background: var(--primary);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -72,7 +84,7 @@
 }
 
 .spice-nav-title {
-  color: var(--cinnamon);
+  color: var(--text-primary);
   font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -86,7 +98,7 @@
 }
 
 .spice-user-greeting {
-  color: var(--clove);
+  color: var(--text-secondary);
   font-weight: 500;
   opacity: 0.9;
   transition: opacity 0.3s ease;
@@ -100,7 +112,7 @@
 .spice-logout-btn {
   position: relative;
   padding: 0.5rem 1.25rem;
-  background: var(--paprika);
+  background: var(--accent);
   color: #fff;
   border: none;
   border-radius: 2rem;
@@ -113,7 +125,7 @@
 }
 
 .spice-logout-btn:hover {
-  background: var(--cinnamon);
+  background: var(--secondary);
   transform: translateX(5px);
 }
 
@@ -138,8 +150,8 @@
 
 /* Error Message */
 .spice-error-message {
-  background: rgba(226, 88, 34, 0.1);
-  color: var(--paprika);
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--accent);
   padding: 1rem;
   border-radius: 0.75rem;
   margin-bottom: 1.5rem;
@@ -157,7 +169,7 @@
   max-width: 260px;
   background: #fff;
   border-radius: 1rem;
-  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
 }
 
@@ -166,20 +178,20 @@
 }
 
 .spice-user-label {
-  color: var(--clove);
+  color: var(--text-secondary);
   font-weight: 500;
   margin-bottom: 0.25rem;
   display: block;
 }
 
 .spice-user-name {
-  color: var(--cinnamon);
+  color: var(--primary);
   font-weight: bold;
   font-size: 1.1rem;
 }
 
 .spice-user-email {
-  color: var(--clove);
+  color: var(--text-secondary);
   font-size: 0.9rem;
   opacity: 0.8;
 }
@@ -200,16 +212,16 @@
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
   background: transparent;
-  color: var(--clove);
+  color: var(--text-primary);
   transition: all 0.3s ease;
 }
 
 .spice-nav-item:hover {
-  background: var(--cardamom);
+  background: var(--background-light);
 }
 
 .spice-nav-active {
-  background: var(--saffron);
+  background: var(--primary);
   color: #fff;
 }
 
@@ -223,27 +235,26 @@
 }
 
 .spice-card {
-  background: #fff;
+  background: var(--card-background);
   padding: 2rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .spice-card-title {
-  color: var(--cinnamon);
+  color: var(--primary);
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
 
 .spice-welcome-text {
-  color: var(--clove);
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
 .spice-info-text {
-  color: var(--clove);
-  opacity: 0.8;
+  color: var(--text-secondary);
   margin-bottom: 1.5rem;
 }
 
@@ -256,27 +267,27 @@
 }
 
 .spice-grid-item {
-  background: var(--cardamom);
+  background: #fff;
   padding: 1rem;
   border-radius: 0.75rem;
-  border: 1px solid rgba(139, 69, 19, 0.1);
+  border: 1px solid var(--card-border);
 }
 
 .spice-grid-title {
-  color: var(--cinnamon);
+  color: var(--primary);
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
 .spice-grid-desc {
-  color: var(--clove);
+  color: var(--text-secondary);
   font-size: 0.9rem;
   opacity: 0.8;
   margin-bottom: 1rem;
 }
 
 .spice-action-btn {
-  background: var(--saffron);
+  background: var(--primary);
   color: #fff;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
@@ -285,7 +296,7 @@
 }
 
 .spice-action-btn:hover {
-  background: var(--turmeric);
+  background: var(--secondary);
 }
 
 /* Loading */
@@ -294,7 +305,7 @@
   padding: 2rem;
   border-radius: 1rem;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* Responsive Design */
