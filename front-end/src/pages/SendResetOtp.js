@@ -21,6 +21,8 @@ const SendResetOtp = () => {
         setMessageType('success');
         setMessage(response.data.message);
         setOtpSent(true);
+        localStorage.setItem('resetEmail', email); // Store email in localStorage
+        console.log('OTP sent, passing email:', email);
       } else {
         setMessageType('error');
         setMessage(response.data.message);
@@ -63,19 +65,27 @@ const SendResetOtp = () => {
               />
             </div>
             <button type="submit" disabled={isSubmitting} className="spice-button">
-              {isSubmitting ? "Sending..." : "Send OTP"}
+              {isSubmitting ? 'Sending...' : 'Send OTP'}
             </button>
           </form>
         ) : (
           <div className="spice-form">
             <p className="spice-subtitle text-center">OTP has been sent to your email. Please check your inbox.</p>
-            <Link to="/reset-password" className="spice-button">Enter OTP to Reset Password</Link>
+            <Link
+              to={{
+                pathname: '/reset-password',
+                state: { email } // Pass email through state
+              }}
+              className="spice-button"
+            >
+              Enter OTP to Reset Password
+            </Link>
           </div>
         )}
 
         <div className="spice-link-section">
           <p className="spice-link-text">
-            Remember your password?{" "}
+            Remember your password?{' '}
             <Link to="/login" className="spice-link">Log in</Link>
           </p>
         </div>

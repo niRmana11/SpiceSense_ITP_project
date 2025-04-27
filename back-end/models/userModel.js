@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  phone: { type: String, required: true }, // Added phone field
+  phone: { type: String, required: true },
   password: { type: String, required: true },
   role: { 
     type: String, 
@@ -26,6 +26,8 @@ const userSchema = new mongoose.Schema({
   isAccountVerified: { type: Boolean, default: false },
   resetOtp: { type: String, default: "" },
   resetOtpExpireAt: { type: Number, default: 0 },
+  // New field for account status
+  isActive: { type: Boolean, default: true }, // Active by default
 });
 
 const userModel = mongoose.model('User', userSchema);

@@ -1,0 +1,275 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Page Layout */
+  .spicesense-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    position: relative;
+    overflow-x: hidden;
+  }
+  
+  /* Header */
+  .spicesense-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 4rem;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .spicesense-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .spicesense-logo img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+  
+  .spicesense-logo span {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #d97706;
+  }
+  
+  .spicesense-nav {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .spicesense-nav a {
+    text-decoration: none;
+    font-size: 1.1rem;
+    color: #333;
+    transition: color 0.3s;
+  }
+  
+  .spicesense-nav a:hover {
+    color: #d97706;
+  }
+  
+  /* Slideshow */
+  .spicesense-slideshow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 1;
+  }
+  
+  .spicesense-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+  }
+  
+  .spicesense-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(70%);
+  }
+  
+  .spicesense-slide:nth-child(1) {
+    animation: slideShow 12s infinite;
+  }
+  
+  .spicesense-slide:nth-child(2) {
+    animation: slideShow 12s infinite 4s;
+  }
+  
+  .spicesense-slide:nth-child(3) {
+    animation: slideShow 12s infinite 8s;
+  }
+  
+  @keyframes slideShow {
+    0% { opacity: 0; }
+    8% { opacity: 1; }
+    33% { opacity: 1; }
+    41% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+  
+  /* Animations */
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes buttonGlow {
+    0% { box-shadow: 0 0 10px rgba(217, 119, 6, 0.4); }
+    50% { box-shadow: 0 0 20px rgba(217, 119, 6, 0.7); }
+    100% { box-shadow: 0 0 10px rgba(217, 119, 6, 0.4); }
+  }
+  
+  /* Container */
+  .spicesense-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    padding: 4rem;
+    text-align: center;
+    max-width: 600px;
+    width: 90%;
+    margin: 120px auto 2rem;
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1s ease-out forwards;
+  }
+  
+  /* Title */
+  .spicesense-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #d97706;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  /* Links */
+  .spicesense-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2.5rem;
+  }
+  
+  .spicesense-btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: #fff;
+    background: #d97706;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    animation: buttonGlow 2s infinite;
+  }
+  
+  .spicesense-btn:hover {
+    background: #b45309;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(217, 119, 6, 0.5);
+  }
+  
+  .spicesense-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+  
+  .spicesense-btn.secondary {
+    background: #991b1b;
+  }
+  
+  .spicesense-btn.secondary:hover {
+    background: #7f1d1d;
+    box-shadow: 0 8px 20px rgba(153, 27, 27, 0.5);
+  }
+  
+  /* Footer */
+  .spicesense-footer {
+    margin-top: auto;
+    padding: 1.5rem 4rem;
+    background: rgba(255, 255, 255, 0.95);
+    text-align: center;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .spicesense-footer p {
+    color: #333;
+    font-size: 0.9rem;
+  }
+  
+  .spicesense-footer-links {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  
+  .spicesense-footer-links a {
+    text-decoration: none;
+    color: #d97706;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+  }
+  
+  .spicesense-footer-links a:hover {
+    color: #b45309;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .spicesense-header {
+      padding: 1rem 2rem;
+      flex-direction: column;
+      gap: 1rem;
+    }
+  
+    .spicesense-nav {
+      gap: 1rem;
+    }
+  
+    .spicesense-container {
+      padding: 2rem;
+      margin-top: 100px;
+    }
+  
+    .spicesense-title {
+      font-size: 2.25rem;
+    }
+  
+    .spicesense-links {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+  
+    .spicesense-btn {
+      padding: 0.875rem 2rem;
+      font-size: 1.125rem;
+    }
+  
+    .spicesense-footer {
+      padding: 1rem 2rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .spicesense-logo span {
+      font-size: 1.25rem;
+    }
+  
+    .spicesense-logo img {
+      width: 30px;
+      height: 30px;
+    }
+  
+    .spicesense-nav a {
+      font-size: 0.9rem;
+    }
+  }

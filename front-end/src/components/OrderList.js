@@ -77,14 +77,20 @@ function OrdersList({ userId }) {
     }
   };
 
-  // Open payment modal
+  // Open payment modal with confirmation
   const openPaymentModal = (order) => {
-    setCurrentOrder(order);
-    setShowPaymentModal(true);
-    fetchCreditCards();
-    setSelectedCard(null);
-    setNewCard({ cardNumber: "", cardHolder: "", expiryDate: "", cvv: "" });
-    setCardErrors({ cardNumber: "", cardHolder: "", expiryDate: "", cvv: "" });
+    const confirmPayment = window.confirm(
+      `Are you sure you want to proceed with payment for Order #${order._id} amounting to $${order.total.toFixed(2)}?`
+    );
+    
+    if (confirmPayment) {
+      setCurrentOrder(order);
+      setShowPaymentModal(true);
+      fetchCreditCards();
+      setSelectedCard(null);
+      setNewCard({ cardNumber: "", cardHolder: "", expiryDate: "", cvv: "" });
+      setCardErrors({ cardNumber: "", cardHolder: "", expiryDate: "", cvv: "" });
+    }
   };
 
   // Validate credit card

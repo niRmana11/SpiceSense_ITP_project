@@ -1,0 +1,398 @@
+/* src/Styles/SupplierMessages.css */
+
+/* Spice-inspired color palette */
+:root {
+    --sm-saffron: #ffaa33; /* Vibrant yellow-orange */
+    --sm-turmeric: #e69b00; /* Warm golden yellow */
+    --sm-cinnamon: #8b4513; /* Rich brown */
+    --sm-paprika: #d2691e; /* Spicy orange-red */
+    --sm-cream: #fff8e6; /* Light creamy background */
+    --sm-shadow: rgba(139, 69, 19, 0.2); /* Subtle cinnamon shadow */
+    --sm-gray: #6b4e31; /* Muted brown-gray for text */
+  }
+  
+  /* Main container */
+  .sm-container {
+    padding: 1.5rem;
+    background: linear-gradient(to bottom, var(--sm-cream), var(--sm-saffron));
+    min-height: 100vh;
+    animation: smFadeIn 0.5s ease-in;
+  }
+  
+  /* Card */
+  .sm-card {
+    background: #fff;
+    box-shadow: 0 4px 12px var(--sm-shadow);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Title */
+  .sm-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--sm-cinnamon);
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Loading state */
+  .sm-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+  }
+  
+  .sm-spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 4px solid var(--sm-turmeric);
+    border-top: 4px solid transparent;
+    border-radius: 50%;
+    animation: smSpin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+  
+  /* Error message */
+  .sm-error {
+    background: rgba(210, 105, 30, 0.1);
+    border: 1px solid var(--sm-paprika);
+    color: var(--sm-cinnamon);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Filter */
+  .sm-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .sm-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--sm-gray);
+  }
+  
+  .sm-select {
+    padding: 0.5rem;
+    border: 1px solid var(--sm-saffron);
+    border-radius: 0.375rem;
+    transition: all 0.3s ease;
+  }
+  
+  .sm-select:focus {
+    outline: none;
+    border-color: var(--sm-paprika);
+    box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.2);
+  }
+  
+  /* Messages */
+  .sm-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .sm-message {
+    background: var(--sm-cream);
+    border: 1px solid var(--sm-saffron);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .sm-message:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--sm-shadow);
+  }
+  
+  .sm-message-unseen {
+    border-left: 4px solid var(--sm-turmeric);
+  }
+  
+  .sm-message-seen {
+    border-left: 4px solid var(--sm-gray);
+  }
+  
+  .sm-message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  
+  .sm-message-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--sm-cinnamon);
+  }
+  
+  .sm-message-subtext {
+    font-size: 0.875rem;
+    color: var(--sm-gray);
+  }
+  
+  .sm-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .sm-status-pending {
+    background: rgba(255, 170, 51, 0.2);
+    color: var(--sm-saffron);
+  }
+  
+  .sm-status-approved {
+    background: rgba(34, 139, 34, 0.2);
+    color: #228b22;
+  }
+  
+  .sm-status-rejected {
+    background: rgba(178, 34, 34, 0.2);
+    color: #b22222;
+  }
+  
+  .sm-status-default {
+    background: rgba(107, 78, 49, 0.2);
+    color: var(--sm-gray);
+  }
+  
+  .sm-message-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .sm-message-text {
+    font-size: 0.875rem;
+    color: var(--sm-gray);
+  }
+  
+  .sm-bold {
+    font-weight: 600;
+    color: var(--sm-cinnamon);
+  }
+  
+  .sm-message-date {
+    font-size: 0.75rem;
+    color: var(--sm-gray);
+    font-style: italic;
+  }
+  
+  .sm-message-footer {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--sm-saffron);
+  }
+  
+  .sm-approved,
+  .sm-rejected {
+    background: rgba(255, 248, 230, 0.5);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+  }
+  
+  .sm-message-action {
+    margin-top: 0.75rem;
+    text-align: right;
+  }
+  
+  .sm-button-respond {
+    background: var(--sm-turmeric);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    transition: background 0.3s ease;
+  }
+  
+  .sm-button-respond:hover {
+    background: var(--sm-paprika);
+  }
+  
+  .sm-new-request {
+    margin-top: 0.5rem;
+    text-align: right;
+  }
+  
+  .sm-new-badge {
+    background: var(--sm-turmeric);
+    color: #fff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  
+  /* Modal */
+  .sm-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    animation: smFadeIn 0.3s ease-in;
+  }
+  
+  .sm-modal-content {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 6px 16px var(--sm-shadow);
+    width: 100%;
+    max-width: 28rem;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .sm-modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--sm-cinnamon);
+    margin-bottom: 1rem;
+  }
+  
+  .sm-modal-info {
+    margin-bottom: 1rem;
+  }
+  
+  .sm-modal-product {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--sm-cinnamon);
+  }
+  
+  .sm-modal-subtext {
+    font-size: 0.875rem;
+    color: var(--sm-gray);
+  }
+  
+  .sm-form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .sm-radio-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  
+  .sm-radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  
+  .sm-radio {
+    accent-color: var(--sm-turmeric);
+  }
+  
+  .sm-radio-text {
+    color: var(--sm-gray);
+  }
+  
+  .sm-input,
+  .sm-textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--sm-saffron);
+    border-radius: 0.375rem;
+    transition: all 0.3s ease;
+  }
+  
+  .sm-input:focus,
+  .sm-textarea:focus {
+    outline: none;
+    border-color: var(--sm-paprika);
+    box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.2);
+  }
+  
+  .sm-textarea {
+    resize: vertical;
+    min-height: 4rem;
+  }
+  
+  .sm-form-details {
+    margin-top: 1rem;
+  }
+  
+  .sm-total {
+    margin-top: 0.75rem;
+  }
+  
+  .sm-total-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--sm-cinnamon);
+  }
+  
+  .sm-modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  
+  .sm-button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .sm-button-cancel {
+    background: var(--sm-gray);
+    color: #fff;
+  }
+  
+  .sm-button-cancel:hover {
+    background: #8b5a2b;
+  }
+  
+  .sm-button-submit {
+    background: var(--sm-turmeric);
+    color: #fff;
+  }
+  
+  .sm-button-submit:hover {
+    background: var(--sm-paprika);
+  }
+  
+  /* Empty state */
+  .sm-empty {
+    text-align: center;
+    padding: 2rem;
+    color: var(--sm-gray);
+  }
+  
+  /* Animations */
+  @keyframes smFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes smSpin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }

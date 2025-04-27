@@ -1,0 +1,320 @@
+/* src/Styles/AdminMessages.css */
+
+/* Spice-inspired color palette */
+:root {
+    --am-saffron: #ffaa33; /* Vibrant yellow-orange */
+    --am-turmeric: #e69b00; /* Warm golden yellow */
+    --am-cinnamon: #8b4513; /* Rich brown */
+    --am-paprika: #d2691e; /* Spicy orange-red */
+    --am-cream: #fff8e6; /* Light creamy background */
+    --am-shadow: rgba(139, 69, 19, 0.2); /* Subtle cinnamon shadow */
+    --am-gray: #6b4e31; /* Muted brown-gray for text */
+  }
+  
+  /* Main container */
+  .am-container {
+    padding: 1.5rem;
+    background: linear-gradient(to bottom, var(--am-cream), var(--am-saffron));
+    min-height: 100vh;
+    animation: amFadeIn 0.5s ease-in;
+  }
+  
+  /* Card */
+  .am-card {
+    background: #fff;
+    box-shadow: 0 4px 12px var(--am-shadow);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Header */
+  .am-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .am-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--am-cinnamon);
+  }
+  
+  /* Buttons */
+  .am-button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .am-button-primary {
+    background: var(--am-turmeric);
+    color: #fff;
+  }
+  
+  .am-button-primary:hover {
+    background: var(--am-paprika);
+  }
+  
+  .am-button-disabled {
+    background: var(--am-gray);
+    color: #fff;
+    cursor: not-allowed;
+  }
+  
+  /* Loading state */
+  .am-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+  }
+  
+  .am-spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 4px solid var(--am-turmeric);
+    border-top: 4px solid transparent;
+    border-radius: 50%;
+    animation: amSpin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+  
+  /* Error and Debug */
+  .am-error {
+    background: rgba(210, 105, 30, 0.1);
+    border: 1px solid var(--am-paprika);
+    color: var(--am-cinnamon);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .am-debug {
+    background: rgba(255, 170, 51, 0.1);
+    border: 1px solid var(--am-saffron);
+    color: var(--am-gray);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Form */
+  .am-form-container {
+    background: var(--am-cream);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .am-form-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--am-cinnamon);
+    margin-bottom: 1rem;
+  }
+  
+  .am-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .am-form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .am-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--am-gray);
+    margin-bottom: 0.25rem;
+  }
+  
+  .am-select,
+  .am-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--am-saffron);
+    border-radius: 0.375rem;
+    transition: all 0.3s ease;
+  }
+  
+  .am-select:focus,
+  .am-input:focus {
+    outline: none;
+    border-color: var(--am-paprika);
+    box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.2);
+  }
+  
+  .am-error-text {
+    color: var(--am-paprika);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  
+  /* Filter */
+  .am-filter {
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  /* Messages */
+  .am-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .am-message {
+    background: var(--am-cream);
+    border: 1px solid var(--am-saffron);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .am-message:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--am-shadow);
+  }
+  
+  .am-message-unseen {
+    border-left: 4px solid var(--am-turmeric);
+  }
+  
+  .am-message-seen {
+    border-left: 4px solid var(--am-gray);
+  }
+  
+  .am-message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  
+  .am-message-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--am-cinnamon);
+  }
+  
+  .am-message-subtext {
+    font-size: 0.875rem;
+    color: var(--am-gray);
+  }
+  
+  .am-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .am-status-pending {
+    background: rgba(255, 170, 51, 0.2);
+    color: var(--am-saffron);
+  }
+  
+  .am-status-approved {
+    background: rgba(34, 139, 34, 0.2);
+    color: #228b22;
+  }
+  
+  .am-status-rejected {
+    background: rgba(178, 34, 34, 0.2);
+    color: #b22222;
+  }
+  
+  .am-status-default {
+    background: rgba(107, 78, 49, 0.2);
+    color: var(--am-gray);
+  }
+  
+  .am-message-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .am-message-text {
+    font-size: 0.875rem;
+    color: var(--am-gray);
+  }
+  
+  .am-bold {
+    font-weight: 600;
+    color: var(--am-cinnamon);
+  }
+  
+  .am-message-date {
+    font-size: 0.75rem;
+    color: var(--am-gray);
+    font-style: italic;
+  }
+  
+  .am-message-footer {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--am-saffron);
+  }
+  
+  .am-approved,
+  .am-rejected {
+    background: rgba(255, 248, 230, 0.5);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+  }
+  
+  /* New response badge */
+  .am-new-response {
+    margin-top: 0.5rem;
+    text-align: right;
+  }
+  
+  .am-new-badge {
+    background: var(--am-turmeric);
+    color: #fff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  
+  /* Empty state */
+  .am-empty {
+    text-align: center;
+    padding: 2rem;
+    color: var(--am-gray);
+  }
+  
+  /* Animations */
+  @keyframes amFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes amSpin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
