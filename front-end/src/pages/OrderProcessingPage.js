@@ -4,18 +4,27 @@ import { createOrder } from '../api';
 import NavigationBar from "../components/NavigationBar";
 import '../Styles/OrderProcessing.css';
 
-const userId = sessionStorage.getItem("userId");
-
 const OrderProcessingPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const userId = sessionStorage.getItem("userId") || '';
+  
+  // Initialize form with default values
   const [form, setForm] = useState({
-    userId: userId,
     quantity: 1,
     shippingAddress: '',
     billingAddress: ''
   });
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    // Check if user is logged in
+    if (!userId) {
+      // Redirect to login page if userId is not available
+      navigate('/login', { state: { redirect: `/order/${id}` } });
+    }
+  }, [userId, navigate, id]);
 
   const validateForm = () => {
     let tempErrors = {};
@@ -39,96 +48,130 @@ const OrderProcessingPage = () => {
       tempErrors.billingAddress = 'Billing address must be at least 5 characters';
     }
 
+
+
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value, type } = e.target;
+    // Handle different input types appropriately
+    const updatedValue = type === 'number' ? parseInt(value, 10) || 1 : value;
+    
+    setForm(prevForm => ({ ...prevForm, [name]: updatedValue }));
+    
     // Clear error when user starts typing
-    if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: '' });
+    if (errors[name]) {
+      setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
     }
   };
 
-  const handleSubmit = async () => {
-    if (validateForm()) {
-      try {
-        const orderData = {
-          userId: form.userId,
-          items: [{ itemId: id, quantity: form.quantity }],
-          shippingAddress: form.shippingAddress,
-          billingAddress: form.billingAddress
-        };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
 
-        const response = await createOrder(orderData);
+    setIsSubmitting(true);
+
+    try {
+      // Format the order data according to API requirements
+      const orderData = {
+        userId: userId,
+        items: [{ 
+          itemId: id, 
+          quantity: parseInt(form.quantity, 10) 
+        }],
+        shippingAddress: form.shippingAddress,
+        billingAddress: form.billingAddress
+      };
+
+      console.log('Sending order data:', orderData); // Debug log
+
+      const response = await createOrder(orderData);
+      
+      if (response && response.data && response.data.order) {
         navigate(`/confirm/${response.data.order._id}`);
-        window.location.reload();
-      } catch (error) {
-        console.error('Order creation failed:', error);
-        setErrors({ ...errors, submit: 'Failed to place order. Please try again.' });
+      } else {
+        throw new Error('Invalid response from server');
       }
+    } catch (error) {
+      console.error('Order creation failed:', error);
+      let errorMessage = 'Failed to place order. Please try again.';
+      
+      // Handle specific error responses from the API
+      if (error.response) {
+        console.log('Error response:', error.response.data);
+        errorMessage = error.response.data.message || errorMessage;
+      }
+      
+      setErrors(prevErrors => ({ ...prevErrors, submit: errorMessage }));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div>
       <NavigationBar />
-      <div style={{ maxWidth: '400px', margin: '20px auto' }}>
+      <div className="order-container">
         <h2>Order Processing</h2>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label>Quantity:</label>
-          <input
-            type="number"
-            name="quantity"
-            value={form.quantity}
-            onChange={handleChange}
-            min="1"
-            style={{ width: '100%', padding: '5px' }}
-          />
-          {errors.quantity && <span style={{ color: 'red', fontSize: '12px' }}>{errors.quantity}</span>}
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="quantity">Quantity:</label>
+            <input
+              id="quantity"
+              type="number"
+              name="quantity"
+              value={form.quantity}
+              onChange={handleChange}
+              min="1"
+              className={errors.quantity ? 'input-error' : ''}
+            />
+            {errors.quantity && <span className="error-message">{errors.quantity}</span>}
+          </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label>Shipping Address:</label>
-          <input
-            type="text"
-            name="shippingAddress"
-            value={form.shippingAddress}
-            onChange={handleChange}
-            style={{ width: '100%', padding: '5px' }}
-          />
-          {errors.shippingAddress && <span style={{ color: 'red', fontSize: '12px' }}>{errors.shippingAddress}</span>}
-        </div>
+          <div className="form-group">
+            <label htmlFor="shippingAddress">Shipping Address:</label>
+            <textarea
+              id="shippingAddress"
+              name="shippingAddress"
+              value={form.shippingAddress}
+              onChange={handleChange}
+              className={errors.shippingAddress ? 'input-error' : ''}
+              rows="3"
+            />
+            {errors.shippingAddress && <span className="error-message">{errors.shippingAddress}</span>}
+          </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label>Billing Address:</label>
-          <input
-            type="text"
-            name="billingAddress"
-            value={form.billingAddress}
-            onChange={handleChange}
-            style={{ width: '100%', padding: '5px' }}
-          />
-          {errors.billingAddress && <span style={{ color: 'red', fontSize: '12px' }}>{errors.billingAddress}</span>}
-        </div>
+          <div className="form-group">
+            <label htmlFor="billingAddress">Billing Address:</label>
+            <textarea
+              id="billingAddress"
+              name="billingAddress"
+              value={form.billingAddress}
+              onChange={handleChange}
+              className={errors.billingAddress ? 'input-error' : ''}
+              rows="3"
+            />
+            {errors.billingAddress && <span className="error-message">{errors.billingAddress}</span>}
+          </div>
 
-        {errors.submit && <div style={{ color: 'red', marginBottom: '15px' }}>{errors.submit}</div>}
 
-        <button
-          onClick={handleSubmit}
-          style={{
-            width: '100%',
-            padding: '10px',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            cursor: 'pointer'
-          }}
-        >
-          Place Order
-        </button>
+
+          {errors.submit && <div className="error-banner">{errors.submit}</div>}
+
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Processing...' : 'Place Order'}
+          </button>
+        </form>
       </div>
     </div>
   );

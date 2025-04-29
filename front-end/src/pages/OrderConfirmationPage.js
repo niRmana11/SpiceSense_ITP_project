@@ -89,6 +89,7 @@ const OrderConfirmationPage = () => {
       // Navigate to the delivery tracking page with the new delivery ID
       navigate(`/delivery-tracking/${deliveryId}`);
       
+      
     } catch (err) {
       console.error('Error confirming order:', err.response?.data || err.message);
       
