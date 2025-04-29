@@ -122,6 +122,10 @@ const OrderConfirmationPage = () => {
     }
   };
 
+  const handleViewDeliveries = () => {
+    navigate('/deliveries');
+  };
+
   const handleQuantityChange = (index, value) => {
     const updatedItems = [...order.items];
     updatedItems[index].quantity = parseInt(value) || 1;
@@ -202,6 +206,12 @@ const OrderConfirmationPage = () => {
           {order.status === 'paid' && (
             <div className="order-confirmation-next-steps">
               <p>Your order has been confirmed. You can now track your delivery status.</p>
+              <button 
+                onClick={handleViewDeliveries} 
+                className="order-confirmation-view-deliveries-btn"
+              >
+                View All My Deliveries
+              </button>
             </div>
           )}
         </div>
@@ -211,9 +221,4 @@ const OrderConfirmationPage = () => {
   );
 };
 
-
-
-
-
 export default OrderConfirmationPage;
-
