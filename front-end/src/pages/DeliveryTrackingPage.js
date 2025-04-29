@@ -1,62 +1,82 @@
 // pages/DeliveryTrackingPage.js
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { fetchOrder } from '../api'; // Use the existing API function
 import NavigationBar from "../components/NavigationBar";
-import "../Styles/DeliveryTracking.css"; // You'll need to create this CSS file
+import "../Styles/DeliveryTracking.css";
 
 const DeliveryTrackingPage = () => {
   const { deliveryId } = useParams();
-  const [delivery, setDelivery] = useState(null);
+  const location = useLocation();
   const [order, setOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-
-  
-    
-    
-
-
-  useEffect(() => {   
-    const fetchDeliveryAndOrder = async () => {
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
       try {
         setIsLoading(true);
-        // Fetch delivery details
-        const deliveryResponse = await axios.get(`http://localhost:5000/api/deliveries/${deliveryId}`);
-        setDelivery(deliveryResponse.data);
         
-        // Fetch associated order details
-        const orderResponse = await axios.get(`http://localhost:5000/api/order/${deliveryResponse.data.orderId}`);
-        setOrder(orderResponse.data);
+        // Get orderId from params or from query string
+        let orderId = null;
         
-        setError(null);
+        // Try to get orderId from URL params or query string
+        if (deliveryId) {
+          // Use deliveryId as orderId directly
+          orderId = deliveryId;
+        } else {
+          // Check if orderId is in the query parameters
+          const searchParams = new URLSearchParams(location.search);
+          orderId = searchParams.get('orderId');
+        }
+        
+        if (!orderId) {
+          setError('No order ID provided');
+          setIsLoading(false);
+          return;
+        }
+        
+        // Use the fetchOrder function from your API
+        const response = await fetchOrder(orderId);
+        
+        if (response.data) {
+          setOrder(response.data);
+          setError(null);
+        } else {
+          setError('Order not found');
+        }
       } catch (err) {
-        console.error('Error fetching delivery details:', err);
-        setError('Unable to load delivery tracking information. Please try again later.');
+        console.error('Error fetching order details:', err);
+        setError('Unable to load tracking information. Please try again later.');
       } finally {
         setIsLoading(false);
       }
     };
 
-    if (deliveryId) {
-      fetchDeliveryAndOrder();
-    }
-  }, [deliveryId]);
+    fetchOrderDetails();
+  }, [deliveryId, location.search]);
 
   // Function to format date
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric'
-    });
+    if (!dateString) return 'Pending';
+    
+    try {
+      return new Date(dateString).toLocaleDateString('en-US', {
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric'
+      });
+    } catch (e) {
+      return 'Invalid Date';
+    }
   };
 
   // Function to determine the current step in the delivery process
   const getCurrentStep = (status) => {
-    switch(status) {
+    if (!status) return 0;
+    
+    switch(status.toLowerCase()) {
       case 'ready for shipment':
         return 1;
       case 'shipped':
@@ -65,9 +85,37 @@ const DeliveryTrackingPage = () => {
         return 3;
       case 'delivered':
         return 4;
+      case 'paid':
+        return 1; // If the order is paid but no delivery status, assume "ready for shipment"
       default:
         return 0;
     }
+  };
+
+  // Generate estimated dates based on order date
+  const getEstimatedDates = () => {
+    if (!order) return {};
+    
+    const orderDate = new Date(order.createdAt || Date.now());
+    
+    // Processing: 1-2 days
+    const processingDate = new Date(orderDate);
+    processingDate.setDate(orderDate.getDate() + 1);
+    
+    // Shipping: 3-5 days after processing
+    const shippingDate = new Date(processingDate);
+    shippingDate.setDate(processingDate.getDate() + 2);
+    
+    // Delivery: 2-7 days after shipping
+    const deliveryDate = new Date(shippingDate);
+    deliveryDate.setDate(shippingDate.getDate() + 5);
+    
+    return {
+      orderDate,
+      processingDate,
+      shippingDate,
+      deliveryDate
+    };
   };
 
   if (isLoading) {
@@ -87,54 +135,47 @@ const DeliveryTrackingPage = () => {
         <NavigationBar />
         <div className="delivery-tracking-container">
           <div className="delivery-tracking-error">{error}</div>
-          <button onClick={() => navigate('/deliveries')} className="back-button">
-            Back to Deliveries
+          <button onClick={() => navigate('/home')} className="back-button">
+            Back to Home
           </button>
         </div>
       </div>
     );
   }
 
-  if (!delivery || !order) {
+  if (!order) {
     return (
       <div>
         <NavigationBar />
         <div className="delivery-tracking-container">
-          <div className="delivery-tracking-error">Delivery information not found.</div>
-          <button onClick={() => navigate('/deliveries')} className="back-button">
-            Back to Deliveries
+          <div className="delivery-tracking-error">Order information not found.</div>
+          <button onClick={() => navigate('/home')} className="back-button">
+            Back to Home
           </button>
         </div>
       </div>
     );
   }
 
-  const currentStep = getCurrentStep(delivery.status);
+  const currentStep = getCurrentStep(order.status);
+  const estimatedDates = getEstimatedDates();
 
   return (
     <div>
       <NavigationBar />
       <div className="delivery-tracking-container">
-        <h2 className="delivery-tracking-title">Delivery Tracking</h2>
+        <h2 className="delivery-tracking-title">Order Tracking</h2>
         
         <div className="delivery-tracking-summary">
           <div className="delivery-tracking-info">
             <p><strong>Order Number:</strong> {order._id}</p>
-            <p><strong>Status:</strong> <span className={`status-${delivery.status.replace(/\s+/g, '-')}`}>
-              {delivery.status.charAt(0).toUpperCase() + delivery.status.slice(1)}
+            <p><strong>Status:</strong> <span className={`status-${(order.status || '').replace(/\s+/g, '-')}`}>
+              {order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'Processing'}
             </span></p>
-            {delivery.trackingNumber && (
-              <p><strong>Tracking Number:</strong> {delivery.trackingNumber}</p>
-            )}
-            {delivery.carrier && (
-              <p><strong>Carrier:</strong> {delivery.carrier}</p>
-            )}
-            {delivery.estimatedDeliveryDate && (
-              <p><strong>Estimated Delivery:</strong> {formatDate(delivery.estimatedDeliveryDate)}</p>
-            )}
-            {delivery.actualDeliveryDate && (
-              <p><strong>Delivered On:</strong> {formatDate(delivery.actualDeliveryDate)}</p>
-            )}
+            <p><strong>Order Date:</strong> {formatDate(order.createdAt)}</p>
+            <p><strong>Estimated Processing:</strong> {formatDate(estimatedDates.processingDate)}</p>
+            <p><strong>Estimated Shipping:</strong> {formatDate(estimatedDates.shippingDate)}</p>
+            <p><strong>Estimated Delivery:</strong> {formatDate(estimatedDates.deliveryDate)}</p>
           </div>
         </div>
         
@@ -144,41 +185,25 @@ const DeliveryTrackingPage = () => {
             <div className={`progress-step ${currentStep >= 1 ? 'active' : ''} ${currentStep > 1 ? 'completed' : ''}`}>
               <div className="step-icon">1</div>
               <div className="step-label">Order Processing</div>
-              <div className="step-date">
-                {delivery.statusHistory && delivery.statusHistory.find(h => h.status === 'ready for shipment') 
-                  ? formatDate(delivery.statusHistory.find(h => h.status === 'ready for shipment').timestamp)
-                  : 'Pending'}
-              </div>
+              <div className="step-date">{formatDate(estimatedDates.processingDate)}</div>
             </div>
             
             <div className={`progress-step ${currentStep >= 2 ? 'active' : ''} ${currentStep > 2 ? 'completed' : ''}`}>
               <div className="step-icon">2</div>
               <div className="step-label">Shipped</div>
-              <div className="step-date">
-                {delivery.statusHistory && delivery.statusHistory.find(h => h.status === 'shipped') 
-                  ? formatDate(delivery.statusHistory.find(h => h.status === 'shipped').timestamp)
-                  : 'Pending'}
-              </div>
+              <div className="step-date">Estimated: {formatDate(estimatedDates.shippingDate)}</div>
             </div>
             
             <div className={`progress-step ${currentStep >= 3 ? 'active' : ''} ${currentStep > 3 ? 'completed' : ''}`}>
               <div className="step-icon">3</div>
               <div className="step-label">In Transit</div>
-              <div className="step-date">
-                {delivery.statusHistory && delivery.statusHistory.find(h => h.status === 'in transit') 
-                  ? formatDate(delivery.statusHistory.find(h => h.status === 'in transit').timestamp)
-                  : 'Pending'}
-              </div>
+              <div className="step-date">Pending</div>
             </div>
             
             <div className={`progress-step ${currentStep >= 4 ? 'active' : ''}`}>
               <div className="step-icon">4</div>
               <div className="step-label">Delivered</div>
-              <div className="step-date">
-                {delivery.statusHistory && delivery.statusHistory.find(h => h.status === 'delivered') 
-                  ? formatDate(delivery.statusHistory.find(h => h.status === 'delivered').timestamp)
-                  : 'Pending'}
-              </div>
+              <div className="step-date">Estimated: {formatDate(estimatedDates.deliveryDate)}</div>
             </div>
           </div>
           
@@ -204,34 +229,20 @@ const DeliveryTrackingPage = () => {
           </div>
         </div>
         
-        {/* Delivery Notes */}
-        {delivery.deliveryNotes && (
-          <div className="delivery-notes">
-            <h3>Delivery Notes</h3>
-            <p>{delivery.deliveryNotes}</p>
-          </div>
-        )}
-        
         {/* Shipping Information */}
         <div className="shipping-information">
           <h3>Shipping Information</h3>
           <p><strong>Shipping Address:</strong> {order.shippingAddress}</p>
-          {delivery.carrier && (
-            <p><strong>Carrier:</strong> {delivery.carrier}</p>
-          )}
-          {delivery.trackingNumber && (
-            <div className="tracking-link">
-              <p><strong>Track your package:</strong></p>
-              <p>Use your tracking number {delivery.trackingNumber} on the carrier's website.</p>
-            </div>
-          )}
+          <p className="info-message">Tracking information will be available once your order ships.</p>
         </div>
         
         <div className="delivery-tracking-actions">
-          <button onClick={() => navigate('/delivery-tracking')} className="back-button">
-            Back to Deliveries
+          <button onClick={() => navigate('/home')} className="back-button">
+            Back to Home
           </button>
-          {/* Could add additional actions here like "Contact Support" */}
+          <button onClick={() => window.print()} className="action-button">
+            Print Order Details
+          </button>
         </div>
       </div>
     </div>
