@@ -1,24 +1,24 @@
-/* Professional Color Palette */
+/* Spice-inspired color palette */
 :root {
-  --primary: #6366f1; /* Indigo */
-  --secondary: #4f46e5; /* Deeper Indigo */
-  --accent: #818cf8; /* Light Indigo */
-  --background-light: #f5f3ff; /* Very Light Purple */
-  --background-dark: #2e1065; /* Deep Purple */
-  --text-primary: #1e1b4b; /* Dark Indigo */
-  --text-secondary: #6b7280; /* Cool Gray */
+  --primary: #ffaa33; /* Saffron */
+  --secondary: #e69b00; /* Turmeric */
+  --accent: #d2691e; /* Paprika */
+  --background-light: #fff8e6; /* Cream */
+  --background-dark: #8b4513; /* Cinnamon */
+  --text-primary: #6b4e31; /* Muted brown-gray */
+  --text-secondary: #8b5a2b; /* Darker brown-gray */
   --card-background: #ffffff; /* White */
-  --card-hover: #f8f7ff; /* Very Light Purple */
-  --card-border: rgba(99, 102, 241, 0.1); /* Indigo Border */
-  --success: #10b981; /* Emerald */
-  --warning: #f59e0b; /* Amber */
-  --error: #ef4444; /* Red */
+  --card-hover: #fff8e6; /* Light cream */
+  --card-border: rgba(139, 69, 19, 0.1); /* Cinnamon border */
+  --success: #228b22; /* Forest green */
+  --warning: #e69b00; /* Turmeric */
+  --error: #b22222; /* Dark red */
 }
 
 /* Base Styles */
 .sd-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--background-light) 0%, #e0e7ff 100%);
+  background: linear-gradient(135deg, var(--background-light) 0%, #ffe4b5 100%);
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -36,7 +36,7 @@
   background: var(--card-background);
   padding: 1.5rem 2rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.1), 0 2px 4px -1px rgba(99, 102, 241, 0.06);
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
   margin-bottom: 2rem;
   border: 1px solid var(--card-border);
   animation: slideDown 0.5s ease-out;
@@ -54,7 +54,7 @@
 }
 
 .sd-title {
-  color: var(--primary);
+  color: var(--background-dark);
   font-size: 1.75rem;
   font-weight: 700;
   margin: 0;
@@ -115,18 +115,18 @@
 }
 
 .sd-logout-btn:hover {
-  background: var(--secondary);
+  background: var(--background-dark);
   transform: translateX(5px);
 }
 
 /* Error Message */
 .sd-error {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(178, 34, 34, 0.1);
   color: var(--error);
   padding: 1rem;
   border-radius: 0.75rem;
   margin-bottom: 1.5rem;
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(178, 34, 34, 0.2);
 }
 
 /* Grid Layout */
@@ -141,13 +141,13 @@
   background: var(--card-background);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.1), 0 2px 4px -1px rgba(99, 102, 241, 0.06);
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
   height: fit-content;
   border: 1px solid var(--card-border);
 }
 
 .sd-section-title {
-  color: var(--primary);
+  color: var(--background-dark);
   font-size: 1.4rem;
   margin-top: 0;
   margin-bottom: 1.5rem;
@@ -191,7 +191,7 @@
   background: var(--card-background);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.1), 0 2px 4px -1px rgba(99, 102, 241, 0.06);
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
   border: 1px solid var(--card-border);
 }
 
@@ -216,7 +216,7 @@
 .sd-add-btn:hover, .sd-submit-btn:hover {
   background: var(--secondary);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
 }
 
 .sd-cancel-btn {
@@ -281,13 +281,14 @@
 .sd-input:focus {
   border-color: var(--primary);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 0 3px rgba(255, 170, 51, 0.2);
 }
 
 .sd-form-actions {
   margin-top: 1.5rem;
   display: flex;
   justify-content: flex-end;
+  gap: 1rem;
 }
 
 /* Products List */
@@ -295,7 +296,7 @@
   background: var(--card-background);
   border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.1), 0 2px 4px -1px rgba(99, 102, 241, 0.06);
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
   border: 1px solid var(--card-border);
 }
 
@@ -358,17 +359,17 @@
 }
 
 .sd-stock-high {
-  background-color: rgba(16, 185, 129, 0.1);
+  background-color: rgba(34, 139, 34, 0.1);
   color: var(--success);
 }
 
 .sd-stock-low {
-  background-color: rgba(245, 158, 11, 0.1);
+  background-color: rgba(230, 155, 0, 0.1);
   color: var(--warning);
 }
 
 .sd-stock-out {
-  background-color: rgba(239, 68, 68, 0.1);
+  background-color: rgba(178, 34, 34, 0.1);
   color: var(--error);
 }
 
@@ -384,7 +385,7 @@
 }
 
 .sd-edit-btn {
-  background: rgba(99, 102, 241, 0.1);
+  background: rgba(255, 170, 51, 0.1);
   color: var(--primary);
 }
 
@@ -395,7 +396,7 @@
 }
 
 .sd-delete-btn {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(178, 34, 34, 0.1);
   color: var(--error);
 }
 
@@ -414,7 +415,7 @@
   min-height: 50vh;
   background: var(--card-background);
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.1), 0 2px 4px -1px rgba(99, 102, 241, 0.06);
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
   padding: 2rem;
   border: 1px solid var(--card-border);
 }
@@ -427,7 +428,7 @@
 .sd-spinner {
   width: 50px;
   height: 50px;
-  border: 5px solid rgba(99, 102, 241, 0.2);
+  border: 5px solid rgba(255, 170, 51, 0.2);
   border-top: 5px solid var(--primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
