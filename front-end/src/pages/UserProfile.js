@@ -281,7 +281,7 @@ const UserProfile = () => {
                     </button>
                   </Link>
 
-                  <Link to="/delivery-tracking">
+                  <Link to="/deliveries">
                     <button className="profile-spiced-credit-btn">
                       Delivery Tracking
                     </button>
