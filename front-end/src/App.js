@@ -31,6 +31,9 @@ import SearchFilter from "./pages/SearchFilter.js";
 import AdminProducts from "./pages/AdminProducts.js";
 import FinancialReports from "./pages/FinancialReports.js"; // Added
 import AccountManagement from "./pages/AccountManagement"; 
+import DeliveryTrackingPage from './pages/DeliveryTrackingPage';
+import CustomerDeliveryDashboard from './pages/CustomerDeliveryDashboard';
+
 
 function App() {
 
@@ -69,8 +72,11 @@ function App() {
         <Route path="/inventory-transactions" element={<InventoryTransactions />}></Route>
         <Route path="/search-filter" element={<SearchFilter />}></Route>
         <Route path="/admin-products" element={<AdminProducts />}></Route>
-        <Route path="/financial-reports" element={<FinancialReports />} /> {/* Added */}
-        <Route path="/account-management" element={<AccountManagement />} /> {/* New route */}
+        <Route path="/financial-reports" element={<FinancialReports />} /> 
+        <Route path="/account-management" element={<AccountManagement />} />
+        <Route path="/delivery-tracking/:deliveryId" element={<DeliveryTrackingPage />} />
+        <Route path="/deliveries" element={<CustomerDeliveryDashboard />} />
+  
 
       </Routes>
     </Router>
