@@ -155,7 +155,7 @@ const SupplierTransactions = () => {
             <table className="st-table">
               <thead>
                 <tr>
-                  <th>Invoice #</th>
+                  <th>Invoice</th>
                   <th>Product</th>
                   <th>Amount</th>
                   <th>Due Date</th>
