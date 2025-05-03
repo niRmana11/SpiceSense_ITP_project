@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
-import OrdersList from "../components/OrderList";
+import OrdersList from "../components/OrderList"; // Fixed typo in import
 import NavigationBar from "../components/NavigationBar";
-import "../Styles/UserProfileSpiced.css";
+import "../Styles/UserProfileSpiced.css"; // New CSS file with spiced theme
 
 const UserProfile = () => {
   const [userData, setUserData] = useState(null);
@@ -19,13 +19,11 @@ const UserProfile = () => {
     companyName: "",
     contactPerson: "",
     jobTitle: "",
-    department: "",
-    profilePhoto: "", // Stores Base64 string
+    department: ""
   });
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [previewPhoto, setPreviewPhoto] = useState(null); // For photo preview
-
+  
   const navigate = useNavigate();
   const location = useLocation();
   const userId = sessionStorage.getItem("userId");
@@ -37,7 +35,6 @@ const UserProfile = () => {
         if (passedUserData) {
           setUserData(passedUserData);
           initializeFormData(passedUserData);
-          setPreviewPhoto(passedUserData.profilePhoto || null);
           return;
         }
         const response = await axios.get("http://localhost:5000/api/user/data", {
@@ -46,7 +43,6 @@ const UserProfile = () => {
         if (response.data.success) {
           setUserData(response.data.userData);
           initializeFormData(response.data.userData);
-          setPreviewPhoto(response.data.userData.profilePhoto || null);
         } else {
           setError(response.data.message);
           navigate("/login");
@@ -69,8 +65,7 @@ const UserProfile = () => {
       companyName: user.companyName || "",
       contactPerson: user.contactPerson || "",
       jobTitle: user.jobTitle || "",
-      department: user.department || "",
-      profilePhoto: "",
+      department: user.department || ""
     });
   };
 
@@ -82,62 +77,6 @@ const UserProfile = () => {
     }));
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // Validate file size (~5MB in binary, before Base64 encoding)
-      if (file.size > 5000000) {
-        setError("Image size exceeds 5MB limit.");
-        return;
-      }
-      // Validate file type
-      if (!['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
-        setError("Only JPEG, JPG, or PNG images are allowed.");
-        return;
-      }
-      // Convert to Base64
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64String = reader.result;
-        setFormData(prev => ({
-          ...prev,
-          profilePhoto: base64String
-        }));
-        setPreviewPhoto(base64String);
-      };
-      reader.onerror = () => {
-        setError("Failed to read image file.");
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleRemovePhoto = async () => {
-    setLoading(true);
-    try {
-      const updateData = { removePhoto: true };
-      const response = await axios.put(
-        `http://localhost:5000/api/user/update-profile`,
-        updateData,
-        { withCredentials: true }
-      );
-      if (response.data.success) {
-        setUserData(response.data.userData);
-        setPreviewPhoto(null);
-        setFormData(prev => ({ ...prev, profilePhoto: "" }));
-        setUpdateSuccess(true);
-        setTimeout(() => setUpdateSuccess(false), 3000);
-      } else {
-        setError(response.data.message);
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to remove profile photo");
-      console.error("Error removing profile photo:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleEditClick = () => {
     setIsEditing(true);
     setUpdateSuccess(false);
@@ -146,14 +85,13 @@ const UserProfile = () => {
   const handleCancelClick = () => {
     setIsEditing(false);
     initializeFormData(userData);
-    setPreviewPhoto(userData.profilePhoto || null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+    
     try {
       const updateData = {};
       Object.keys(formData).forEach(key => {
@@ -161,22 +99,21 @@ const UserProfile = () => {
           updateData[key] = formData[key];
         }
       });
-
+      
       if (Object.keys(updateData).length === 0) {
         setIsEditing(false);
         setLoading(false);
         return;
       }
-
+      
       const response = await axios.put(
         `http://localhost:5000/api/user/update-profile`,
         updateData,
         { withCredentials: true }
       );
-
+      
       if (response.data.success) {
-        setUserData(response.data.userData);
-        setPreviewPhoto(response.data.userData.profilePhoto || null);
+        setUserData({...userData, ...updateData});
         setUpdateSuccess(true);
         setTimeout(() => setUpdateSuccess(false), 3000);
         setIsEditing(false);
@@ -321,34 +258,6 @@ const UserProfile = () => {
             <>
               {!isEditing ? (
                 <div className="profile-spiced-details">
-                  <div className="profile-spiced-photo-section">
-                    {userData.profilePhoto ? (
-                      <img
-                        src={userData.profilePhoto}
-                        alt="Profile"
-                        className="profile-spiced-photo"
-                      />
-                    ) : (
-                      <div className="profile-spiced-placeholder">
-                        No Profile Photo
-                      </div>
-                    )}
-                    <button
-                      onClick={handleEditClick}
-                      className="profile-spiced-edit-photo-btn"
-                    >
-                      {userData.profilePhoto ? "Change Photo" : "Add Photo"}
-                    </button>
-                    {userData.profilePhoto && (
-                      <button
-                        onClick={handleRemovePhoto}
-                        className="profile-spiced-remove-photo-btn"
-                        disabled={loading}
-                      >
-                        {loading ? "Removing..." : "Remove Photo"}
-                      </button>
-                    )}
-                  </div>
                   <p className="profile-spiced-detail"><strong>Name:</strong> {userData.name}</p>
                   <p className="profile-spiced-detail"><strong>Email:</strong> {userData.email}</p>
                   <p className="profile-spiced-detail"><strong>Phone:</strong> {userData.phone}</p>
@@ -371,38 +280,18 @@ const UserProfile = () => {
                       Manage My Credit Cards
                     </button>
                   </Link>
+
                   <Link to="/deliveries">
                     <button className="profile-spiced-credit-btn">
                       Delivery Tracking
                     </button>
                   </Link>
+
                   <OrdersList userId={userId} />
+                  
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="profile-spiced-form">
-                  <div className="profile-spiced-form-group">
-                    <label className="profile-spiced-label">Profile Photo</label>
-                    <div className="profile-spiced-photo-preview">
-                      {previewPhoto ? (
-                        <img
-                          src={previewPhoto}
-                          alt="Preview"
-                          className="profile-spiced-photo-preview-img"
-                        />
-                      ) : (
-                        <div className="profile-spiced-placeholder">
-                          No Photo Selected
-                        </div>
-                      )}
-                    </div>
-                    <input
-                      type="file"
-                      name="profilePhoto"
-                      accept="image/jpeg,image/jpg,image/png"
-                      onChange={handleFileChange}
-                      className="profile-spiced-file-input"
-                    />
-                  </div>
                   <div className="profile-spiced-form-group">
                     <label className="profile-spiced-label">Name</label>
                     <input
@@ -414,6 +303,7 @@ const UserProfile = () => {
                       required
                     />
                   </div>
+                  
                   <div className="profile-spiced-form-group">
                     <label className="profile-spiced-label">Email (cannot be changed)</label>
                     <input
@@ -423,6 +313,7 @@ const UserProfile = () => {
                       disabled
                     />
                   </div>
+                  
                   <div className="profile-spiced-form-group">
                     <label className="profile-spiced-label">Phone</label>
                     <input

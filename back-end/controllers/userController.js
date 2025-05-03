@@ -12,7 +12,7 @@ export const getUserData = async (req, res) => {
     console.log("Getting data for user ID:", userId);
 
     const user = await userModel.findById(userId).select(
-      "name email role phone isAccountVerified shippingAddress billingAddress companyName contactPerson jobTitle department profilePhoto"
+      "name email role phone isAccountVerified shippingAddress billingAddress companyName contactPerson jobTitle department"
     );
 
     if (!user) {
@@ -26,6 +26,8 @@ export const getUserData = async (req, res) => {
     return res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
+
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -224,30 +226,12 @@ export const updateUserProfile = async (req, res) => {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    // Handle profile photo (Base64 string)
-    if (updateData.profilePhoto) {
-      // Validate Base64 string format
-      if (!updateData.profilePhoto.startsWith('data:image/')) {
-        return res.status(400).json({ success: false, message: "Invalid image format. Must be a valid Base64 image." });
-      }
-      // Limit size to ~5MB (Base64 is ~33% larger than binary, so adjust accordingly)
-      if (updateData.profilePhoto.length > 7000000) { // Approx 5MB in Base64
-        return res.status(400).json({ success: false, message: "Image size exceeds 5MB limit." });
-      }
-    }
-
-    // Handle profile photo removal
-    if (updateData.removePhoto === 'true') {
-      updateData.profilePhoto = "";
-    }
-
     delete updateData.email;
     delete updateData.role;
     delete updateData.password;
     delete updateData.isAccountVerified;
-    delete updateData.removePhoto; // Clean up temporary field
 
-    const allowedFields = ["name", "phone", "profilePhoto"];
+    const allowedFields = ["name", "phone"];
 
     switch (user.role) {
       case "customer":
