@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema({
   resetOtpExpireAt: { type: Number, default: 0 },
   // New field for account status
   isActive: { type: Boolean, default: true }, // Active by default
+  profilePhoto: { type: String, default: "" },
 });
 
 const userModel = mongoose.model('User', userSchema);
