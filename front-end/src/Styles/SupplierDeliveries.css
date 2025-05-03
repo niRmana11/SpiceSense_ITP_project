@@ -1,357 +1,400 @@
 /* SupplierDeliveries.css */
 
+/* Global container with a warm, spiced background */
 .sd-container {
-    padding: 20px;
-    width: 100%;
-  }
-  
-  .sd-card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 25px;
-  }
-  
-  .sd-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #f3f4f6;
-    padding-bottom: 15px;
-  }
-  
-  .sd-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #4b5563;
-    margin: 0;
-  }
-  
-  .sd-create-btn {
-    background-color: #10b981;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 18px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .sd-create-btn:hover {
-    background-color: #059669;
-  }
-  
-  .sd-create-btn:disabled {
-    background-color: #d1d5db;
-    cursor: not-allowed;
-  }
-  
-  .sd-loading-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 50px;
-  }
-  
-  .sd-spinner {
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    border-top: 4px solid #10b981;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 15px;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  .sd-error {
-    background-color: #fee2e2;
-    border-left: 4px solid #ef4444;
-    color: #b91c1c;
-    padding: 12px 16px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-  }
-  
-  .sd-filter {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .sd-label {
-    font-weight: 500;
-    margin-right: 10px;
-    color: #4b5563;
-  }
-  
-  .sd-select {
-    padding: 8px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    min-width: 180px;
-    background-color: #fff;
-    font-size: 14px;
-  }
-  
-  .sd-empty {
-    background-color: #f9fafb;
-    border-radius: 6px;
-    padding: 30px;
-    text-align: center;
-    color: #6b7280;
-    font-size: 16px;
-    margin: 20px 0;
-  }
-  
-  /* Shipment styles */
-  .sd-shipments {
-    margin-top: 20px;
-  }
-  
-  .sd-shipment-card {
-    background-color: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  }
-  
-  .sd-shipment-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    background-color: #f9fafb;
-    border-bottom: 1px solid #e5e7eb;
-  }
-  
-  .sd-shipment-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin: 0;
-    color: #111827;
-  }
-  
-  .sd-shipment-subtext {
-    font-size: 14px;
-    color: #6b7280;
-    margin: 5px 0 0;
-  }
-  
-  .sd-status {
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-    text-transform: uppercase;
-  }
-  
-  .sd-status-preparing {
-    background-color: #eff6ff;
-    color: #1d4ed8;
-    border: 1px solid #bfdbfe;
-  }
-  
-  .sd-status-shipped {
-    background-color: #f0f9ff;
-    color: #0369a1;
-    border: 1px solid #bae6fd;
-  }
-  
-  .sd-status-transit {
-    background-color: #f5f3ff;
-    color: #6d28d9;
-    border: 1px solid #ddd6fe;
-  }
-  
-  .sd-status-out {
-    background-color: #fef3c7;
-    color: #b45309;
-    border: 1px solid #fde68a;
-  }
-  
-  .sd-status-delivered {
-    background-color: #f0fdf4;
-    color: #166534;
-    border: 1px solid #86efac;
-  }
-  
-  .sd-status-failed {
-    background-color: #fef2f2;
-    color: #b91c1c;
-    border: 1px solid #fecaca;
-  }
-  
-  .sd-shipment-details {
-    padding: 20px;
-  }
-  
-  .sd-shipment-info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
-    margin-bottom: 15px;
-  }
-  
-  .sd-shipment-info-group {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .sd-shipment-label {
-    font-size: 12px;
-    color: #6b7280;
-    margin-bottom: 5px;
-  }
-  
-  .sd-shipment-value {
-    font-size: 14px;
-    font-weight: 500;
-    color: #374151;
-  }
-  
-  .sd-shipment-notes {
-    background-color: #f9fafb;
-    padding: 10px 15px;
-    border-radius: 4px;
-    margin-top: 10px;
-  }
-  
-  .sd-shipment-actions {
-    padding: 15px 20px;
-    border-top: 1px solid #e5e7eb;
-    text-align: right;
-  }
-  
-  .sd-update-btn {
-    background-color: #10b981;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .sd-update-btn:hover {
-    background-color: #059669;
-  }
-  
-  /* Modal styles */
-  .sd-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .sd-modal-content {
-    background-color: white;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-    padding: 25px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-  }
-  
-  .sd-modal-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: #111827;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #e5e7eb;
-  }
-  
-  .sd-modal-info {
-    background-color: #f9fafb;
-    padding: 15px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-  }
-  
-  .sd-modal-product {
-    font-size: 16px;
-    font-weight: 500;
-    margin: 0 0 5px;
-    color: #111827;
-  }
-  
-  .sd-modal-status {
-    font-size: 14px;
-    color: #4b5563;
-    margin: 0;
-  }
-  
-  .sd-form-group {
-    margin-bottom: 15px;
-  }
-  
-  .sd-input, .sd-textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    font-size: 14px;
-  }
-  
-  .sd-textarea {
-    resize: vertical;
-    min-height: 80px;
-  }
-  
-  .sd-modal-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
-  .sd-button {
-    padding: 10px 18px;
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  
-  .sd-button-cancel {
-    background-color: #f3f4f6;
-    color: #4b5563;
-    border: 1px solid #d1d5db;
-  }
-  
-  .sd-button-cancel:hover {
-    background-color: #e5e7eb;
-  }
-  
-  .sd-button-submit {
-    background-color: #10b981;
-    color: white;
-    border: 1px solid #10b981;
-  }
-  
-  .sd-button-submit:hover {
-    background-color: #059669;
-  }
+  padding: 24px;
+  width: 100%;
+  background: linear-gradient(135deg, #fff7e6 0%, #fff1d6 100%); /* Subtle saffron gradient */
+}
+
+/* Card with enhanced shadow and slight border glow */
+.sd-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 147, 0, 0.1); /* Paprika-inspired shadow */
+  padding: 28px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sd-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Header with a spiced border */
+.sd-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #fed7aa; /* Warm saffron border */
+  padding-bottom: 16px;
+}
+
+.sd-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #7f1d1d; /* Deep chili red */
+  margin: 0;
+}
+
+/* Button with spicy hover effect */
+.sd-create-btn {
+  background: #f97316; /* Vibrant saffron orange */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.sd-create-btn:hover {
+  background: #ea580c; /* Darker saffron */
+  transform: scale(1.05);
+}
+
+.sd-create-btn:disabled {
+  background: #d4d4d8;
+  cursor: not-allowed;
+}
+
+/* Loading container with centered spicy spinner */
+.sd-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+}
+
+.sd-spinner {
+  border: 5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 5px solid #f97316; /* Saffron spinner */
+  width: 48px;
+  height: 48px;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error with bold chili red */
+.sd-error {
+  background: #fee2e2;
+  border-left: 5px solid #dc2626; /* Chili red */
+  color: #991b1b;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Filter with turmeric accent */
+.sd-filter {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.sd-label {
+  font-weight: 600;
+  margin-right: 12px;
+  color: #7f1d1d; /* Chili red */
+}
+
+.sd-select {
+  padding: 10px 14px;
+  border: 1px solid #fed7aa; /* Saffron border */
+  border-radius: 6px;
+  min-width: 200px;
+  background: #fff;
+  font-size: 15px;
+  transition: border-color 0.2s ease;
+}
+
+.sd-select:focus {
+  border-color: #f97316;
+  outline: none;
+}
+
+/* Empty state with warm background */
+.sd-empty {
+  background: #fef3c7; /* Turmeric yellow */
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+  color: #854d0e;
+  font-size: 17px;
+  margin: 24px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Shipment styles */
+.sd-shipments {
+  margin-top: 24px;
+}
+
+/* Shipment card with subtle hover animation */
+.sd-shipment-card {
+  background: #ffffff;
+  border: 1px solid #fed7aa;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.sd-shipment-card:hover {
+  transform: translateY(-3px);
+}
+
+.sd-shipment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: #fff7e6; /* Light saffron */
+  border-bottom: 1px solid #fed7aa;
+}
+
+.sd-shipment-title {
+  font-size: 19px;
+  font-weight: 600;
+  margin: 0;
+  color: #7f1d1d; /* Chili red */
+}
+
+.sd-shipment-subtext {
+  font-size: 14px;
+  color: #854d0e; /* Turmeric brown */
+  margin: 6px 0 0;
+}
+
+/* Status badges with spiced colors */
+.sd-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.sd-status-preparing {
+  background: #fef3c7;
+  color: #b45309; /* Turmeric */
+  border: 1px solid #fcd34d;
+}
+
+.sd-status-shipped {
+  background: #ffedd5;
+  color: #c2410c; /* Paprika */
+  border: 1px solid #fb923c;
+}
+
+.sd-status-transit {
+  background: #fee2e2;
+  color: #991b1b; /* Chili */
+  border: 1px solid #f87171;
+}
+
+.sd-status-out {
+  background: #fef3c7;
+  color: #854d0e;
+  border: 1px solid #facc15;
+}
+
+.sd-status-delivered {
+  background: #d1fae5;
+  color: #065f46; /* Cumin green */
+  border: 1px solid #34d399;
+}
+
+.sd-status-failed {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #f87171;
+}
+
+.sd-shipment-details {
+  padding: 20px;
+}
+
+.sd-shipment-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.sd-shipment-info-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.sd-shipment-label {
+  font-size: 13px;
+  color: #854d0e;
+  margin-bottom: 6px;
+}
+
+.sd-shipment-value {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1f2a44; /* Deep spice blue */
+}
+
+.sd-shipment-notes {
+  background: #fff7e6;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-top: 12px;
+}
+
+.sd-shipment-actions {
+  padding: 16px 20px;
+  border-top: 1px solid #fed7aa;
+  text-align: right;
+}
+
+/* Update button with hover effect */
+.sd-update-btn {
+  background: #f97316;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.sd-update-btn:hover {
+  background: #ea580c;
+  transform: scale(1.05);
+}
+
+/* Modal with enhanced shadow */
+.sd-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.sd-modal-content {
+  background: #ffffff;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 640px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 28px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+}
+
+.sd-modal-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #7f1d1d;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #fed7aa;
+}
+
+.sd-modal-info {
+  background: #fff7e6;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.sd-modal-product {
+  font-size: 17px;
+  font-weight: 500;
+  margin: 0 0 6px;
+  color: #1f2a44;
+}
+
+.sd-modal-status {
+  font-size: 15px;
+  color: #854d0e;
+  margin: 0;
+}
+
+.sd-form-group {
+  margin-bottom: 16px;
+}
+
+.sd-input,
+.sd-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #fed7aa;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: border-color 0.2s ease;
+}
+
+.sd-input:focus,
+.sd-textarea:focus {
+  border-color: #f97316;
+  outline: none;
+}
+
+.sd-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.sd-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.sd-button {
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sd-button-cancel {
+  background: #f3f4f6;
+  color: #7f1d1d;
+  border: 1px solid #fed7aa;
+}
+
+.sd-button-cancel:hover {
+  background: #e5e7eb;
+  transform: scale(1.05);
+}
+
+.sd-button-submit {
+  background: #f97316;
+  color: #fff;
+  border: 1px solid #f97316;
+}
+
+.sd-button-submit:hover {
+  background: #ea580c;
+  transform: scale(1.05);
+}
