@@ -36,6 +36,7 @@ const UserManagement = () => {
   const [error, setError] = useState(null);
   const [selectedRole, setSelectedRole] = useState("all");
   const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [showCreateForm, setShowCreateForm] = useState(false); // New state for create form
   const [currentUser, setCurrentUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [formData, setFormData] = useState({
@@ -53,6 +54,7 @@ const UserManagement = () => {
   });
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
+  const [createSuccess, setCreateSuccess] = useState(false); // New state for create success
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     title: "",
@@ -94,7 +96,7 @@ const UserManagement = () => {
     };
 
     fetchUsers();
-  }, [selectedRole, updateSuccess, deleteSuccess]);
+  }, [selectedRole, updateSuccess, deleteSuccess, createSuccess]);
 
   // Filter users based on search term
   useEffect(() => {
@@ -147,6 +149,24 @@ const UserManagement = () => {
     setShowUpdateForm(true);
   };
 
+  // Open create form
+  const handleCreateClick = () => {
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      role: "",
+      password: "",
+      companyName: "",
+      contactPerson: "",
+      jobTitle: "",
+      department: "",
+      shippingAddress: "",
+      billingAddress: "",
+    });
+    setShowCreateForm(true);
+  };
+
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -191,6 +211,44 @@ const UserManagement = () => {
       const errorMessage = err.response?.data?.message || "Failed to update user";
       setError(errorMessage);
       console.error("Error updating user:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Submit create form
+  const handleCreateSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      setError(null);
+
+      const createData = { ...formData };
+
+      // Remove empty fields that are not required
+      Object.keys(createData).forEach((key) => {
+        if (createData[key] === "" && key !== "password") {
+          delete createData[key];
+        }
+      });
+
+      const response = await axios.post(
+        "http://localhost:5000/api/user/create-user",
+        createData,
+        { withCredentials: true }
+      );
+
+      if (response.data.success) {
+        setCreateSuccess(true);
+        setTimeout(() => setCreateSuccess(false), 3000);
+        setShowCreateForm(false);
+      } else {
+        setError(response.data.message || "Failed to create user");
+      }
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "Failed to create user";
+      setError(errorMessage);
+      console.error("Error creating user:", err);
     } finally {
       setLoading(false);
     }
@@ -244,9 +302,10 @@ const UserManagement = () => {
     }
   };
 
-  // Close update form
+  // Close forms
   const handleCloseForm = () => {
     setShowUpdateForm(false);
+    setShowCreateForm(false);
     setFormData({
       name: "",
       email: "",
@@ -349,6 +408,13 @@ const UserManagement = () => {
     <div className="ginger-container">
       <h2 className="ginger-title">User Management</h2>
 
+      {/* Create New User Button */}
+      <div className="ginger-create-button-container">
+        <button onClick={handleCreateClick} className="ginger-create-btn">
+          Create New User
+        </button>
+      </div>
+
       <div className="ginger-search-container">
         <input
           type="text"
@@ -402,6 +468,7 @@ const UserManagement = () => {
       {error && <div className="ginger-error">{error}</div>}
       {updateSuccess && <div className="ginger-success">User updated successfully!</div>}
       {deleteSuccess && <div className="ginger-success">User deleted successfully!</div>}
+      {createSuccess && <div className="ginger-success">User created successfully!</div>}
 
       {/* User Table */}
       {loading ? (
@@ -542,7 +609,7 @@ const UserManagement = () => {
                   className="ginger-input"
                 />
                 <p className="ginger-hint">
-                  Only fill this if you want to change the user&apos;s password
+                  Only fill this if you want to change the user's password
                 </p>
               </div>
 
@@ -571,6 +638,98 @@ const UserManagement = () => {
                 </button>
                 <button type="submit" className="ginger-submit-btn" disabled={loading}>
                   {loading ? "Updating..." : "Update User"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Create User Form Modal */}
+      {showCreateForm && (
+        <div className="ginger-modal-overlay">
+          <div className="ginger-modal">
+            <div className="ginger-modal-header">
+              <h3 className="ginger-modal-title">Create New User</h3>
+              <button onClick={handleCloseForm} className="ginger-close-btn">
+                ×
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateSubmit} className="ginger-form">
+              <div className="ginger-form-group">
+                <label className="ginger-label">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="ginger-input"
+                  required
+                />
+              </div>
+
+              <div className="ginger-form-group">
+                <label className="ginger-label">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="ginger-input"
+                  required
+                />
+              </div>
+
+              <div className="ginger-form-group">
+                <label className="ginger-label">Phone</label>
+                <input
+                  type="text"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  className="ginger-input"
+                  required
+                />
+              </div>
+
+              <div className="ginger-form-group">
+                <label className="ginger-label">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  className="ginger-input"
+                  required
+                />
+              </div>
+
+              <div className="ginger-form-group">
+                <label className="ginger-label">Role</label>
+                <select
+                  name="role"
+                  value={formData.role}
+                  onChange={handleInputChange}
+                  className="ginger-select"
+                  required
+                >
+                  <option value="">Select Role</option>
+                  <option value="admin">Admin</option>
+                  <option value="supplier">Supplier</option>
+                  <option value="customer">Customer</option>
+                  <option value="employee">Employee</option>
+                </select>
+              </div>
+
+              {getRoleSpecificFields()}
+
+              <div className="ginger-form-actions">
+                <button type="button" onClick={handleCloseForm} className="ginger-cancel-btn">
+                  Cancel
+                </button>
+                <button type="submit" className="ginger-submit-btn" disabled={loading}>
+                  {loading ? "Creating..." : "Create User"}
                 </button>
               </div>
             </form>
