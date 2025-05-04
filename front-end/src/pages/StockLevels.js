@@ -113,14 +113,18 @@ const StockLevels = () => {
       await axios.delete(`${API_URL}/stocks/delete/${stockId}/${batchNumber}`);
       alert("Batch deleted successfully!");
       window.location.reload();
-      setStocks(stocks.map(stock => ({
+
+      // Dynamically update UI without reload
+      setStocks(prevStocks => prevStocks.map(stock => ({
         ...stock,
         batches: stock.batches.filter(batch => batch.batchNumber !== batchNumber)
       })));
     } catch (error) {
-      console.error("Error deleting batch:", error.response?.data || error.message);
+      console.error("Error deleting batch:", error.response?.data ?? error.message);
+      alert(`Error: ${error.response?.data?.message || "Failed to delete batch"}`);
     }
   };
+
 
   const handleStockOutChange = (e) => {
     setStockOutData({ ...stockOutData, [e.target.name]: e.target.value });
