@@ -8,6 +8,7 @@ import AdminMessages from "../components/AdminMessages";
 import AdminDeliveries from "../components/AdminDeliveries";
 import AdminTransactions from "../components/AdminTransactions";
 import FinancialReports from "../pages/FinancialReports";
+import AccountManagement from "../pages/AccountManagement"; // Already imported
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import "../Styles/AdminNav.css";
@@ -246,8 +247,7 @@ const AdminDashboard = () => {
       case "reports":
         return <FinancialReports />;
       case "account-management":
-        console.log("AdminDashboard: Navigating to /account-management");
-        return navigate("/account-management");
+        return <AccountManagement />;
       case "dashboard":
       default:
         return (
