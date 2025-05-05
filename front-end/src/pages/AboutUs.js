@@ -83,7 +83,7 @@ const AboutUs = () => {
           <div className="about-spiced-team-member">
             <img
               src={vishwa}
-              alt="Team member 2"
+              alt="Team member 1"
               className="about-spiced-team-image"
             />
             <h3 className="about-spiced-team-name">Vishwa Abeyrathna</h3>
@@ -92,7 +92,7 @@ const AboutUs = () => {
           <div className="about-spiced-team-member">
             <img
               src={nirmana}
-              alt="Team member 3"
+              alt="Team member 2"
               className="about-spiced-team-image"
             />
             <h3 className="about-spiced-team-name">Nirmana Herath</h3>
@@ -101,7 +101,7 @@ const AboutUs = () => {
           <div className="about-spiced-team-member">
             <img
               src={matheesha}
-              alt="Team member 1"
+              alt="Team member 3"
               className="about-spiced-team-image"
             />
             <h3 className="about-spiced-team-name">Matheesha Weerakoon</h3>
@@ -110,7 +110,7 @@ const AboutUs = () => {
           <div className="about-spiced-team-member">
             <img
               src={kanushka}
-              alt="Team member 3"
+              alt="Team member 4"
               className="about-spiced-team-image"
             />
             <h3 className="about-spiced-team-name">Kanushka Kahakotuwa</h3>
@@ -119,7 +119,7 @@ const AboutUs = () => {
           <div className="about-spiced-team-member">
             <img
               src={bishan}
-              alt="Team member 3"
+              alt="Team member 5"
               className="about-spiced-team-image"
             />
             <h3 className="about-spiced-team-name">Bishan Wishwajith</h3>
