@@ -131,6 +131,26 @@ function OrdersList({ userId }) {
     } else if (!/^\d{2}\/\d{2}$/.test(newCard.expiryDate)) {
       newErrors.expiryDate = "Use MM/YY format";
       isValid = false;
+    } else {
+      const [month, year] = newCard.expiryDate.split('/').map(Number);
+      // Validate month range (1-12)
+      if (month < 1 || month > 12) {
+        newErrors.expiryDate = "Month must be between 01 and 12";
+        isValid = false;
+      } else {
+        // Validate expiry date
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear() % 100; // Get last two digits
+        const currentMonth = currentDate.getMonth() + 1; // Months are 0-based in JS
+        
+        const fullYear = 2000 + year; // Convert YY to YYYY
+        const cardDate = new Date(fullYear, month - 1); // Month is 0-based in Date
+        
+        if (year < currentYear || (year === currentYear && month < currentMonth)) {
+          newErrors.expiryDate = "Card has expired";
+          isValid = false;
+        }
+      }
     }
 
     if (!newCard.cvv) {

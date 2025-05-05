@@ -8,7 +8,7 @@ import ExcelJS from "exceljs";
 
 const router = express.Router();
 
-// Existing routes (unchanged)
+// Existing POST route (unchanged)
 router.post("/", async (req, res) => {
   try {
     console.log("Payment request body:", req.body);
@@ -42,6 +42,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Existing invoice generation route (unchanged)
 router.get("/invoice/:paymentId", async (req, res) => {
   try {
     const payment = await Payment.findById(req.params.paymentId)
@@ -71,33 +72,132 @@ router.get("/invoice/:paymentId", async (req, res) => {
       return acc;
     }, {});
 
-    const doc = new PDFDocument();
+    // Initialize PDF document
+    const doc = new PDFDocument({ margin: 50 });
     res.setHeader("Content-Disposition", `attachment; filename=invoice-${payment._id}.pdf`);
     res.setHeader("Content-Type", "application/pdf");
     doc.pipe(res);
 
-    doc.fontSize(20).text("Invoice", { align: "center" });
-    doc.moveDown();
-    doc.fontSize(12).text(`Order ID: ${order._id}`);
-    doc.text(`Payment ID: ${payment._id}`);
-    doc.text(`Date: ${new Date(payment.date).toLocaleDateString()}`);
-    doc.moveDown();
+    // Helper function to draw a horizontal line
+    const drawLine = (y, thickness = 1) => {
+      doc
+        .lineWidth(thickness)
+        .moveTo(50, y)
+        .lineTo(550, y)
+        .stroke();
+    };
 
-    doc.text("Items:");
+    // Header
+    doc
+      .fillColor("#003087") // Dark blue color
+      .fontSize(24)
+      .font("Helvetica-Bold")
+      .text("INVOICE", 50, 50, { align: "left" });
+    doc
+      .fillColor("#555555")
+      .fontSize(12)
+      .font("Helvetica")
+      .text("Spice Sense", 50, 80)
+      .text("23 Spice Lane, Suite 100", 50, 95)
+      .text("Flavor Town, USAz 23100", 50, 110)
+      .text("Email: support@spicesense.com", 50, 125);
+
+    // Invoice details (right-aligned)
+    doc
+      .fillColor("#000000")
+      .fontSize(12)
+      .text(`Invoice #: ${payment._id}`, 350, 50, { align: "right" })
+      .text(`Order #: ${order._id}`, 350, 65, { align: "right" })
+      .text(`Date: ${new Date(payment.date).toLocaleDateString()}`, 350, 80, { align: "right" });
+
+    // Divider
+    drawLine(150, 2);
+
+    // Items table header
+    const tableTop = 170;
+    doc
+      .fillColor("#003087")
+      .fontSize(12)
+      .font("Helvetica-Bold")
+      .text("Description", 50, tableTop)
+      .text("Quantity", 300, tableTop, { width: 90, align: "right" })
+      .text("Unit Price", 390, tableTop, { width: 90, align: "right" })
+      .text("Total", 480, tableTop, { width: 90, align: "right" });
+
+    drawLine(tableTop + 20);
+
+    // Items table rows
+    let y = tableTop + 30;
+    let subtotal = 0;
     if (Array.isArray(order.items) && order.items.length > 0) {
-      order.items.forEach((item) => {
+      order.items.forEach((item, index) => {
         const itemName = itemsMap[item.itemId.toString()] || "Unknown Item";
-        doc.text(`${itemName} - ${item.quantity || 0} x $${(item.price || 0).toFixed(2)}`);
+        const quantity = item.quantity || 0;
+        const price = item.price || 0;
+        const itemTotal = quantity * price;
+
+        doc
+          .fillColor("#000000")
+          .fontSize(10)
+          .font("Helvetica")
+          .text(itemName, 50, y, { width: 240 })
+          .text(quantity.toString(), 300, y, { width: 90, align: "right" })
+          .text(`$${price.toFixed(2)}`, 390, y, { width: 90, align: "right" })
+          .text(`$${itemTotal.toFixed(2)}`, 480, y, { width: 90, align: "right" });
+
+        subtotal += itemTotal;
+        y += 20;
+
+        // Add page break if needed
+        if (y > 700) {
+          doc.addPage();
+          y = 50;
+        }
       });
     } else {
-      doc.text("No items found in this order.");
+      doc
+        .fontSize(10)
+        .text("No items found in this order.", 50, y);
+      y += 20;
     }
-    doc.moveDown();
-    doc.text(`Total: $${(order.total || 0).toFixed(2)}`);
-    doc.moveDown();
 
-    doc.text(`Paid with: **** **** **** ${card.cardNumber.slice(-4)}`);
-    doc.text(`Card Holder: ${card.cardHolder}`);
+    // Draw table bottom line
+    drawLine(y);
+
+    // Total
+    y += 20;
+    doc
+      .fillColor("#000000")
+      .fontSize(12)
+      .font("Helvetica-Bold")
+      .text("Total", 390, y, { width: 90, align: "right" })
+      .text(`$${order.total.toFixed(2)}`, 480, y, { width: 90, align: "right" });
+
+    // Payment details
+    y += 40;
+    doc
+      .fillColor("#003087")
+      .fontSize(12)
+      .font("Helvetica-Bold")
+      .text("Payment Details", 50, y);
+    y += 20;
+    doc
+      .fillColor("#000000")
+      .fontSize(10)
+      .font("Helvetica")
+      .text(`Paid with: **** **** **** ${card.cardNumber.slice(-4)}`, 50, y)
+      .text(`Card Holder: ${card.cardHolder}`, 50, y + 15)
+      .text(`Payment Date: ${new Date(payment.date).toLocaleString()}`, 50, y + 30);
+
+    // Footer
+    const footerY = 750;
+    drawLine(footerY, 1);
+    doc
+      .fillColor("#555555")
+      .fontSize(10)
+      .font("Helvetica")
+      .text("Thank you for your business!", 50, footerY + 10, { align: "center" })
+      .text("Contact us at support@spicesense.com for any inquiries.", 50, footerY + 25, { align: "center" });
 
     doc.end();
   } catch (err) {
@@ -108,6 +208,7 @@ router.get("/invoice/:paymentId", async (req, res) => {
   }
 });
 
+// Existing GET payments route (unchanged)
 router.get("/", async (req, res) => {
   try {
     const payments = await Payment.find();
@@ -117,7 +218,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Updated route for financial reports data
+// Existing financial reports route (unchanged)
 router.get("/financial-reports", async (req, res) => {
   try {
     // Get top 3 best-selling items
@@ -198,7 +299,7 @@ router.get("/financial-reports", async (req, res) => {
   }
 });
 
-// Route for downloadable reports (unchanged)
+// Updated financial report download route with fixed footer
 router.get("/financial-report/download/:type/:period", async (req, res) => {
   try {
     const { type, period } = req.params;
@@ -249,7 +350,7 @@ router.get("/financial-report/download/:type/:period", async (req, res) => {
     });
 
     if (type === "pdf") {
-      const doc = new PDFDocument();
+      const doc = new PDFDocument({ margin: 50 });
       res.setHeader(
         "Content-Disposition",
         `attachment; filename=financial-report-${period}.pdf`
@@ -257,32 +358,146 @@ router.get("/financial-report/download/:type/:period", async (req, res) => {
       res.setHeader("Content-Type", "application/pdf");
       doc.pipe(res);
 
-      doc.fontSize(20).text(`Financial Report - ${period.charAt(0).toUpperCase() + period.slice(1)}`, {
-        align: "center",
-      });
-      doc.moveDown();
+      // Helper function to draw a horizontal line
+      const drawLine = (y, thickness = 1) => {
+        doc
+          .lineWidth(thickness)
+          .moveTo(50, y)
+          .lineTo(550, y)
+          .stroke();
+      };
 
-      doc.fontSize(12).text(`Period: ${startDate.toLocaleDateString()} - ${new Date().toLocaleDateString()}`);
-      doc.text(`Total Transactions: ${paymentData.length}`);
-      doc.text(`Total Revenue: $${paymentData.reduce((sum, p) => sum + p.amount, 0).toFixed(2)}`);
-      doc.moveDown();
+      // Helper function to draw the footer
+      const drawFooter = (yPosition) => {
+        drawLine(yPosition, 1);
+        doc
+          .fillColor("#555555")
+          .fontSize(10)
+          .font("Helvetica")
+          .text("Thank you for your business!", 50, yPosition + 10, { align: "center" })
+          .text("Contact us at support@spicesense.com for any inquiries.", 50, yPosition + 25, { align: "center" });
+      };
 
-      doc.text("Payment Logs:");
-      paymentData.forEach((payment, index) => {
-        doc.text(`Payment ${index + 1}:`);
-        doc.text(`Payment ID: ${payment.paymentId}`);
-        doc.text(`Order ID: ${payment.orderId || "N/A"}`);
-        doc.text(`Amount: $${payment.amount.toFixed(2)}`);
-        doc.text(`Method: ${payment.method}`);
-        doc.text(`Card: **** **** **** ${payment.cardLast4}`);
-        doc.text(`Status: ${payment.status}`);
-        doc.text(`Date: ${new Date(payment.date).toLocaleString()}`);
-        doc.text("Items:");
-        payment.items.forEach((item) => {
-          doc.text(`- ${item.name}: ${item.quantity} x $${item.price.toFixed(2)}`);
+      // Header
+      doc
+        .fillColor("#003087") // Dark blue color
+        .fontSize(24)
+        .font("Helvetica-Bold")
+        .text(`FINANCIAL REPORT - ${period.toUpperCase()}`, 50, 50, { align: "left" });
+      doc
+        .fillColor("#555555")
+        .fontSize(12)
+        .font("Helvetica")
+        .text("Spice Sense", 50, 80)
+        .text("23 Spice Lane, Suite 100", 50, 95)
+        .text("Flavor Town, USAz 23100", 50, 110)
+        .text("Email: support@spicesense.com", 50, 125);
+
+      // Report details (right-aligned)
+      doc
+        .fillColor("#000000")
+        .fontSize(12)
+        .text(`Period: ${startDate.toLocaleDateString()} - ${new Date().toLocaleDateString()}`, 350, 50, { align: "right" })
+        .text(`Generated: ${new Date().toLocaleDateString()}`, 350, 65, { align: "right" });
+
+      // Divider
+      drawLine(150, 2);
+
+      // Summary section
+      const summaryTop = 170;
+      doc
+        .fillColor("#003087")
+        .fontSize(12)
+        .font("Helvetica-Bold")
+        .text("Summary", 50, summaryTop);
+      drawLine(summaryTop + 20);
+      doc
+        .fillColor("#000000")
+        .fontSize(10)
+        .font("Helvetica")
+        .text(`Total Transactions: ${paymentData.length}`, 50, summaryTop + 30)
+        .text(`Total Revenue: $${paymentData.reduce((sum, p) => sum + p.amount, 0).toFixed(2)}`, 50, summaryTop + 45);
+
+      // Payment logs table header
+      let tableTop = summaryTop + 80;
+      doc
+        .fillColor("#003087")
+        .fontSize(12)
+        .font("Helvetica-Bold")
+        .text("Payment ID", 50, tableTop)
+        .text("Order ID", 150, tableTop)
+        .text("Amount", 250, tableTop, { width: 90, align: "right" })
+        .text("Card", 340, tableTop, { width: 90, align: "right" })
+        .text("Date", 430, tableTop, { width: 120, align: "right" });
+
+      drawLine(tableTop + 20);
+
+      // Payment logs table rows
+      let y = tableTop + 30;
+      if (paymentData.length > 0) {
+        paymentData.forEach((payment, index) => {
+          doc
+            .fillColor("#000000")
+            .fontSize(9)
+            .font("Helvetica")
+            .text(payment.paymentId.toString(), 50, y, { width: 100 })
+            .text(payment.orderId?.toString() || "N/A", 150, y, { width: 100 })
+            .text(`$${payment.amount.toFixed(2)}`, 250, y, { width: 90, align: "right" })
+            .text(`**** ${payment.cardLast4}`, 340, y, { width: 90, align: "right" })
+            .text(new Date(payment.date).toLocaleString(), 430, y, { width: 120, align: "right" });
+
+          y += 20;
+
+          // Add items as sub-rows
+          if (payment.items.length > 0) {
+            doc
+              .fillColor("#555555")
+              .fontSize(8)
+              .text("Items:", 60, y);
+            payment.items.forEach((item) => {
+              y += 15;
+              doc.text(
+                `- ${item.name}: ${item.quantity} x $${item.price.toFixed(2)}`,
+                70,
+                y,
+                { width: 450 }
+              );
+            });
+            y += 15;
+          }
+
+          // Add page break if needed
+          if (y > 650) { // Reserve space for footer
+            doc.addPage();
+            y = 50;
+            // Redraw table header on new page
+            doc
+              .fillColor("#003087")
+              .fontSize(12)
+              .font("Helvetica-Bold")
+              .text("Payment ID", 50, y)
+              .text("Order ID", 150, y)
+              .text("Amount", 250, y, { width: 90, align: "right" })
+              .text("Card", 340, y, { width: 90, align: "right" })
+              .text("Date", 430, y, { width: 120, align: "right" });
+            drawLine(y + 20);
+            y += 30;
+          }
         });
-        doc.moveDown();
-      });
+      } else {
+        doc
+          .fillColor("#000000")
+          .fontSize(10)
+          .text("No payments found for this period.", 50, y);
+        y += 20;
+      }
+
+      // Draw table bottom line
+      drawLine(y);
+
+      // Draw footer at the bottom of the final page
+      const footerY = Math.max(y + 20, 650); // Ensure footer doesn't overlap content
+      drawFooter(footerY);
 
       doc.end();
     } else if (type === "excel") {
@@ -331,7 +546,9 @@ router.get("/financial-report/download/:type/:period", async (req, res) => {
     }
   } catch (err) {
     console.error("Report download error:", err);
-    res.status(500).json({ error: err.message });
+    if (!res.headersSent) {
+      res.status(500).json({ error: err.message });
+    }
   }
 });
 
