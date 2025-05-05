@@ -212,7 +212,7 @@
 /* Specific column widths */
 .ginger-table th:nth-child(1),
 .ginger-table td:nth-child(1) {
-  width: 14%; /* Name - Reduced slightly */
+  width: 14%; /* Name */
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -220,7 +220,7 @@
 
 .ginger-table th:nth-child(2),
 .ginger-table td:nth-child(2) {
-  width: 18%; /* Email - Reduced slightly */
+  width: 18%; /* Email */
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -228,7 +228,7 @@
 
 .ginger-table th:nth-child(3),
 .ginger-table td:nth-child(3) {
-  width: 14%; /* Phone - Reduced slightly */
+  width: 14%; /* Phone */
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -236,7 +236,7 @@
 
 .ginger-table th:nth-child(4),
 .ginger-table td:nth-child(4) {
-  width: 9%; /* Role - Reduced slightly */
+  width: 9%; /* Role */
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -474,7 +474,8 @@
 }
 
 .ginger-submit-btn:disabled {
-  situation: not-allowed;
+  background: #cccccc;
+  cursor: not-allowed;
 }
 
 /* Confirm Dialog */
