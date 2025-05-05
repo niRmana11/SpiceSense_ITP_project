@@ -1,0 +1,81 @@
+/* ../Styles/AccountManagement.css */
+
+/* Ensure container fits within dashboard */
+.spice-container {
+    background: var(--white);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    max-width: 100%;
+    margin: 1rem;
+    width: calc(100% - 2rem);
+    box-sizing: border-box;
+  }
+  
+  /* Ensure table wrapper is responsive */
+  .spice-table-wrapper {
+    overflow-x: auto;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    max-width: 100%;
+  }
+  
+  /* Ensure table fits */
+  .spice-table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    font-size: 0.875rem;
+    table-layout: auto;
+  }
+  
+  /* Adjust column widths */
+  .spice-table th:nth-child(1),
+  .spice-table td:nth-child(1) {
+    width: 25%; /* Name */
+  }
+  .spice-table th:nth-child(2),
+  .spice-table td:nth-child(2) {
+    width: 30%; /* Email */
+  }
+  .spice-table th:nth-child(3),
+  .spice-table td:nth-child(3) {
+    width: 15%; /* Role */
+  }
+  .spice-table th:nth-child(4),
+  .spice-table td:nth-child(4) {
+    width: 15%; /* Status */
+  }
+  .spice-table th:nth-child(5),
+  .spice-table td:nth-child(5) {
+    width: 15%; /* Actions */
+    min-width: 120px; /* Ensure space for buttons */
+  }
+  
+  /* Ensure actions are inline */
+  .spice-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .spice-container {
+      margin: 0.5rem;
+      padding: 0.75rem;
+    }
+    .spice-table th,
+    .spice-table td {
+      padding: 0.5rem 0.25rem;
+      font-size: 0.75rem;
+    }
+    .spice-table th:nth-child(5),
+    .spice-table td:nth-child(5) {
+      min-width: 100px;
+    }
+  }
