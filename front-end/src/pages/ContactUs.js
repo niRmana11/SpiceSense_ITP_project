@@ -1,12 +1,46 @@
 // pages/ContactUs.js
-import React from "react";
+import React, { useState, useEffect } from "react";
 import NavigationBar from "../components/NavigationBar";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../Styles/ContactUsSpiced.css"; // Import new spiced CSS
+import axios from "axios";
 
 const ContactUs = () => {
-  const location = useLocation();
-  const userData = location.state?.userData;
+    const userId = sessionStorage.getItem("userId");
+        const [userData, setUserData] = useState(null);
+        const [error, setError] = useState(null);
+        const navigate = useNavigate();
+        const location = useLocation();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const passedUserData = location.state?.userData;
+        if (passedUserData) {
+          setUserData(passedUserData);
+          return;
+        }
+
+        const response = await axios.get("http://localhost:5000/api/user/data", {
+          withCredentials: true,
+        });
+
+        if (response.data.success) {
+          setUserData(response.data.userData);
+        } else {
+          setError(response.data.message);
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error.response?.data?.message || error.message);
+        setError("Failed to load user data. Please log in again.");
+        navigate("/login");
+      }
+    };
+
+    fetchUserData();
+  }, [navigate, location.state]);
+  
 
   return (
     <div className="contact-spiced-container">
