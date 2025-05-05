@@ -1,6 +1,6 @@
-/* Styles/OrdersList.css */
+/* Styles/OrdersListSpiced.css */
 
-/* Import spice-themed variables from UserProfileSpiced.css */
+/* Spice-inspired color palette */
 :root {
   --saffron: #ff9933; /* Bright orange-yellow */
   --turmeric: #e6b800; /* Warm yellow */
@@ -11,54 +11,49 @@
 }
 
 .orders-spiced-container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-  background: var(--cardamom);
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  animation: slideUp 0.8s ease-out;
 }
 
-.orders-spiced-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--cinnamon);
-  margin-bottom: 1rem;
+.orders-spiced-header {
+  margin-bottom: 1.5rem;
   text-align: center;
-}
-
-.orders-spiced-search-container {
-  margin-bottom: 20px;
 }
 
 .orders-spiced-search-input {
   width: 100%;
-  max-width: 400px;
-  padding: 10px;
+  max-width: 500px;
+  padding: 0.75rem;
   border: 1px solid var(--cinnamon);
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 8px;
+  font-size: 1rem;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .orders-spiced-search-input:focus {
   border-color: var(--saffron);
-  box-shadow: 0 0 5px rgba(255, 153, 51, 0.5);
+  box-shadow: 0 0 6px rgba(255, 153, 51, 0.3);
   outline: none;
+}
+
+.orders-spiced-table-wrapper {
+  overflow-x: auto;
 }
 
 .orders-spiced-table {
   width: 100%;
   border-collapse: collapse;
   background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
 }
 
 .orders-spiced-table th,
 .orders-spiced-table td {
-  padding: 12px 15px;
+  padding: 1rem;
   text-align: left;
   border-bottom: 1px solid var(--cardamom);
 }
@@ -69,22 +64,35 @@
   font-weight: 600;
 }
 
-.orders-spiced-table tr:hover {
+.orders-spiced-row {
+  animation: slideInLeft 0.5s ease-out;
+  animation-fill-mode: backwards;
+}
+
+.orders-spiced-row:nth-child(even) {
+  animation: slideInRight 0.5s ease-out;
+}
+
+.orders-spiced-row:hover {
   background: var(--cardamom);
 }
 
+.orders-spiced-item {
+  margin-bottom: 0.5rem;
+}
+
 .orders-spiced-pay-button {
-  background: var(--saffron);
+  background: var(--paprika);
   color: white;
   border: none;
-  padding: 8px 15px;
-  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
   cursor: pointer;
-  transition: transform 0.2s, background 0.3s;
+  transition: background 0.3s, transform 0.2s;
 }
 
 .orders-spiced-pay-button:hover {
-  background: var(--turmeric);
+  background: var(--clove);
   transform: scale(1.05);
 }
 
@@ -95,12 +103,12 @@
 
 .orders-spiced-no-orders {
   color: var(--clove);
-  font-style: italic;
+  font-size: 1rem;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 1.5rem;
 }
 
-/* Payment Modal Styles */
+/* Payment Modal */
 .payment-spiced-overlay {
   position: fixed;
   top: 0;
@@ -116,52 +124,50 @@
 }
 
 .payment-spiced-modal {
-  background: linear-gradient(to bottom, var(--cardamom), #fff);
-  padding: 24px;
+  background: white;
+  padding: 2rem;
   border-radius: 12px;
   width: 100%;
-  max-width: 450px;
+  max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  position: relative;
   animation: popIn 0.4s ease-out;
-  transform: translateY(0);
 }
 
 .payment-spiced-title {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 600;
   color: var(--cinnamon);
-  margin-bottom: 12px;
+  margin-bottom: 1rem;
   text-align: center;
 }
 
 .payment-spiced-total {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   color: var(--clove);
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
   text-align: center;
 }
 
 .payment-spiced-subtitle {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   font-weight: 500;
   color: var(--cinnamon);
-  margin: 16px 0 8px;
+  margin: 1rem 0 0.5rem;
 }
 
 .payment-spiced-cards-list {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
 .payment-spiced-card-option {
   display: flex;
   align-items: center;
-  padding: 10px;
-  background: white;
+  padding: 0.75rem;
+  background: var(--cardamom);
   border-radius: 8px;
-  margin: 8px 0;
+  margin: 0.5rem 0;
   transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
 }
@@ -172,7 +178,7 @@
 }
 
 .payment-spiced-radio {
-  margin-right: 10px;
+  margin-right: 0.75rem;
 }
 
 .payment-spiced-card-label {
@@ -186,43 +192,41 @@
 }
 
 .payment-spiced-card-holder {
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   color: var(--cinnamon);
 }
 
 .payment-spiced-no-cards {
   color: var(--clove);
-  font-style: italic;
-  margin-bottom: 20px;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
   text-align: center;
 }
 
 .payment-spiced-form-group {
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
 }
 
 .payment-spiced-label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 0.5rem;
   color: var(--cinnamon);
   font-weight: 500;
 }
 
 .payment-spiced-input {
   width: 100%;
-  padding: 10px;
+  padding: 0.75rem;
   border: 1px solid var(--cinnamon);
-  border-radius: 6px;
-  font-size: 14px;
-  transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
-  background: white;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .payment-spiced-input:focus {
   border-color: var(--saffron);
   box-shadow: 0 0 6px rgba(255, 153, 51, 0.3);
   outline: none;
-  transform: scale(1.02);
 }
 
 .payment-spiced-input:disabled {
@@ -232,20 +236,20 @@
 }
 
 .payment-spiced-input-error {
-  border-color: var(--paprika) !important;
+  border-color: var(--paprika);
 }
 
 .payment-spiced-error-message {
   color: var(--paprika);
-  font-size: 12px;
-  margin-top: 4px;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
   display: block;
   animation: shake 0.3s ease;
 }
 
 .payment-spiced-form-row {
   display: flex;
-  gap: 12px;
+  gap: 1rem;
 }
 
 .payment-spiced-form-row .payment-spiced-form-group {
@@ -253,130 +257,136 @@
 }
 
 .payment-spiced-buttons {
-  margin-top: 24px;
+  margin-top: 1.5rem;
   display: flex;
-  gap: 12px;
+  gap: 1rem;
   justify-content: center;
+}
+
+.payment-spiced-pay-button,
+.payment-spiced-cancel-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
 }
 
 .payment-spiced-pay-button {
-  background: var(--saffron);
+  background: var(--paprika);
   color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.3s, transform 0.2s;
 }
 
 .payment-spiced-pay-button:hover:not(:disabled) {
-  background: var(--turmeric);
-  transform: scale(1.05);
-}
-
-.payment-spiced-pay-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.payment-spiced-cancel-button {
-  background: var(--cinnamon);
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background 0.3s, transform 0.2s;
-}
-
-.payment-spiced-cancel-button:hover:not(:disabled) {
   background: var(--clove);
   transform: scale(1.05);
 }
 
+.payment-spiced-cancel-button {
+  background: #d1d5db;
+  color: var(--clove);
+}
+
+.payment-spiced-cancel-button:hover:not(:disabled) {
+  background: #9ca3af;
+  transform: scale(1.05);
+}
+
+.payment-spiced-pay-button:disabled,
 .payment-spiced-cancel-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
 .payment-spiced-spinner {
-  width: 20px;
-  height: 20px;
+  width: 1.5rem;
+  height: 1.5rem;
   border: 3px solid white;
   border-top-color: transparent;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-right: 8px;
+  margin-right: 0.5rem;
 }
 
 /* Animations */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes popIn {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(1.05);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-  }
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
 
 @keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-3px);
-  }
-  50% {
-    transform: translateX(3px);
-  }
-  75% {
-    transform: translateX(-3px);
-  }
-  100% {
-    transform: translateX(0);
-  }
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+  75% { transform: translateX(-3px); }
+  100% { transform: translateX(0); }
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 /* Responsive Design */
-@media (max-width: 600px) {
-  .payment-spiced-modal {
-    width: 90%;
-    padding: 16px;
-  }
-
-  .payment-spiced-form-row {
-    flex-direction: column;
-    gap: 16px;
+@media (max-width: 768px) {
+  .orders-spiced-container {
+    padding: 1.5rem;
   }
 
   .orders-spiced-table th,
   .orders-spiced-table td {
-    padding: 8px;
-    font-size: 14px;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .payment-spiced-modal {
+    width: 90%;
+    padding: 1.5rem;
+  }
+
+  .payment-spiced-form-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .orders-spiced-search-input {
+    max-width: 100%;
+  }
+
+  .orders-spiced-table th,
+  .orders-spiced-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .payment-spiced-title {
+    font-size: 1.5rem;
+  }
+
+  .payment-spiced-total {
+    font-size: 1rem;
   }
 }
