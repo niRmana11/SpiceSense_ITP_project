@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import '../Styles/auth.css';
 
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,15 +36,12 @@ const Login = () => {
         }
 
         if (response.data.message.includes("OTP sent")) {
-          // Account not verified, navigate to verification
           alert("Please verify your email.");
           navigate("/verify-account");
         } else {
-          // Account verified, store token and navigate to dashboard
           localStorage.setItem("authToken", response.data.token);
           alert("Login successful!");
 
-          // Navigate based on role
           switch (response.data.role) {
             case "admin":
               navigate("/admin-dashboard");
@@ -76,64 +74,73 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-container">
-        <div className="text-center">
-          <h1>Log In</h1>
-          <p>Welcome back to SpiceSense</p>
+    <div className="spicesense-page">
+      {/* Header */}
+      <header className="spicesense-header">
+        <div className="spicesense-logo">
+          <span>SpiceSense</span>
         </div>
+      </header>
 
-        {error && <div className="auth-error">{error}</div>}
-
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="auth-form-group">
-            <label htmlFor="email" className="auth-label">Email Address</label>
-            <input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="auth-input"
-            />
+      <div className="auth-page">
+        <div className="auth-container">
+          <div className="text-center">
+            <h1>Log In</h1>
+            <p>Welcome back to SpiceSense</p>
           </div>
 
-          <div className="auth-form-group">
-            <label htmlFor="password" className="auth-label">Password</label>
-            <input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="auth-input"
-            />
-          </div>
+          {error && <div className="auth-error">{error}</div>}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="auth-button"
-          >
-            {loading ? "Logging in..." : "Log In"}
-          </button>
-        </form>
+          <form onSubmit={handleSubmit} className="auth-form">
+            <div className="auth-form-group">
+              <label htmlFor="email" className="auth-label">Email Address</label>
+              <input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="auth-input"
+              />
+            </div>
 
-        <div className="mt-4 text-center">
-          <Link to="/send-reset-otp" className="auth-link">
-            Forgot your password?
-          </Link>
-        </div>
+            <div className="auth-form-group">
+              <label htmlFor="password" className="auth-label">Password</label>
+              <input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="auth-input"
+              />
+            </div>
 
-        <div className="mt-6 text-center">
-          <p>
-            Don't have an account?{" "}
-            <Link to="/register" className="auth-link">
-              Register
+            <button
+              type="submit"
+              disabled={loading}
+              className="auth-button"
+            >
+              {loading ? "Logging in..." : "Log In"}
+            </button>
+          </form>
+
+          <div className="mt-4 text-center">
+            <Link to="/send-reset-otp" className="auth-link">
+              Forgot your password?
             </Link>
-          </p>
+          </div>
+
+          <div className="mt-6 text-center">
+            <p>
+              Don't have an account?{" "}
+              <Link to="/register" className="auth-link">
+                Register
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

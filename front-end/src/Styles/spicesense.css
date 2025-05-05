@@ -6,7 +6,7 @@
   }
   
   /* Page Layout */
-  .spicesense-page {
+  .spicesense-page-welcome {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -17,7 +17,7 @@
   }
   
   /* Header */
-  .spicesense-header {
+  .spicesense-header-welcome {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -30,19 +30,19 @@
     z-index: 1000;
   }
   
-  .spicesense-logo {
+  .spicesense-logo-welcome {
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
   
-  .spicesense-logo img {
+  .spicesense-logo-welcome img {
     width: 40px;
     height: 40px;
     object-fit: contain;
   }
   
-  .spicesense-logo span {
+  .spicesense-logo-welcome span {
     font-size: 1.5rem;
     font-weight: 700;
     color: #d97706;
