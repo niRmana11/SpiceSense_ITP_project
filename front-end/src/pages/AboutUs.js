@@ -96,7 +96,7 @@ const AboutUs = () => {
               className="about-spiced-team-image"
             />
             <h3 className="about-spiced-team-name">Nirmana Herath</h3>
-            <p className="about-spiced-team-role">inventory Manger</p>
+            <p className="about-spiced-team-role">Inventory Manger</p>
           </div>
           <div className="about-spiced-team-member">
             <img
