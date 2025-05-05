@@ -2,9 +2,15 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/CreditCardPage.css"; // Import CSS from Styles folder
 import NavigationBar from "../components/NavigationBar";
+import axios from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const CreditCardPage = () => {
     const userId = sessionStorage.getItem("userId");
+    const [userData, setUserData] = useState(null);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const [cards, setCards] = useState([]);
     const [formData, setFormData] = useState({ 
@@ -24,6 +30,35 @@ const CreditCardPage = () => {
     const [deleteMessage, setDeleteMessage] = useState(""); // For delete confirmation message
 
     const API_BASE_URL = "http://localhost:5000/api/credit-cards";
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+          try {
+            const passedUserData = location.state?.userData;
+            if (passedUserData) {
+              setUserData(passedUserData);
+              return;
+            }
+    
+            const response = await axios.get("http://localhost:5000/api/user/data", {
+              withCredentials: true,
+            });
+    
+            if (response.data.success) {
+              setUserData(response.data.userData);
+            } else {
+              setError(response.data.message);
+              navigate("/login");
+            }
+          } catch (error) {
+            console.error("Error fetching user data:", error.response?.data?.message || error.message);
+            setError("Failed to load user data. Please log in again.");
+            navigate("/login");
+          }
+        };
+    
+        fetchUserData();
+      }, [navigate, location.state]);
 
     useEffect(() => {
         if (!userId) return;
@@ -169,7 +204,7 @@ const CreditCardPage = () => {
 
     return (
         <div>
-            <NavigationBar />
+            <NavigationBar userData={userData}/>
             <div className="credit-card-container">
                 <h2 className="credit-card-title">My Saved Credit Cards</h2>
                 
