@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import '../Styles/auth.css';
 
+
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -116,6 +117,15 @@ const Register = () => {
   };
 
   return (
+
+    <div className="spicesense-page">
+    {/* Header */}
+    <header className="spicesense-header">
+      <div className="spicesense-logo">
+        <span>SpiceSense</span>
+      </div>
+    </header>
+
     <div className="auth-page">
       <div className="auth-container">
         <div className="text-center">
@@ -284,6 +294,7 @@ const Register = () => {
           </p>
         </div>
       </div>
+    </div>
     </div>
   );
 };

@@ -27,6 +27,8 @@ export const getUserData = async (req, res) => {
   }
 };
 
+
+
 export const getAllUsers = async (req, res) => {
   try {
     if (!req.user || req.user.role !== "admin") {
@@ -274,6 +276,7 @@ export const updateUserProfile = async (req, res) => {
   }
 };
 
+
 export const toggleAccountStatus = async (req, res) => {
   try {
     if (!req.user || req.user.role !== "admin") {
@@ -382,6 +385,106 @@ export const getUserSummaryReport = async (req, res) => {
     return res.json({ success: true, summary });
   } catch (error) {
     console.error("getUserSummaryReport error:", error);
+    return res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+// userController.js
+export const createUser = async (req, res) => {
+  try {
+    // Verify that the requester is an admin
+    if (!req.user || req.user.role !== "admin") {
+      return res.status(403).json({ success: false, message: "Access denied. Admin only." });
+    }
+
+    const {
+      name,
+      email,
+      phone,
+      password,
+      role,
+      companyName,
+      contactPerson,
+      jobTitle,
+      department,
+      shippingAddress,
+      billingAddress,
+    } = req.body;
+
+    // Validate required fields
+    if (!name || !email || !phone || !password || !role) {
+      return res.status(400).json({ success: false, message: "Name, email, phone, password, and role are required" });
+    }
+
+    // Validate role
+    if (!["admin", "supplier", "customer", "employee"].includes(role)) {
+      return res.status(400).json({ success: false, message: "Invalid role specified" });
+    }
+
+    // Check if email already exists
+    const existingUser = await userModel.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ success: false, message: "Email already in use" });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Prepare user data
+    const userData = {
+      name,
+      email,
+      phone,
+      password: hashedPassword,
+      role,
+      companyName: role === "supplier" ? companyName : undefined,
+      contactPerson: role === "supplier" ? contactPerson : undefined,
+      jobTitle: role === "employee" ? jobTitle : undefined,
+      department: role === "employee" ? department : undefined,
+      shippingAddress: role === "customer" ? shippingAddress : undefined,
+      billingAddress: role === "customer" ? billingAddress : undefined,
+      isActive: true,
+      isAccountVerified: false,
+    };
+
+    // Create new user
+    const newUser = await userModel.create(userData);
+
+    // Send welcome email with password
+    if (newUser.email && process.env.SENDER_EMAIL) {
+      const mailOptions = {
+        from: `SpiceSense <${process.env.SENDER_EMAIL}>`,
+        to: newUser.email,
+        subject: "Welcome to SpiceSense!",
+        text: `Dear ${newUser.name},\n\nYour account has been created successfully!\n\nRole: ${newUser.role}\nEmail: ${newUser.email}\nPassword: ${password}\n\nPlease log in to verify your account and start using our services. If you did not request this account, please contact support.\n\nRegards,\nSpiceSense Team`,
+      };
+
+      try {
+        await transporter.sendMail(mailOptions);
+        console.log("Welcome email sent to:", newUser.email);
+      } catch (emailError) {
+        console.error("Error sending welcome email:", emailError);
+      }
+    } else {
+      console.warn("Email notification skipped: Missing user email or SENDER_EMAIL");
+    }
+
+
+    // Return the new user (excluding sensitive fields)
+    const userResponse = await userModel
+      .findById(newUser._id)
+      .select("-password -verifyOtp -resetOtp -resetOtpExpireAt");
+
+    return res.status(201).json({
+      success: true,
+      message: "User created successfully",
+      user: userResponse,
+    });
+  } catch (error) {
+    console.error("createUser error:", error);
+    if (error.name === "ValidationError") {
+      return res.status(400).json({ success: false, message: error.message });
+    }
     return res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };

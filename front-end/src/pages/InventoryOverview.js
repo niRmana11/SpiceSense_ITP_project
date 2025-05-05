@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../Styles/inventoryOverview.css";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
-import NavBar from "../components/navBar"; 
+import NavBar from "../components/navBar";
 import backgroundImage from "../assets/background.png";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -22,7 +22,7 @@ const InventoryOverview = () => {
         document.body.style.backgroundRepeat = "no-repeat";
 
         return () => {
-            document.body.style.backgroundImage = ""; 
+            document.body.style.backgroundImage = "";
         };
     }, []);
 
@@ -30,14 +30,14 @@ const InventoryOverview = () => {
         fetch(`${API_URL}/stocks/inventory`)
             .then(response => response.json())
             .then(data => {
-                
-                
+
+
                 if (Array.isArray(data)) {
                     setStocks(data);
                     setLowStockItems(data.filter(item => item.quantity < 50));
 
-                    
-                    const expired = data.flatMap(item => 
+
+                    const expired = data.flatMap(item =>
                         item.expiredBatches.map(batch => ({
                             name: batch.name,
                             batchNumber: batch.batchNumber
@@ -51,9 +51,9 @@ const InventoryOverview = () => {
             })
             .catch(error => console.error("Error fetching inventory data:", error));
     }, []);
-    
+
     const chartData = {
-        labels: stocks.map(item => item.name),
+        labels: stocks.filter(item => item.quantity > 0).map(item => item.name),
         datasets: [
             {
                 label: "Stock Levels",
@@ -65,7 +65,7 @@ const InventoryOverview = () => {
 
     return (
         <div>
-            <NavBar /> 
+            <NavBar />
             <div className="inventory-container">
                 <h2>Inventory Overview</h2>
 
@@ -82,40 +82,40 @@ const InventoryOverview = () => {
                 )}
 
                 {/* 🔹 Low Stock Alert Section */}
-                {lowStockItems.length > 0 &&  (
+                {lowStockItems.filter(item => item.quantity > 0).length > 0 && (
                     <div className="low-stock-alert">
                         <h3>Low Stock Alert</h3>
                         <ul>
-                            {lowStockItems.map(item => (
+                            {lowStockItems.filter(item => item.quantity > 0).map(item => (
                                 <li key={item.id}>{item.name} is low on stock ({item.quantity} Kg)</li>
                             ))}
                         </ul>
                     </div>
                 )}
-                
+
                 <table className="stock-table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Quantity (Kg)</th>
-        </tr>
-    </thead>
-    <tbody>
-        {stocks.map(item => (
-            <tr key={item.id} className={item.quantity < 50 ? "low-stock" : ""}>
-                <td>{item.name || "Unknown"}</td>
-                <td>{item.category || "Unknown"}</td>
-                <td>{item.quantity || 0}</td>
-            </tr>
-        ))}
-    </tbody>
-</table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Quantity (Kg)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {stocks.filter(item => item.quantity > 0).map(item => (
+                            <tr key={item.id} className={item.quantity < 50 ? "low-stock" : ""}>
+                                <td>{item.name || "Unknown"}</td>
+                                <td>{item.category || "Unknown"}</td>
+                                <td>{item.quantity || 0}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
 
 
                 <div className="chart-container">
                     <h3>Stock Levels Report</h3>
-                    <Bar data={chartData}/>
+                    <Bar data={chartData} />
                 </div>
             </div>
         </div>

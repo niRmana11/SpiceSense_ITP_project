@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 const Stock = require("../models/Stock");
 const Product = require("../models/Product");
 const Transaction = require("../models/Transaction");
@@ -134,18 +135,30 @@ router.delete("/delete/:stockId/:batchNumber", async (req, res) => {
     try {
         const { stockId, batchNumber } = req.params;
 
-        let stock = await Stock.findById(stockId);
-        if (!stock) return res.status(404).json({ message: "Stock not found" });
 
+        if (!mongoose.Types.ObjectId.isValid(stockId)) {
+            return res.status(400).json({ message: "Invalid stock ID" });
+        }
+
+        let stock = await Stock.findById(stockId);
+        if (!stock) {
+            return res.status(404).json({ message: "Stock not found" });
+        }
+
+        const originalLength = stock.batches.length;
         stock.batches = stock.batches.filter(batch => batch.batchNumber !== batchNumber);
 
+        if (stock.batches.length === originalLength) {
+            return res.status(404).json({ message: "Batch not found" });
+        }
 
         stock.totalQuantity = stock.batches.reduce((sum, b) => sum + b.quantity, 0);
-
         await stock.save();
+
         res.json({ message: "Batch deleted successfully", stock });
 
     } catch (error) {
+        console.error("Error deleting batch:", error);
         res.status(400).json({ message: "Error deleting batch", error });
     }
 });
