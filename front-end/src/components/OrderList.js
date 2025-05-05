@@ -1,7 +1,7 @@
 // components/OrdersList.js
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "../Styles/OrdersList.css"; // Updated to OrdersList.css
+import "../Styles/OrdersList.css";
 
 function OrdersList({ userId }) {
   const [orders, setOrders] = useState([]);
@@ -212,6 +212,7 @@ function OrdersList({ userId }) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
+      // Update orders and maintain reversed order
       setOrders(
         orders.map((order) =>
           order._id === currentOrder._id ? { ...order, status: "paid" } : order
@@ -280,7 +281,7 @@ function OrdersList({ userId }) {
               </tr>
             </thead>
             <tbody>
-              {filteredOrders.map((order) => (
+              {[...filteredOrders].reverse().map((order) => (
                 <tr key={order._id} className="orders-spiced-row">
                   <td>{order._id}</td>
                   <td>
