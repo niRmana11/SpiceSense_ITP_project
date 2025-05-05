@@ -257,7 +257,10 @@ function OrdersList({ userId }) {
       }
     } catch (error) {
       console.error("Payment error:", error.response ? error.response.data : error.message);
-      alert("Payment failed. Please try again.");
+  const errorMessage = error.response?.data?.errors
+    ? Object.values(error.response.data.errors).join(", ")
+    : "Payment failed. Please try again.";
+  alert(errorMessage);
     } finally {
       setIsPaying(false); // Hide loading state
     }
