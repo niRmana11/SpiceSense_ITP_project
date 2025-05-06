@@ -312,7 +312,7 @@ const SupplierDashboard = () => {
                   <p className="sd-info-value">{userData.companyName || "Not provided"}</p>
                 </div>
                 <div className="sd-info-item">
-                  <p className="sd-info-label">Contact Person</p>
+                  <p className="sd-info-label">Warehouse Location</p>
                   <p className="sd-info-value">{userData.contactPerson || "Not provided"}</p>
                 </div>
                 <div className="sd-info-item">
