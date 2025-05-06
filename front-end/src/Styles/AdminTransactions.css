@@ -1,476 +1,562 @@
 /* AdminTransactions.css */
 
+/* Root container with a spicy gradient background */
 .at-container {
-    padding: 20px;
-    width: 100%;
-  }
-  
-  .at-card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 25px;
-  }
-  
-  .at-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #f3f4f6;
-    padding-bottom: 15px;
-  }
-  
-  .at-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #4b5563;
-    margin: 0;
-  }
-  
-  .at-create-btn {
-    background-color: #8b5cf6;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 18px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .at-create-btn:hover {
-    background-color: #7c3aed;
-  }
-  
-  .at-create-btn:disabled {
-    background-color: #d1d5db;
-    cursor: not-allowed;
-  }
-  
-  .at-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 25px;
-    background-color: #f9fafb;
-    padding: 15px;
-    border-radius: 6px;
-  }
-  
-  .at-filter-group {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    min-width: 200px;
-  }
-  
-  .at-search {
-    flex: 2;
-  }
-  
-  .at-label {
-    font-weight: 500;
-    margin-right: 10px;
-    color: #4b5563;
-    white-space: nowrap;
-  }
-  
-  .at-select, .at-input {
-    padding: 8px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    flex-grow: 1;
-    background-color: #fff;
-    font-size: 14px;
-  }
-  
-  .at-loading-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 50px;
-  }
-  
-  .at-spinner {
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    border-top: 4px solid #8b5cf6;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 15px;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  .at-error {
-    background-color: #fee2e2;
-    border-left: 4px solid #ef4444;
-    color: #b91c1c;
-    padding: 12px 16px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-  }
-  
-  .at-empty {
-    background-color: #f9fafb;
-    border-radius: 6px;
-    padding: 30px;
-    text-align: center;
-    color: #6b7280;
-    font-size: 16px;
-    margin: 20px 0;
-  }
-  
-  /* Table styles */
-  .at-table-container {
-    overflow-x: auto;
-    margin-top: 20px;
-  }
-  
-  .at-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-  }
-  
-  .at-table thead {
-    background-color: #f9fafb;
-  }
-  
-  .at-table th {
-    padding: 12px 15px;
-    text-align: left;
-    font-weight: 600;
-    color: #4b5563;
-    border-bottom: 1px solid #e5e7eb;
-  }
-  
-  .at-table td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #e5e7eb;
-    color: #374151;
-  }
-  
-  .at-table-row:hover {
-    background-color: #f9fafb;
-  }
-  
-  /* Status badge styles */
-  .at-status {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-    text-align: center;
-    white-space: nowrap;
-  }
-  
-  .at-status-pending {
-    background-color: #fff7ed;
-    color: #c2410c;
-    border: 1px solid #fed7aa;
-  }
-  
-  .at-status-processing {
-    background-color: #ecfdf5;
-    color: #047857;
-    border: 1px solid #a7f3d0;
-  }
-  
-  .at-status-paid {
-    background-color: #eff6ff;
-    color: #1d4ed8;
-    border: 1px solid #bfdbfe;
-  }
-  
-  .at-status-completed {
-    background-color: #f0fdf4;
-    color: #166534;
-    border: 1px solid #86efac;
-  }
-  
-  .at-status-cancelled {
-    background-color: #fef2f2;
-    color: #b91c1c;
-    border: 1px solid #fecaca;
-  }
-  
-  .at-status-refunded {
-    background-color: #f5f3ff;
-    color: #6d28d9;
-    border: 1px solid #ddd6fe;
-  }
-  
-  /* Action buttons styles */
-  .at-actions {
-    display: flex;
-    gap: 8px;
-  }
-  
-  .at-view-btn, .at-update-btn {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 4px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .at-view-btn {
-    background-color: #6b7280;
-    color: white;
-  }
-  
-  .at-view-btn:hover {
-    background-color: #4b5563;
-  }
-  
-  .at-update-btn {
-    background-color: #8b5cf6;
-    color: white;
-  }
-  
-  .at-update-btn:hover {
-    background-color: #7c3aed;
-  }
-  
-  /* Modal styles */
-  .at-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .at-modal-content {
-    background-color: white;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-  }
-  
-  .at-modal-large {
-    max-width: 800px;
-  }
-  
-  .at-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    border-bottom: 1px solid #e5e7eb;
-  }
-  
-  .at-modal-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: #111827;
-    margin: 0;
-  }
-  
-  .at-modal-close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    line-height: 1;
-    color: #6b7280;
-    cursor: pointer;
-  }
-  
-  .at-modal-body {
-    padding: 20px;
-  }
-  
-  .at-transaction-info {
-    background-color: #f9fafb;
-    border-radius: 6px;
-    padding: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .at-transaction-invoice {
-    font-size: 16px;
-    font-weight: 600;
-    color: #111827;
-    margin: 0 0 8px;
-  }
-  
-  .at-transaction-supplier {
-    font-size: 14px;
-    color: #4b5563;
-    margin: 0 0 5px;
-  }
-  
-  .at-transaction-amount {
-    font-size: 14px;
-    color: #4b5563;
-    margin: 0 0 5px;
-  }
-  
-  .at-transaction-status {
-    font-size: 14px;
-    color: #4b5563;
-    margin: 0;
-  }
-  
-  .at-form-group {
-    margin-bottom: 15px;
-  }
-  
-  .at-form-label {
-    display: block;
-    font-size: 14px;
-    font-weight: 500;
-    color: #374151;
-    margin-bottom: 5px;
-  }
-  
-  .at-form-input, .at-form-select, .at-form-textarea {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    font-size: 14px;
-  }
-  
-  .at-form-textarea {
-    resize: vertical;
-    min-height: 80px;
-  }
-  
-  .at-detail-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 25px;
-  }
-  
-  .at-invoice-number {
-    font-size: 18px;
-    font-weight: 600;
-    color: #111827;
-    margin: 0 0 5px;
-  }
-  
-  .at-product-name {
-    font-size: 16px;
-    color: #4b5563;
-    margin: 0;
-  }
-  
-  .at-status-large {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 500;
-  }
-  
-  .at-detail-section {
-    margin-bottom: 25px;
-  }
-  
-  .at-section-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: #374151;
-    margin: 0 0 15px;
-    border-bottom: 1px solid #e5e7eb;
-    padding-bottom: 8px;
-  }
-  
-  .at-detail-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 20px;
-  }
-  
-  .at-detail-group {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .at-detail-label {
-    font-size: 13px;
-    color: #6b7280;
-    margin-bottom: 4px;
-  }
-  
-  .at-detail-value {
-    font-size: 15px;
-    font-weight: 500;
-    color: #111827;
-  }
-  
-  .at-notes-text {
-    font-size: 14px;
-    color: #4b5563;
-    margin: 0;
-    line-height: 1.5;
-  }
-  
-  .at-detail-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-  }
-  
-  .at-modal-footer {
-    padding: 15px 20px;
-    border-top: 1px solid #e5e7eb;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-  }
-  
-  .at-button {
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .at-button-cancel {
-    background-color: #f3f4f6;
-    color: #374151;
-    border: 1px solid #d1d5db;
-  }
-  
-  .at-button-cancel:hover {
-    background-color: #e5e7eb;
-  }
-  
-  .at-button-submit {
-    background-color: #8b5cf6;
-    color: white;
-    border: 1px solid #8b5cf6;
-  }
-  
-  .at-button-submit:hover {
-    background-color: #7c3aed;
-  }
-  
-  .at-button-update {
-    background-color: #8b5cf6;
-    color: white;
-    border: 1px solid #8b5cf6;
-  }
+  padding: 24px;
+  width: 100%;
+  background: linear-gradient(135deg, #fef5e7 0%, #ffe4b5 100%); /* Saffron-inspired gradient */
+}
+
+/* Card with a creamy base and paprika shadow */
+.at-card {
+  background-color: #fffcf5; /* Creamy off-white */
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(183, 65, 14, 0.15); /* Paprika shadow */
+  padding: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.at-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(183, 65, 14, 0.25);
+}
+
+/* Header with a fiery border */
+.at-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  border-bottom: 3px solid #f97316; /* Saffron orange */
+  padding-bottom: 12px;
+}
+
+/* Title with a bold, chili red tone */
+.at-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #7f1d1d; /* Deep chili red */
+  margin: 0;
+}
+
+/* Create button with a turmeric-inspired color */
+.at-create-btn {
+  background-color: #d97706; /* Turmeric orange */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.at-create-btn:hover {
+  background-color: #b45309; /* Darker turmeric */
+  box-shadow: 0 2px 8px rgba(183, 65, 14, 0.3);
+}
+
+.at-create-btn:disabled {
+  background-color: #d1d5db; /* Neutral gray */
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Filters with a cumin-toned background */
+.at-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 30px;
+  background-color: #fdf2e9; /* Light cumin */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(154, 52, 18, 0.1); /* Subtle turmeric shadow */
+}
+
+/* Filter group for alignment */
+.at-filter-group {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 220px;
+}
+
+/* Search bar with more space */
+.at-search {
+  flex: 2;
+}
+
+/* Label with a spiced tone */
+.at-label {
+  font-weight: 600;
+  margin-right: 12px;
+  color: #6b2d00; /* Dark cinnamon */
+  white-space: nowrap;
+}
+
+/* Inputs with a clean, modern look */
+.at-select,
+.at-input {
+  padding: 10px 14px;
+  border: 1px solid #e5b082; /* Light saffron border */
+  border-radius: 6px;
+  flex-grow: 1;
+  background-color: #fff;
+  font-size: 15px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.at-select:focus,
+.at-input:focus {
+  border-color: #f97316; /* Bright orange focus */
+  box-shadow: 0 0 8px rgba(249, 115, 22, 0.3);
+  outline: none;
+}
+
+/* Loading container with centered content */
+.at-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+}
+
+/* Spinner with a chili red accent */
+.at-spinner {
+  border: 5px solid rgba(183, 65, 14, 0.2); /* Paprika base */
+  border-radius: 50%;
+  border-top: 5px solid #dc2626; /* Chili red */
+  width: 48px;
+  height: 48px;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error with a bold, chili alert */
+.at-error {
+  background-color: #fee2e2; /* Light chili */
+  border-left: 5px solid #dc2626; /* Bright chili red */
+  color: #991b1b; /* Darker chili */
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.15);
+}
+
+/* Empty state with a saffron tone */
+.at-empty {
+  background-color: #fef3c7; /* Saffron yellow */
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  color: #78350f; /* Dark cumin */
+  font-size: 18px;
+  margin: 24px 0;
+  box-shadow: 0 2px 10px rgba(154, 52, 18, 0.1);
+}
+
+/* Table container with horizontal scroll */
+.at-table-container {
+  overflow-x: auto;
+  margin-top: 24px;
+}
+
+/* Table with clean styling */
+.at-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  background-color: #fffcf5; /* Creamy off-white */
+}
+
+/* Table header with a cumin background */
+.at-table thead {
+  background-color: #fdf2e9; /* Light cumin */
+}
+
+/* Table header cells with bold text */
+.at-table th {
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #6b2d00; /* Dark cinnamon */
+  border-bottom: 1px solid #fed7aa; /* Light saffron */
+}
+
+/* Table data cells with readable text */
+.at-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #fed7aa;
+  color: #3f2c0f; /* Dark cumin */
+}
+
+/* Hover effect for table rows */
+.at-table-row:hover {
+  background-color: #fef3c7; /* Saffron yellow */
+}
+
+/* Status badges with spice-inspired colors */
+.at-status {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.at-status-pending {
+  background-color: #fef3c7; /* Saffron */
+  color: #b45309; /* Dark saffron */
+  border: 1px solid #f97316;
+}
+
+.at-status-processing {
+  background-color: #e6f3e6; /* Light cilantro */
+  color: #15803d; /* Green chili */
+  border: 1px solid #4ade80;
+}
+
+.at-status-paid {
+  background-color: #f3e8ff; /* Light cardamom */
+  color: #7e22ce; /* Deep cumin */
+  border: 1px solid #c084fc;
+}
+
+.at-status-completed {
+  background-color: #dcfce7; /* Light mint */
+  color: #166534; /* Dark cilantro */
+  border: 1px solid #22c55e;
+}
+
+.at-status-cancelled {
+  background-color: #fee2e2; /* Light chili */
+  color: #991b1b; /* Dark chili */
+  border: 1px solid #dc2626;
+}
+
+.at-status-refunded {
+  background-color: #ffedd5; /* Light turmeric */
+  color: #c2410c; /* Paprika */
+  border: 1px solid #fb923c;
+}
+
+/* Action buttons with spiced styling */
+.at-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.at-view-btn,
+.at-update-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.at-view-btn {
+  background-color: #78350f; /* Dark cumin */
+  color: white;
+}
+
+.at-view-btn:hover {
+  background-color: #5a270b;
+  box-shadow: 0 2px 8px rgba(154, 52, 18, 0.3);
+}
+
+.at-update-btn {
+  background-color: #d97706; /* Turmeric orange */
+  color: white;
+}
+
+.at-update-btn:hover {
+  background-color: #b45309;
+  box-shadow: 0 2px 8px rgba(183, 65, 14, 0.3);
+}
+
+/* Modal with a dark overlay */
+.at-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal content with a creamy base */
+.at-modal-content {
+  background-color: #fffcf5;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 6px 30px rgba(183, 65, 14, 0.2); /* Paprika shadow */
+}
+
+.at-modal-large {
+  max-width: 800px;
+}
+
+/* Modal header with a spiced border */
+.at-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #fed7aa; /* Light saffron */
+}
+
+/* Modal title with a bold tone */
+.at-modal-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #7f1d1d; /* Chili red */
+  margin: 0;
+}
+
+/* Modal close button with a subtle hover */
+.at-modal-close {
+  background: none;
+  border: none;
+  font-size: 26px;
+  line-height: 1;
+  color: #854d0e; /* Dark saffron */
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.at-modal-close:hover {
+  color: #f97316; /* Saffron orange */
+}
+
+/* Modal body with clean padding */
+.at-modal-body {
+  padding: 24px;
+}
+
+/* Transaction info with a cumin background */
+.at-transaction-info {
+  background-color: #fdf2e9; /* Light cumin */
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(154, 52, 18, 0.1);
+}
+
+/* Transaction invoice with bold styling */
+.at-transaction-invoice {
+  font-size: 18px;
+  font-weight: 600;
+  color: #7f1d1d; /* Chili red */
+  margin: 0 0 10px;
+}
+
+/* Transaction details with spiced tones */
+.at-transaction-supplier,
+.at-transaction-amount,
+.at-transaction-status {
+  font-size: 15px;
+  color: #6b2d00; /* Dark cinnamon */
+  margin: 0 0 6px;
+}
+
+/* Form group with consistent spacing */
+.at-form-group {
+  margin-bottom: 20px;
+}
+
+/* Form label with a readable tone */
+.at-form-label {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  color: #3f2c0f; /* Dark cumin */
+  margin-bottom: 6px;
+}
+
+/* Form inputs with spiced styling */
+.at-form-input,
+.at-form-select,
+.at-form-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e5b082; /* Light saffron */
+  border-radius: 6px;
+  font-size: 15px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.at-form-input:focus,
+.at-form-select:focus,
+.at-form-textarea:focus {
+  border-color: #f97316; /* Saffron orange */
+  box-shadow: 0 0 8px rgba(249, 115, 22, 0.3);
+  outline: none;
+}
+
+.at-form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Detail header with flexible layout */
+.at-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+/* Invoice number with bold styling */
+.at-invoice-number {
+  font-size: 20px;
+  font-weight: 600;
+  color: #7f1d1d; /* Chili red */
+  margin: 0 0 6px;
+}
+
+/* Product name with a spiced tone */
+.at-product-name {
+  font-size: 17px;
+  color: #6b2d00; /* Dark cinnamon */
+  margin: 0;
+}
+
+/* Large status badge with spice colors */
+.at-status-large {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Detail section with clear hierarchy */
+.at-detail-section {
+  margin-bottom: 30px;
+}
+
+/* Section title with a bold, spiced border */
+.at-section-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #3f2c0f; /* Dark cumin */
+  margin: 0 0 16px;
+  border-bottom: 1px solid #fed7aa; /* Light saffron */
+  padding-bottom: 10px;
+}
+
+/* Detail grid for responsive layout */
+.at-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+/* Detail group for alignment */
+.at-detail-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Detail label with a subtle tone */
+.at-detail-label {
+  font-size: 14px;
+  color: #854d0e; /* Dark saffron */
+  margin-bottom: 6px;
+}
+
+/* Detail value with bold text */
+.at-detail-value {
+  font-size: 16px;
+  font-weight: 500;
+  color: #3f2c0f; /* Dark cumin */
+}
+
+/* Notes with a spiced background */
+.at-notes-text {
+  font-size: 15px;
+  color: #6b2d00; /* Dark cinnamon */
+  margin: 0;
+  line-height: 1.6;
+  background-color: #fef3c7; /* Saffron yellow */
+  padding: 12px 16px;
+  border-radius: 6px;
+  border-left: 4px solid #f97316; /* Saffron orange */
+}
+
+/* Detail actions with right-aligned buttons */
+.at-detail-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+/* Modal footer with a spiced border */
+.at-modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #fed7aa; /* Light saffron */
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* Generic button styling */
+.at-button {
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Cancel button with a neutral tone */
+.at-button-cancel {
+  background-color: #f3f4f6; /* Light gray */
+  color: #3f2c0f; /* Dark cumin */
+  border: 1px solid #e5b082; /* Light saffron */
+}
+
+.at-button-cancel:hover {
+  background-color: #e5e7eb;
+  box-shadow: 0 2px 8px rgba(154, 52, 18, 0.2);
+}
+
+/* Submit and update buttons with turmeric styling */
+.at-button-submit,
+.at-button-update {
+  background-color: #d97706; /* Turmeric orange */
+  color: white;
+  border: 1px solid #d97706;
+}
+
+.at-button-submit:hover,
+.at-button-update:hover {
+  background-color: #b45309; /* Darker turmeric */
+  box-shadow: 0 2px 8px rgba(183, 65, 14, 0.3);
+}
