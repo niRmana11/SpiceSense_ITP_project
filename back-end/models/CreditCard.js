@@ -5,7 +5,7 @@ const CreditCardSchema = new mongoose.Schema({
     cardNumber: { type: String, required: true },
     cardHolder: { type: String, required: true },
     expiryDate: { type: String, required: true },
-    cvv: { type: String, required: true }, // For simplicity (Don't store CVV in real apps!)
+    cvv: { type: String, required: true }, 
 });
 
 module.exports = mongoose.model("CreditCard", CreditCardSchema);

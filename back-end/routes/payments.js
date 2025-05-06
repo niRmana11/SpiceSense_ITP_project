@@ -8,7 +8,7 @@ import ExcelJS from "exceljs";
 
 const router = express.Router();
 
-// Existing POST route (unchanged)
+//  POST route 
 router.post("/", async (req, res) => {
   try {
     console.log("Payment request body:", req.body);
@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Existing invoice generation route (unchanged)
+//  invoice generation route 
 router.get("/invoice/:paymentId", async (req, res) => {
   try {
     const payment = await Payment.findById(req.params.paymentId)
@@ -208,7 +208,7 @@ router.get("/invoice/:paymentId", async (req, res) => {
   }
 });
 
-// Existing GET payments route (unchanged)
+//  GET payments route 
 router.get("/", async (req, res) => {
   try {
     const payments = await Payment.find();
@@ -218,7 +218,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Existing financial reports route (unchanged)
+// financial reports route 
 router.get("/financial-reports", async (req, res) => {
   try {
     // Get top 3 best-selling items
