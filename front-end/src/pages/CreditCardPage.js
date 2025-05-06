@@ -2,9 +2,15 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/CreditCardPage.css"; // Import CSS from Styles folder
 import NavigationBar from "../components/NavigationBar";
+import axios from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const CreditCardPage = () => {
     const userId = sessionStorage.getItem("userId");
+    const [userData, setUserData] = useState(null);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const [cards, setCards] = useState([]);
     const [formData, setFormData] = useState({ 
@@ -24,6 +30,35 @@ const CreditCardPage = () => {
     const [deleteMessage, setDeleteMessage] = useState(""); // For delete confirmation message
 
     const API_BASE_URL = "http://localhost:5000/api/credit-cards";
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+          try {
+            const passedUserData = location.state?.userData;
+            if (passedUserData) {
+              setUserData(passedUserData);
+              return;
+            }
+    
+            const response = await axios.get("http://localhost:5000/api/user/data", {
+              withCredentials: true,
+            });
+    
+            if (response.data.success) {
+              setUserData(response.data.userData);
+            } else {
+              setError(response.data.message);
+              navigate("/login");
+            }
+          } catch (error) {
+            console.error("Error fetching user data:", error.response?.data?.message || error.message);
+            setError("Failed to load user data. Please log in again.");
+            navigate("/login");
+          }
+        };
+    
+        fetchUserData();
+      }, [navigate, location.state]);
 
     useEffect(() => {
         if (!userId) return;
@@ -71,6 +106,26 @@ const CreditCardPage = () => {
         } else if (!/^\d{2}\/\d{2}$/.test(formData.expiryDate)) {
             newErrors.expiryDate = "Use MM/YY format";
             isValid = false;
+        } else {
+            const [month, year] = formData.expiryDate.split('/').map(Number);
+            // Validate month range (1-12)
+            if (month < 1 || month > 12) {
+                newErrors.expiryDate = "Month must be between 01 and 12";
+                isValid = false;
+            } else {
+                // Validate expiry date
+                const currentDate = new Date();
+                const currentYear = currentDate.getFullYear() % 100; // Get last two digits
+                const currentMonth = currentDate.getMonth() + 1; // Months are 0-based in JS
+                
+                const fullYear = 2000 + year; // Convert YY to YYYY
+                const cardDate = new Date(fullYear, month - 1); // Month is 0-based in Date
+                
+                if (year < currentYear || (year === currentYear && month < currentMonth)) {
+                    newErrors.expiryDate = "Card has expired";
+                    isValid = false;
+                }
+            }
         }
 
         if (!formData.cvv) {
@@ -149,7 +204,7 @@ const CreditCardPage = () => {
 
     return (
         <div>
-            <NavigationBar />
+            <NavigationBar userData={userData}/>
             <div className="credit-card-container">
                 <h2 className="credit-card-title">My Saved Credit Cards</h2>
                 

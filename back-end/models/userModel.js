@@ -10,24 +10,18 @@ const userSchema = new mongoose.Schema({
     enum: ['admin', 'supplier', 'customer', 'employee'], 
     required: true 
   },
-  // Fields for Supplier
   companyName: { type: String },
   contactPerson: { type: String },
-  // Fields for Employee
   jobTitle: { type: String },
   department: { type: String },
-  // Fields for Admin
   permissions: { type: Array, default: ['manage-users', 'view-reports'] },
-  // Fields for Customer
   shippingAddress: { type: String },
   billingAddress: { type: String },
-  // OTP and account verification
   verifyOtp: { type: String, default: "0" },
   isAccountVerified: { type: Boolean, default: false },
   resetOtp: { type: String, default: "" },
   resetOtpExpireAt: { type: Number, default: 0 },
-  // New field for account status
-  isActive: { type: Boolean, default: true }, // Active by default
+  isActive: { type: Boolean, default: true }, 
 });
 
 const userModel = mongoose.model('User', userSchema);

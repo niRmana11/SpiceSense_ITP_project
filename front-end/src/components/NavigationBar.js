@@ -1,11 +1,13 @@
 // components/NavigationBar.js
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import "../Styles/NavigationBar.css"; // Updated import path to Styles folder
+import "../Styles/NavigationBar.css";
 
 const NavigationBar = ({ userData }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for mobile menu
 
   const handleLogout = async () => {
     try {
@@ -16,45 +18,61 @@ const NavigationBar = ({ userData }) => {
     }
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  // Determine active link based on current path
+  const isActive = (path) => location.pathname === path;
+
   return (
-    <nav className="nav-bar-container">
-      <h1 className="nav-bar-title">SpiceSense</h1>
-      <div className="nav-bar-links">
+    <nav className="nav-spiced-container">
+      <h1 className="nav-spiced-title">SpiceSense</h1>
+      <button className="nav-spiced-hamburger" onClick={toggleMenu}>
+        <span className="nav-spiced-hamburger-line"></span>
+        <span className="nav-spiced-hamburger-line"></span>
+        <span className="nav-spiced-hamburger-line"></span>
+      </button>
+      <div className={`nav-spiced-links ${isMenuOpen ? "nav-spiced-links-open" : ""}`}>
         <button
           onClick={() => navigate("/home", { state: { userData } })}
-          className="nav-bar-link"
+          className={`nav-spiced-link ${isActive("/home") ? "nav-spiced-link-active" : ""}`}
         >
           Home
         </button>
         <button
           onClick={() => navigate("/about-us")}
-          className="nav-bar-link"
+          className={`nav-spiced-link ${isActive("/about-us") ? "nav-spiced-link-active" : ""}`}
         >
           About Us
         </button>
         <button
           onClick={() => navigate("/contact-us")}
-          className="nav-bar-link"
+          className={`nav-spiced-link ${isActive("/contact-us") ? "nav-spiced-link-active" : ""}`}
         >
           Contact Us
         </button>
         {userData ? (
-          <div className="nav-bar-user-section">
+          <div className="nav-spiced-user-section">
             <button
               onClick={() => navigate("/user-profile", { state: { userData } })}
-              className="nav-bar-user-name"
+              className={`nav-spiced-user-name ${isActive("/user-profile") ? "nav-spiced-link-active" : ""}`}
             >
+              <span className="nav-spiced-user-icon">👤</span>
               {userData.name}
             </button>
             <button
               onClick={handleLogout}
-              className="nav-bar-logout-btn"
+              className="nav-spiced-logout-btn"
             >
               Logout
             </button>
           </div>
         ) : (
-          <p className="nav-bar-loading">Loading...</p>
+          <div className="nav-spiced-loading">
+            <span className="nav-spiced-spinner"></span>
+            Loading...
+          </div>
         )}
       </div>
     </nav>

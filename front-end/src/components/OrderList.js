@@ -1,4 +1,4 @@
-// OrdersList.js
+// components/OrdersList.js
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "../Styles/OrdersList.css";
@@ -15,10 +15,11 @@ function OrdersList({ userId }) {
     cardNumber: "",
     cardHolder: "",
     expiryDate: "",
-    cvv: ""
+    cvv: "",
   });
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [currentOrder, setCurrentOrder] = useState(null);
+  const [isPaying, setIsPaying] = useState(false);
 
   // Fetch orders
   useEffect(() => {
@@ -56,11 +57,11 @@ function OrdersList({ userId }) {
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
-    
-    const filtered = orders.filter(order => {
+
+    const filtered = orders.filter((order) => {
       if (order._id.toLowerCase().includes(term)) return true;
       if (order.status.toLowerCase().includes(term)) return true;
-      return order.items.some(item => 
+      return order.items.some((item) =>
         items[item.itemId]?.toLowerCase().includes(term)
       );
     });
@@ -82,7 +83,7 @@ function OrdersList({ userId }) {
     const confirmPayment = window.confirm(
       `Are you sure you want to proceed with payment for Order #${order._id} amounting to $${order.total.toFixed(2)}?`
     );
-    
+
     if (confirmPayment) {
       setCurrentOrder(order);
       setShowPaymentModal(true);
@@ -100,7 +101,7 @@ function OrdersList({ userId }) {
       cardNumber: "",
       cardHolder: "",
       expiryDate: "",
-      cvv: ""
+      cvv: "",
     };
 
     if (selectedCard) {
@@ -108,7 +109,7 @@ function OrdersList({ userId }) {
       return true;
     }
 
-    const cleanNumber = newCard.cardNumber.replace(/\s/g, '');
+    const cleanNumber = newCard.cardNumber.replace(/\s/g, "");
     if (!cleanNumber) {
       newErrors.cardNumber = "Card number is required";
       isValid = false;
@@ -121,7 +122,7 @@ function OrdersList({ userId }) {
     }
 
     if (!newCard.cardHolder.trim()) {
-      newErrors.cardHolder = "Card holder name is required";
+      newErrors.cardHolder = "Cardholder name is required";
       isValid = false;
     }
 
@@ -131,6 +132,21 @@ function OrdersList({ userId }) {
     } else if (!/^\d{2}\/\d{2}$/.test(newCard.expiryDate)) {
       newErrors.expiryDate = "Use MM/YY format";
       isValid = false;
+    } else {
+      const [month, year] = newCard.expiryDate.split("/").map(Number);
+      if (month < 1 || month > 12) {
+        newErrors.expiryDate = "Month must be between 01 and 12";
+        isValid = false;
+      } else {
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear() % 100;
+        const currentMonth = currentDate.getMonth() + 1;
+
+        if (year < currentYear || (year === currentYear && month < currentMonth)) {
+          newErrors.expiryDate = "Card has expired";
+          isValid = false;
+        }
+      }
     }
 
     if (!newCard.cvv) {
@@ -149,24 +165,15 @@ function OrdersList({ userId }) {
   const handleNewCardChange = (e) => {
     const { name, value } = e.target;
     setNewCard({ ...newCard, [name]: value });
-    
     if (cardErrors[name]) {
-      setCardErrors({
-        ...cardErrors,
-        [name]: ""
-      });
+      setCardErrors({ ...cardErrors, [name]: "" });
     }
   };
 
   // Handle selection of a saved card
   const handleCardSelection = (card) => {
     setSelectedCard(card);
-    setCardErrors({
-      cardNumber: "",
-      cardHolder: "",
-      expiryDate: "",
-      cvv: ""
-    });
+    setCardErrors({ cardNumber: "", cardHolder: "", expiryDate: "", cvv: "" });
   };
 
   // Handle payment
@@ -175,6 +182,7 @@ function OrdersList({ userId }) {
       return;
     }
 
+    setIsPaying(true);
     try {
       const token = localStorage.getItem("token");
       let paymentData = {
@@ -182,7 +190,7 @@ function OrdersList({ userId }) {
         orderId: currentOrder._id,
         amount: currentOrder.total,
       };
-  
+
       if (selectedCard) {
         paymentData.cardId = selectedCard._id;
       } else if (newCard.cardNumber) {
@@ -194,15 +202,17 @@ function OrdersList({ userId }) {
         paymentData.cardId = cardResponse.data._id;
       } else {
         alert("Please select a card or enter new card details.");
+        setIsPaying(false);
         return;
       }
-  
+
       const paymentResponse = await axios.post(
         "http://localhost:5000/api/payments",
         paymentData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-  
+
+      // Update orders and maintain reversed order
       setOrders(
         orders.map((order) =>
           order._id === currentOrder._id ? { ...order, status: "paid" } : order
@@ -216,9 +226,9 @@ function OrdersList({ userId }) {
       setShowPaymentModal(false);
       setSelectedCard(null);
       setNewCard({ cardNumber: "", cardHolder: "", expiryDate: "", cvv: "" });
-  
+
       alert("Payment Successful");
-  
+
       try {
         const invoiceResponse = await axios.get(
           `http://localhost:5000/api/payments/invoice/${paymentResponse.data.paymentId}`,
@@ -236,79 +246,89 @@ function OrdersList({ userId }) {
       }
     } catch (error) {
       console.error("Payment error:", error.response ? error.response.data : error.message);
-      alert("Payment failed. Please try again.");
+      const errorMessage = error.response?.data?.errors
+        ? Object.values(error.response.data.errors).join(", ")
+        : "Payment failed. Please try again.";
+      alert(errorMessage);
+    } finally {
+      setIsPaying(false);
     }
   };
 
   return (
-    <div className="orders-container">
-      <h2>My Orders</h2>
-      <div className="search-container">
+    <div className="orders-spiced-container">
+      <div className="orders-spiced-header">
         <input
           type="text"
           placeholder="Search by Order ID, Status, or Item Name..."
           value={searchTerm}
           onChange={handleSearch}
-          className="search-input"
+          className="orders-spiced-search-input"
+          aria-label="Search orders"
         />
       </div>
 
       {filteredOrders.length > 0 ? (
-        <table className="orders-table">
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Items</th>
-              <th>Total</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredOrders.map((order) => (
-              <tr key={order._id}>
-                <td>{order._id}</td>
-                <td>
-                  {order.items.map((item, index) => (
-                    <div key={index}>
-                      {items[item.itemId] || "Loading..."} - {item.quantity} pcs @ $
-                      {item.price.toFixed(2)}
-                    </div>
-                  ))}
-                </td>
-                <td>${order.total.toFixed(2)}</td>
-                <td>{order.status}</td>
-                <td>
-                  {order.status === "pending" ? (
-                    <button 
-                      onClick={() => openPaymentModal(order)}
-                      className="pay-button"
-                    >
-                      Pay Now
-                    </button>
-                  ) : (
-                    <span>✅ Paid</span>
-                  )}
-                </td>
+        <div className="orders-spiced-table-wrapper">
+          <table className="orders-spiced-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {[...filteredOrders].reverse().map((order) => (
+                <tr key={order._id} className="orders-spiced-row">
+                  <td>{order._id}</td>
+                  <td>
+                    {order.items.map((item, index) => (
+                      <div key={index} className="orders-spiced-item">
+                        {items[item.itemId] || "Loading..."} - {item.quantity} pcs @ $
+                        {item.price.toFixed(2)}
+                      </div>
+                    ))}
+                  </td>
+                  <td>${order.total.toFixed(2)}</td>
+                  <td>{order.status}</td>
+                  <td>
+                    {order.status === "pending" ? (
+                      <button
+                        onClick={() => openPaymentModal(order)}
+                        className="orders-spiced-pay-button"
+                        aria-label={`Pay for order ${order._id}`}
+                      >
+                        Pay Now
+                      </button>
+                    ) : (
+                      <span className="orders-spiced-paid" aria-label="Order paid">✅ Paid</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
-        <p className="no-orders">No orders found{searchTerm ? " matching your search" : ""}.</p>
+        <p className="orders-spiced-no-orders">
+          No orders found{searchTerm ? " matching your search" : ""}.
+        </p>
       )}
 
       {showPaymentModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>Pay for Order #{currentOrder._id}</h3>
-            <p>Total: ${currentOrder.total.toFixed(2)}</p>
+        <div className="payment-spiced-overlay">
+          <div className="payment-spiced-modal">
+            <h3 className="payment-spiced-title">Pay for Order #{currentOrder._id}</h3>
+            <p className="payment-spiced-total">Total: ${currentOrder.total.toFixed(2)}</p>
 
-            <h4>Select a Saved Card</h4>
+            <h4 className="payment-spiced-subtitle">Select a Saved Card</h4>
             {cards.length > 0 ? (
-              <div className="cards-list">
+              <div className="payment-spiced-cards-list">
                 {cards.map((card) => (
-                  <div key={card._id} className="card-option">
+                  <div key={card._id} className="payment-spiced-card-option">
                     <input
                       type="radio"
                       id={`card-${card._id}`}
@@ -316,53 +336,62 @@ function OrdersList({ userId }) {
                       value={card._id}
                       checked={selectedCard && selectedCard._id === card._id}
                       onChange={() => handleCardSelection(card)}
+                      className="payment-spiced-radio"
+                      aria-label={`Select card ending in ${card.cardNumber.slice(-4)}`}
                     />
-                    <label htmlFor={`card-${card._id}`}>
-                      **** **** **** {card.cardNumber.slice(-4)} ({card.cardHolder})
+                    <label htmlFor={`card-${card._id}`} className="payment-spiced-card-label">
+                      <span className="payment-spiced-card-number">
+                        **** **** **** {card.cardNumber.slice(-4)}
+                      </span>
+                      <span className="payment-spiced-card-holder">({card.cardHolder})</span>
                     </label>
                   </div>
                 ))}
               </div>
             ) : (
-              <p>No saved cards found.</p>
+              <p className="payment-spiced-no-cards">No saved cards found.</p>
             )}
 
-            <h4>Or Enter New Card</h4>
-            <div className="form-group">
-              <label htmlFor="cardNumber">Card Number</label>
+            <h4 className="payment-spiced-subtitle">Or Enter New Card</h4>
+            <div className="payment-spiced-form-group">
+              <label htmlFor="cardNumber" className="payment-spiced-label">Card Number</label>
               <input
                 type="text"
                 id="cardNumber"
                 name="cardNumber"
-                placeholder="Card Number"
+                placeholder="1234 5678 9012 3456"
                 value={newCard.cardNumber}
                 onChange={handleNewCardChange}
-                className={cardErrors.cardNumber ? "input-error" : ""}
+                className={`payment-spiced-input ${cardErrors.cardNumber ? "payment-spiced-input-error" : ""}`}
+                disabled={selectedCard}
+                aria-invalid={cardErrors.cardNumber ? "true" : "false"}
               />
               {cardErrors.cardNumber && (
-                <span className="error-message">{cardErrors.cardNumber}</span>
+                <span className="payment-spiced-error-message">{cardErrors.cardNumber}</span>
               )}
             </div>
 
-            <div className="form-group">
-              <label htmlFor="cardHolder">Cardholder Name</label>
+            <div className="payment-spiced-form-group">
+              <label htmlFor="cardHolder" className="payment-spiced-label">Cardholder Name</label>
               <input
                 type="text"
                 id="cardHolder"
                 name="cardHolder"
-                placeholder="Card Holder Name"
+                placeholder="John Doe"
                 value={newCard.cardHolder}
                 onChange={handleNewCardChange}
-                className={cardErrors.cardHolder ? "input-error" : ""}
+                className={`payment-spiced-input ${cardErrors.cardHolder ? "payment-spiced-input-error" : ""}`}
+                disabled={selectedCard}
+                aria-invalid={cardErrors.cardHolder ? "true" : "false"}
               />
               {cardErrors.cardHolder && (
-                <span className="error-message">{cardErrors.cardHolder}</span>
+                <span className="payment-spiced-error-message">{cardErrors.cardHolder}</span>
               )}
             </div>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="expiryDate">Expiry Date</label>
+            <div className="payment-spiced-form-row">
+              <div className="payment-spiced-form-group">
+                <label htmlFor="expiryDate" className="payment-spiced-label">Expiry Date</label>
                 <input
                   type="text"
                   id="expiryDate"
@@ -370,40 +399,52 @@ function OrdersList({ userId }) {
                   placeholder="MM/YY"
                   value={newCard.expiryDate}
                   onChange={handleNewCardChange}
-                  className={cardErrors.expiryDate ? "input-error" : ""}
+                  className={`payment-spiced-input ${cardErrors.expiryDate ? "payment-spiced-input-error" : ""}`}
+                  disabled={selectedCard}
+                  aria-invalid={cardErrors.expiryDate ? "true" : "false"}
                 />
                 {cardErrors.expiryDate && (
-                  <span className="error-message">{cardErrors.expiryDate}</span>
+                  <span className="payment-spiced-error-message">{cardErrors.expiryDate}</span>
                 )}
               </div>
 
-              <div className="form-group">
-                <label htmlFor="cvv">CVV</label>
+              <div className="payment-spiced-form-group">
+                <label htmlFor="cvv" className="payment-spiced-label">CVV</label>
                 <input
                   type="text"
                   id="cvv"
                   name="cvv"
-                  placeholder="CVV"
+                  placeholder="123"
                   value={newCard.cvv}
                   onChange={handleNewCardChange}
-                  className={cardErrors.cvv ? "input-error" : ""}
+                  className={`payment-spiced-input ${cardErrors.cvv ? "payment-spiced-input-error" : ""}`}
+                  disabled={selectedCard}
+                  aria-invalid={cardErrors.cvv ? "true" : "false"}
                 />
                 {cardErrors.cvv && (
-                  <span className="error-message">{cardErrors.cvv}</span>
+                  <span className="payment-spiced-error-message">{cardErrors.cvv}</span>
                 )}
               </div>
             </div>
 
-            <div className="modal-buttons">
-              <button 
+            <div className="payment-spiced-buttons">
+              <button
                 onClick={handlePayment}
-                className="pay-button"
+                className="payment-spiced-pay-button"
+                disabled={isPaying}
+                aria-label="Confirm payment"
               >
-                Pay Now
+                {isPaying ? (
+                  <span className="payment-spiced-spinner"></span>
+                ) : (
+                  "Pay Now"
+                )}
               </button>
-              <button 
+              <button
                 onClick={() => setShowPaymentModal(false)}
-                className="cancel-button"
+                className="payment-spiced-cancel-button"
+                disabled={isPaying}
+                aria-label="Cancel payment"
               >
                 Cancel
               </button>
