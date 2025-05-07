@@ -1,6 +1,6 @@
 // pages/CustomerDeliveryDashboard.js
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import NavigationBar from "../components/NavigationBar";
 import "../Styles/DeliveryDashboard.css";
@@ -11,9 +11,40 @@ const CustomerDeliveryDashboard = () => {
   const [error, setError] = useState(null);
   const [statusFilter, setStatusFilter] = useState('all');
   const navigate = useNavigate();
+  const [userData, setUserData] = useState(null);
+  const location = useLocation();
   
   // Get user ID from session storage
   const userId = sessionStorage.getItem("userId");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const passedUserData = location.state?.userData;
+        if (passedUserData) {
+          setUserData(passedUserData);
+          return;
+        }
+
+        const response = await axios.get("http://localhost:5000/api/user/data", {
+          withCredentials: true,
+        });
+
+        if (response.data.success) {
+          setUserData(response.data.userData);
+        } else {
+          setError(response.data.message);
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error.response?.data?.message || error.message);
+        setError("Failed to load user data. Please log in again.");
+        navigate("/login");
+      }
+    };
+
+    fetchUserData();
+  }, [navigate, location.state]);
   
   useEffect(() => {
     const fetchOrders = async () => {
@@ -116,7 +147,7 @@ const CustomerDeliveryDashboard = () => {
 
   return (
     <div>
-      <NavigationBar />
+      <NavigationBar userData={userData}/>
       <div className="delivery-dashboard-container">
         <h2 className="delivery-dashboard-title">My Orders & Deliveries</h2>
         
