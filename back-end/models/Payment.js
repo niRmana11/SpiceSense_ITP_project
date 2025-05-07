@@ -1,4 +1,4 @@
-// models/Payment.js
+
 const mongoose = require("mongoose");
 
 const PaymentSchema = new mongoose.Schema({

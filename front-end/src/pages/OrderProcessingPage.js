@@ -1,13 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { createOrder } from '../api';
 import NavigationBar from "../components/NavigationBar";
 import '../Styles/OrderProcessing.css';
+import axios from "axios";
 
 const OrderProcessingPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const userId = sessionStorage.getItem("userId") || '';
+  const [userData, setUserData] = useState(null);
+  const [error, setError] = useState(null);
+  const location = useLocation();
+
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const passedUserData = location.state?.userData;
+        if (passedUserData) {
+          setUserData(passedUserData);
+          return;
+        }
+
+        const response = await axios.get("http://localhost:5000/api/user/data", {
+          withCredentials: true,
+        });
+
+        if (response.data.success) {
+          setUserData(response.data.userData);
+        } else {
+          setError(response.data.message);
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error.response?.data?.message || error.message);
+        setError("Failed to load user data. Please log in again.");
+        navigate("/login");
+      }
+    };
+
+    fetchUserData();
+  }, [navigate, location.state]);
   
   // Initialize form with default values
   const [form, setForm] = useState({
@@ -115,7 +149,7 @@ const OrderProcessingPage = () => {
 
   return (
     <div>
-      <NavigationBar />
+      <NavigationBar userData={userData} />
       <div className="order-container">
         <h2>Order Processing</h2>
 

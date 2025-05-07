@@ -14,14 +14,14 @@ import userAuth from '../middleware/userAuth.js';
 
 const userRouter = express.Router();
 
-// Existing route
+
 userRouter.get('/data', userAuth, getUserData);
 
-// New admin routes
-userRouter.get('/all', userAuth, getAllUsers); // Get all users (admin only)
-userRouter.get('/role/:role', userAuth, getUsersByRole); // Get users by role (admin only)
-userRouter.put('/update/:userId', userAuth, updateUser); // Update a user (admin only)
-userRouter.delete('/delete/:userId', userAuth, deleteUser); // Delete a user (admin only)
+
+userRouter.get('/all', userAuth, getAllUsers); 
+userRouter.get('/role/:role', userAuth, getUsersByRole); 
+userRouter.put('/update/:userId', userAuth, updateUser); 
+userRouter.delete('/delete/:userId', userAuth, deleteUser); 
 userRouter.put('/update-profile', userAuth, updateUserProfile);
 userRouter.put('/toggle-status/:userId', userAuth,toggleAccountStatus);
 userRouter.get("/reports/summary", userAuth, getUserSummaryReport); 

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+
 import "../Styles/SupplierDeliveries.css";
 
 const SupplierDeliveries = () => {
@@ -260,14 +263,60 @@ const SupplierDeliveries = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  if (loading) {
-    return (
-      <div className="sd-loading-container">
-        <div className="sd-spinner"></div>
-        <p>Loading deliveries...</p>
-      </div>
-    );
-  }
+  const generatePDF = () => {
+    const doc = new jsPDF();
+  
+    // Main Title
+    doc.setFontSize(18);
+    doc.setTextColor(44, 62, 80); // dark gray-blue
+    doc.text('Shipment Report', 14, 20);
+  
+    // Date & Time
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 28);
+  
+    // Table headers and data
+    const headers = [['Shipment ID', 'Product', 'Status', 'Carrier', 'Tracking #', 'Created']];
+    const data = shipments.map(shipment => [
+      shipment._id?.substring(0, 8) || 'N/A',
+      shipment.orderDeliveryId?.productId?.productName || 'N/A',
+      getStatusLabel(shipment.status),
+      shipment.carrier || 'N/A',
+      shipment.trackingNumber || 'N/A',
+      formatDateTime(shipment.createdAt)
+    ]);
+  
+    // Stylish compact table
+    doc.autoTable({
+      startY: 35,
+      head: headers,
+      body: data,
+      theme: 'striped',
+      styles: {
+        fontSize: 10,
+        textColor: [60, 60, 60],
+        fillColor: [255, 255, 255], // white background
+        lineWidth: 0.1,
+        lineColor: [200, 200, 200], // light gray lines
+        cellPadding: 3
+      },
+      headStyles: {
+        fillColor: [52, 152, 219], // blue
+        textColor: 255,
+        fontStyle: 'bold'
+      },
+      alternateRowStyles: { fillColor: [245, 245, 245] }, // very light gray rows
+      margin: { top: 35 },
+      tableLineColor: [230, 230, 230],
+      tableLineWidth: 0.1
+    });
+  
+    // Save PDF
+    doc.save('shipment_report.pdf');
+  };
+  
+  
 
   return (
     <div className="sd-container">
@@ -291,20 +340,25 @@ const SupplierDeliveries = () => {
         
         {/* Status filter */}
         <div className="sd-filter">
-          <label className="sd-label">Filter by status:</label>
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="sd-select"
-          >
-            <option value="all">All Shipments</option>
-            <option value="preparing">Preparing</option>
-            <option value="shipped">Shipped</option>
-            <option value="in_transit">In Transit</option>
-            <option value="out_for_delivery">Out for Delivery</option>
-            <option value="delivered">Delivered</option>
-            <option value="failed_delivery">Failed Delivery</option>
-          </select>
+          <div className="sd-filter-group">
+            <label className="sd-label">Filter by status:</label>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="sd-select"
+            >
+              <option value="all">All Shipments</option>
+              <option value="preparing">Preparing</option>
+              <option value="shipped">Shipped</option>
+              <option value="in_transit">In Transit</option>
+              <option value="out_for_delivery">Out for Delivery</option>
+              <option value="delivered">Delivered</option>
+              <option value="failed_delivery">Failed Delivery</option>
+            </select>
+          </div>
+          <button onClick={generatePDF} className="sd-button sd-button-submit">
+            Export to PDF
+          </button>
         </div>
         
         {/* Shipments list */}

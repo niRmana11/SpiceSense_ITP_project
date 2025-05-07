@@ -137,7 +137,7 @@ export const updateUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    // Verify that req.user exists and the requester is an admin
+    
     if (!req.user) {
       return res.status(401).json({ success: false, message: "Unauthorized: No user data" });
     }
@@ -147,12 +147,12 @@ export const deleteUser = async (req, res) => {
 
     const { userId } = req.params;
 
-    // Validate userId format (MongoDB ObjectId)
+    
     if (!userId || !userId.match(/^[0-9a-fA-F]{24}$/)) {
       return res.status(400).json({ success: false, message: "Invalid user ID format" });
     }
 
-    // Find user first to get their email
+    
     const user = await userModel.findById(userId);
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
@@ -176,14 +176,14 @@ export const deleteUser = async (req, res) => {
       }
     }
 
-    // Store email and name before deleting
+    
     const userEmail = user.email;
     const userName = user.name || "User";
 
-    // Delete the user
+    
     await userModel.findByIdAndDelete(userId);
 
-    // Send email notification
+    
     if (userEmail && process.env.SENDER_EMAIL) {
       const mailOptions = {
         from: `SpiceSense <${process.env.SENDER_EMAIL}>`,
@@ -411,26 +411,26 @@ export const createUser = async (req, res) => {
       billingAddress,
     } = req.body;
 
-    // Validate required fields
+    
     if (!name || !email || !phone || !password || !role) {
       return res.status(400).json({ success: false, message: "Name, email, phone, password, and role are required" });
     }
 
-    // Validate role
+    
     if (!["admin", "supplier", "customer", "employee"].includes(role)) {
       return res.status(400).json({ success: false, message: "Invalid role specified" });
     }
 
-    // Check if email already exists
+    
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ success: false, message: "Email already in use" });
     }
 
-    // Hash password
+    
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Prepare user data
+    
     const userData = {
       name,
       email,
@@ -447,10 +447,10 @@ export const createUser = async (req, res) => {
       isAccountVerified: false,
     };
 
-    // Create new user
+    
     const newUser = await userModel.create(userData);
 
-    // Send welcome email with password
+    
     if (newUser.email && process.env.SENDER_EMAIL) {
       const mailOptions = {
         from: `SpiceSense <${process.env.SENDER_EMAIL}>`,
@@ -470,7 +470,7 @@ export const createUser = async (req, res) => {
     }
 
 
-    // Return the new user (excluding sensitive fields)
+    
     const userResponse = await userModel
       .findById(newUser._id)
       .select("-password -verifyOtp -resetOtp -resetOtpExpireAt");

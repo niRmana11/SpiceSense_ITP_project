@@ -1,4 +1,4 @@
-// routes/payments.js
+
 import express from "express";
 import Payment from "../models/Payment.js";
 import Order from "../models/Order.js";
@@ -8,7 +8,7 @@ import ExcelJS from "exceljs";
 
 const router = express.Router();
 
-//  POST route 
+//  save payement after paying for order
 router.post("/", async (req, res) => {
   try {
     console.log("Payment request body:", req.body);
@@ -98,8 +98,8 @@ router.get("/invoice/:paymentId", async (req, res) => {
       .fontSize(12)
       .font("Helvetica")
       .text("Spice Sense", 50, 80)
-      .text("23 Spice Lane, Suite 100", 50, 95)
-      .text("Flavor Town, USAz 23100", 50, 110)
+      .text("123 Spice Lane, Palapathwela,", 50, 95)
+      .text("Sri Lanka 23100", 50, 110)
       .text("Email: support@spicesense.com", 50, 125);
 
     // Invoice details (right-aligned)
@@ -389,8 +389,8 @@ router.get("/financial-report/download/:type/:period", async (req, res) => {
         .fontSize(12)
         .font("Helvetica")
         .text("Spice Sense", 50, 80)
-        .text("23 Spice Lane, Suite 100", 50, 95)
-        .text("Flavor Town, USAz 23100", 50, 110)
+        .text("123 Spice Lane, Palapathwela,", 50, 95)
+        .text("Sri Lanka 23100", 50, 110)
         .text("Email: support@spicesense.com", 50, 125);
 
       // Report details (right-aligned)

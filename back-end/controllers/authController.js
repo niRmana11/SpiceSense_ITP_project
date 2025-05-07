@@ -235,8 +235,6 @@ export const verifyEmail = async (req, res) => {
   }
 };
 
-// Other functions (logout, sendResetOtp, resetPassword) remain unchanged
-
 export const logout = async (req, res) => {
   try {
     if (!req.user?.id) {
@@ -280,7 +278,7 @@ export const sendResetOtp = async (req, res) => {
     await user.save();
 
     const mailOptions = {
-      from: process.env.SENDER_EMAIL,
+      from: `SpiceSense <${process.env.SENDER_EMAIL}>`,
       to: user.email,
       subject: "Password Reset OTP",
       text: `Your OTP for resetting your password is ${otp}. Use this OTP for resetting your password`,
