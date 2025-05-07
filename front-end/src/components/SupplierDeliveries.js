@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+
 import "../Styles/SupplierDeliveries.css";
 
 const SupplierDeliveries = () => {
@@ -260,14 +263,38 @@ const SupplierDeliveries = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  if (loading) {
-    return (
-      <div className="sd-loading-container">
-        <div className="sd-spinner"></div>
-        <p>Loading deliveries...</p>
-      </div>
-    );
-  }
+  const generatePDF = () => {
+    const doc = new jsPDF();
+  
+    doc.setFontSize(18);
+    doc.text('Shipment Report', 14, 22);
+  
+    const filterInfo = [
+      `Status: ${statusFilter || 'All'}`
+    ];
+  
+    doc.setFontSize(12);
+    filterInfo.forEach((line, i) => {
+      doc.text(line, 14, 32 + i * 6);
+    });
+  
+    const headers = [['Shipment ID', 'Product', 'Status', 'Expected Delivery']];
+    const data = shipments.map(item => [
+      item._id,
+      item.orderDeliveryId?.productId?.productName || 'Unknown',
+      getStatusLabel(item.status),
+      formatDate(item.expectedDeliveryDate)
+    ]);
+  
+    doc.autoTable({
+      startY: 60,
+      head: headers,
+      body: data,
+    });
+  
+    doc.save('shipment_report.pdf');
+  };
+  
 
   return (
     <div className="sd-container">
@@ -281,6 +308,7 @@ const SupplierDeliveries = () => {
           >
             Create New Shipment
           </button>
+
         </div>
         
         {error && (
@@ -305,6 +333,9 @@ const SupplierDeliveries = () => {
             <option value="delivered">Delivered</option>
             <option value="failed_delivery">Failed Delivery</option>
           </select>
+          <button onClick={generatePDF} variant="contained" color="primary" className="sd-button sd-button-submit">
+            Export to PDF
+          </button>
         </div>
         
         {/* Shipments list */}
@@ -597,6 +628,8 @@ const SupplierDeliveries = () => {
                 </button>
               </div>
             </form>
+            
+            
           </div>
         </div>
       )}

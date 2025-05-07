@@ -17,7 +17,7 @@ const SupplierDashboard = () => {
   const [activeTab, setActiveTab] = useState("products");
   const [availableProducts, setAvailableProducts] = useState([]);
 
-  // Predefined product lists by category
+  
   const productsByCategory = {
     "Whole Spices": ["Black Pepper", "Cardamom", "Cinnamon", "Cloves", "Cumin Seeds", "Fennel Seeds"],
     "Ground Spices": ["Ground Turmeric", "Ground Cumin", "Ground Coriander", "Ground Cinnamon", "Ground Cardamom"],
