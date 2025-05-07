@@ -338,7 +338,7 @@ const UserManagement = () => {
               />
             </div>
             <div className="ginger-form-group">
-              <label className="ginger-label">Contact Person</label>
+              <label className="ginger-label">Warehouse Location</label>
               <input
                 type="text"
                 name="contactPerson"
@@ -456,12 +456,7 @@ const UserManagement = () => {
         >
           Customers
         </button>
-        <button
-          onClick={() => handleRoleSelect("employee")}
-          className={`ginger-tab ${selectedRole === "employee" ? "ginger-tab-active" : ""}`}
-        >
-          Employees
-        </button>
+       
       </div>
 
       {/* Status messages */}
@@ -507,7 +502,7 @@ const UserManagement = () => {
                             <strong>Company:</strong> {user.companyName || "N/A"}
                           </p>
                           <p>
-                            <strong>Contact:</strong> {user.contactPerson || "N/A"}
+                            <strong>Warehouse location</strong> {user.contactPerson || "N/A"}
                           </p>
                         </>
                       )}
@@ -626,7 +621,6 @@ const UserManagement = () => {
                   <option value="admin">Admin</option>
                   <option value="supplier">Supplier</option>
                   <option value="customer">Customer</option>
-                  <option value="employee">Employee</option>
                 </select>
               </div>
 
@@ -718,7 +712,6 @@ const UserManagement = () => {
                   <option value="admin">Admin</option>
                   <option value="supplier">Supplier</option>
                   <option value="customer">Customer</option>
-                  <option value="employee">Employee</option>
                 </select>
               </div>
 

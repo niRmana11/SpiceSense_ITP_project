@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../Styles/spice-otp-styles.css';
 
+
 const ResetPassword = () => {
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -84,6 +85,14 @@ const ResetPassword = () => {
   };
 
   return (
+    <div className="spicesense-page">
+      {/* Header */}
+      <header className="spicesense-header">
+        <div className="spicesense-logo">
+          <span>SpiceSense</span>
+        </div>
+      </header>
+
     <div className="spice-page-container">
       <div className="spice-form-card">
         <div className="spice-header">
@@ -157,6 +166,7 @@ const ResetPassword = () => {
           </button>
         </form>
       </div>
+    </div>
     </div>
   );
 };

@@ -1,0 +1,437 @@
+/* AccountManagement.css */
+
+/* Ginger Color Palette */
+:root {
+    --ginger: #DAA520;
+    --nutmeg: #8A4F2D;
+    --chili: #C41E3A;
+    --coriander: #F0EAD6;
+    --pepper: #333333;
+    --cumin: #F5F5F5;
+    --white: #FFFFFF;
+    --shadow-sm: 0 2px 8px rgba(138, 79, 45, 0.1);
+    --shadow-md: 0 4px 15px rgba(138, 79, 45, 0.15);
+    --radius-sm: 0.5rem;
+    --radius-md: 1rem;
+    --transition: all 0.3s ease;
+  }
+  
+  /* Container */
+  .acct-mgmt-container {
+    background: var(--white);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    max-width: 100%;
+    margin: 1rem;
+    width: calc(100% - 2rem);
+    box-sizing: border-box;
+    animation: acct-mgmt-fade-in 0.3s ease-out;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--pepper);
+  }
+  
+  @keyframes acct-mgmt-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Title */
+  .acct-mgmt-title {
+    color: var(--nutmeg);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  /* Search */
+  .acct-mgmt-search-container {
+    position: relative;
+    margin-bottom: 1rem;
+    max-width: 100%;
+  }
+  
+  .acct-mgmt-search-input {
+    width: 100%;
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    border: 1px solid var(--coriander);
+    border-radius: var(--radius-sm);
+    background: var(--cumin);
+    font-size: 0.875rem;
+    transition: var(--transition);
+  }
+  
+  .acct-mgmt-search-input:focus {
+    border-color: var(--ginger);
+    box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2);
+    outline: none;
+  }
+  
+  .acct-mgmt-clear-btn {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--pepper);
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .acct-mgmt-clear-btn:hover {
+    color: var(--chili);
+  }
+  
+  /* Filter Group */
+  .acct-mgmt-filter-group {
+    margin-bottom: 1rem;
+  }
+  
+  .acct-mgmt-filter-title {
+    color: var(--nutmeg);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Tabs */
+  .acct-mgmt-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--coriander);
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .acct-mgmt-tab {
+    padding: 0.75rem 1rem;
+    color: var(--pepper);
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .acct-mgmt-tab:hover {
+    color: var(--ginger);
+  }
+  
+  .acct-mgmt-tab-active {
+    color: var(--ginger);
+    border-bottom: 2px solid var(--ginger);
+  }
+  
+  /* Messages */
+  .acct-mgmt-error,
+  .acct-mgmt-success {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    animation: acct-mgmt-message-slide 0.3s ease-out;
+  }
+  
+  .acct-mgmt-error {
+    background: rgba(196, 30, 58, 0.1);
+    color: var(--chili);
+  }
+  
+  .acct-mgmt-success {
+    background: rgba(34, 139, 34, 0.1);
+    color: #228B22;
+  }
+  
+  @keyframes acct-mgmt-message-slide {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  /* Table Wrapper */
+  .acct-mgmt-table-wrapper {
+    overflow-x: auto;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    max-width: 100%;
+  }
+  
+  /* Table */
+  .acct-mgmt-table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    font-size: 0.875rem;
+    table-layout: auto;
+  }
+  
+  .acct-mgmt-table-header {
+    background: var(--coriander);
+    color: var(--nutmeg);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  
+  .acct-mgmt-table-header th {
+    padding: 0.75rem 0.5rem;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+    min-width: 80px;
+  }
+  
+  .acct-mgmt-table-row {
+    border-bottom: 1px solid var(--coriander);
+    transition: var(--transition);
+  }
+  
+  .acct-mgmt-table-row:hover {
+    background: var(--cumin);
+  }
+  
+  .acct-mgmt-table-row td {
+    padding: 0.75rem 0.5rem;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+  
+  /* Specific column widths */
+  .acct-mgmt-table th:nth-child(1),
+  .acct-mgmt-table td:nth-child(1) {
+    width: 20%;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .acct-mgmt-table th:nth-child(2),
+  .acct-mgmt-table td:nth-child(2) {
+    width: 25%;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .acct-mgmt-table th:nth-child(3),
+  .acct-mgmt-table td:nth-child(3) {
+    width: 15%;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .acct-mgmt-table th:nth-child(4),
+  .acct-mgmt-table td:nth-child(4) {
+    width: 15%;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .acct-mgmt-table th:nth-child(5),
+  .acct-mgmt-table td:nth-child(5) {
+    width: 25%;
+    min-width: 160px;
+  }
+  
+  /* Capitalize Role */
+  .acct-mgmt-capitalize {
+    text-transform: capitalize;
+  }
+  
+  /* No Results */
+  .acct-mgmt-no-results {
+    padding: 1rem;
+    text-align: center;
+    color: var(--pepper);
+    font-size: 0.875rem;
+    opacity: 0.7;
+  }
+  
+  /* Actions */
+  .acct-mgmt-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  .acct-mgmt-action-btn {
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-sm);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+    min-width: 70px;
+    text-align: center;
+  }
+  
+  .acct-mgmt-activate-btn {
+    background: var(--ginger);
+  }
+  
+  .acct-mgmt-activate-btn:hover {
+    background: #e6b800;
+    transform: translateY(-1px);
+  }
+  
+  .acct-mgmt-deactivate-btn {
+    background: var(--chili);
+  }
+  
+  .acct-mgmt-deactivate-btn:hover {
+    background: #b71c1c;
+    transform: translateY(-1px);
+  }
+  
+  .acct-mgmt-action-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  /* Modal Overlay */
+  .acct-mgmt-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: acct-mgmt-overlay-fade 0.3s ease-out;
+  }
+  
+  @keyframes acct-mgmt-overlay-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Modal */
+  .acct-mgmt-modal {
+    background: var(--white);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-md);
+    animation: acct-mgmt-modal-pop 0.3s ease-out;
+  }
+  
+  @keyframes acct-mgmt-modal-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* Modal Header */
+  .acct-mgmt-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  /* Modal Title */
+  .acct-mgmt-modal-title {
+    color: var(--nutmeg);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  
+  /* Close Button */
+  .acct-mgmt-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    color: var(--pepper);
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .acct-mgmt-close-btn:hover {
+    color: var(--chili);
+  }
+  
+  /* Confirm Message */
+  .acct-mgmt-confirm-message {
+    margin-bottom: 1rem;
+    color: var(--pepper);
+    font-size: 0.875rem;
+    text-align: center;
+  }
+  
+  /* Form Actions */
+  .acct-mgmt-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  
+  /* Cancel and Confirm Buttons */
+  .acct-mgmt-cancel-btn,
+  .acct-mgmt-confirm-btn {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: var(--transition);
+  }
+  
+  .acct-mgmt-cancel-btn {
+    background: var(--coriander);
+    color: var(--pepper);
+    border: none;
+  }
+  
+  .acct-mgmt-cancel-btn:hover {
+    background: #e0e0e0;
+  }
+  
+  .acct-mgmt-confirm-btn {
+    background: var(--ginger);
+    color: var(--white);
+    border: none;
+  }
+  
+  .acct-mgmt-confirm-btn:hover {
+    background: #e6b800;
+  }
+  
+  .acct-mgmt-confirm-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+  }
+  

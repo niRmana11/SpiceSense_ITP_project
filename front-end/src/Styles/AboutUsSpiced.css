@@ -1,64 +1,317 @@
 /* Styles/AboutUsSpiced.css */
 
-/* Spice-inspired color palette */
+/* Spice-inspired color palette (consistent with UserProfileSpiced.css, NavigationBar.css) */
 :root {
-    --saffron: #ff9933; /* Bright orange-yellow */
-    --turmeric: #e6b800; /* Warm yellow */
-    --cinnamon: #8c5523; /* Rich brown */
-    --paprika: #e74c3c; /* Vibrant red */
-    --cardamom: #f5f5f0; /* Off-white */
-    --clove: #4a2c2a; /* Dark brown */
+  --saffron: #ff9933; /* Bright orange-yellow */
+  --turmeric: #e6b800; /* Warm yellow */
+  --cinnamon: #8c5523; /* Rich brown */
+  --paprika: #e74c3c; /* Vibrant red */
+  --cardamom: #f5f5f0; /* Off-white */
+  --clove: #4a2c2a; /* Dark brown */
+}
+
+.about-spiced-container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, var(--cardamom), #fff);
+  font-family: 'Arial', sans-serif;
+}
+
+/* Hero Section */
+.about-spiced-hero {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(to bottom, var(--saffron), var(--turmeric));
+  color: white;
+  animation: fadeIn 1s ease-in;
+}
+
+.about-spiced-hero-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--clove);
+  margin-bottom: 1rem;
+  animation: bounceIn 0.6s ease;
+}
+
+.about-spiced-hero-text {
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  color: var(--clove);
+  animation: fadeInText 1.2s ease-in;
+}
+
+.about-spiced-hero-image {
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s;
+}
+
+.about-spiced-hero-image:hover {
+  transform: scale(1.02);
+}
+
+/* Mission Section */
+.about-spiced-mission {
+  padding: 3rem 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.about-spiced-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  min-width: 280px;
+  max-width: 450px;
+  text-align: center;
+  animation: slideUp 0.8s ease-out;
+  animation-fill-mode: backwards;
+}
+
+.about-spiced-card:nth-child(1) { animation-delay: 0.1s; }
+.about-spiced-card:nth-child(2) { animation-delay: 0.2s; }
+
+.about-spiced-card-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--cinnamon);
+  margin-bottom: 1rem;
+}
+
+.about-spiced-card-text {
+  font-size: 1rem;
+  color: var(--clove);
+  line-height: 1.6;
+}
+
+/* Team Section */
+.about-spiced-team {
+  padding: 3rem 2rem;
+  background: var(--cardamom);
+  text-align: center;
+}
+
+.about-spiced-section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--cinnamon);
+  margin-bottom: 2rem;
+  animation: fadeIn 1s ease-in;
+}
+
+.about-spiced-team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-spiced-team-member {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  animation: slideInLeft 0.8s ease-out;
+  animation-fill-mode: backwards;
+}
+
+.about-spiced-team-member:nth-child(2) { animation: slideInRight 0.8s ease-out; }
+.about-spiced-team-member:nth-child(3) { animation: slideInLeft 0.8s ease-out; }
+
+.about-spiced-team-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1rem;
+  transition: transform 0.3s;
+}
+
+.about-spiced-team-image:hover {
+  transform: scale(1.1);
+}
+
+.about-spiced-team-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--clove);
+  margin-bottom: 0.5rem;
+}
+
+.about-spiced-team-role {
+  font-size: 1rem;
+  color: var(--cinnamon);
+}
+
+/* Values Section */
+.about-spiced-values {
+  padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-spiced-values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.about-spiced-value-item {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.8s ease-out;
+  animation-fill-mode: backwards;
+}
+
+.about-spiced-value-item:nth-child(1) { animation-delay: 0.1s; }
+.about-spiced-value-item:nth-child(2) { animation-delay: 0.2s; }
+.about-spiced-value-item:nth-child(3) { animation-delay: 0.3s; }
+
+.about-spiced-value-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--cinnamon);
+  margin-bottom: 0.5rem;
+}
+
+.about-spiced-value-text {
+  font-size: 1rem;
+  color: var(--clove);
+  line-height: 1.6;
+}
+
+/* CTA Section */
+.about-spiced-cta {
+  padding: 3rem 2rem;
+  background: linear-gradient(to bottom, var(--turmeric), var(--saffron));
+  text-align: center;
+}
+
+.about-spiced-cta-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--clove);
+  margin-bottom: 1.5rem;
+  animation: fadeIn 1s ease-in;
+}
+
+.about-spiced-cta-button {
+  background: var(--paprika);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+
+.about-spiced-cta-button:hover {
+  background: var(--clove);
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(231, 76, 60, 0.5);
+}
+
+.about-spiced-cta-button:active {
+  transform: scale(0.95);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeInText {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .about-spiced-hero {
+    padding: 2rem 1rem;
   }
-  
-  .about-spiced-container {
-    min-height: 100vh;
-    background: linear-gradient(to bottom, var(--cardamom), var(--saffron));
-    animation: fadeIn 1s ease-in;
+
+  .about-spiced-hero-title {
+    font-size: 2rem;
   }
-  
-  .about-spiced-content {
-    padding: 2rem; /* p-8 equivalent */
-    text-align: center;
-    max-width: 64rem; /* Matches other pages' width */
-    margin: 0 auto;
-    animation: slideUp 0.8s ease-out;
+
+  .about-spiced-hero-text {
+    font-size: 1rem;
   }
-  
-  .about-spiced-title {
-    font-size: 1.875rem; /* text-3xl */
-    font-weight: 700; /* font-bold */
-    color: var(--cinnamon);
-    margin-bottom: 1rem; /* mb-4 */
-    animation: bounceIn 0.6s ease;
+
+  .about-spiced-mission {
+    flex-direction: column;
+    padding: 2rem 1rem;
   }
-  
-  .about-spiced-text {
-    color: var(--clove);
-    font-size: 1.125rem; /* Slightly larger for readability */
-    max-width: 32rem; /* max-w-2xl */
-    margin: 0 auto;
-    line-height: 1.6; /* Improved readability */
-    animation: fadeInText 1.2s ease-in;
+
+  .about-spiced-team,
+  .about-spiced-values,
+  .about-spiced-cta {
+    padding: 2rem 1rem;
   }
-  
-  /* Animations */
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+
+  .about-spiced-section-title,
+  .about-spiced-cta-title {
+    font-size: 1.75rem;
   }
-  
-  @keyframes slideUp {
-    from { transform: translateY(30px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .about-spiced-hero-title {
+    font-size: 1.75rem;
   }
-  
-  @keyframes bounceIn {
-    0% { transform: scale(0.8); opacity: 0; }
-    60% { transform: scale(1.1); opacity: 1; }
-    100% { transform: scale(1); }
+
+  .about-spiced-card,
+  .about-spiced-team-member,
+  .about-spiced-value-item {
+    padding: 1rem;
   }
-  
-  @keyframes fadeInText {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+
+  .about-spiced-team-image {
+    width: 80px;
+    height: 80px;
   }
+
+  .about-spiced-cta-button {
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+  }
+}
