@@ -59,7 +59,7 @@ const CreditCardPage = () => {
     
         fetchUserData();
       }, [navigate, location.state]);
-
+//fetch credit cards of the user
     useEffect(() => {
         if (!userId) return;
 
