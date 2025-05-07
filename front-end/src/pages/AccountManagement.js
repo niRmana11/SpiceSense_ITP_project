@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Loading from "../components/Loading"; // Reuse the Loading component
-
+import Loading from "../components/Loading";
+import "../Styles/AccountManagement.css";
 
 const ConfirmDialog = ({ isOpen, title, message, onConfirm, onCancel }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="spice-modal-overlay">
-      <div className="spice-modal">
-        <div className="spice-modal-header">
-          <h3 className="spice-modal-title">{title}</h3>
-          <button onClick={onCancel} className="spice-close-btn">×</button>
+    <div className="acct-mgmt-modal-overlay">
+      <div className="acct-mgmt-modal">
+        <div className="acct-mgmt-modal-header">
+          <h3 className="acct-mgmt-modal-title">{title}</h3>
+          <button onClick={onCancel} className="acct-mgmt-close-btn">×</button>
         </div>
-        <div className="spice-confirm-message">
+        <div className="acct-mgmt-confirm-message">
           <p>{message}</p>
         </div>
-        <div className="spice-form-actions">
-          <button onClick={onCancel} className="spice-cancel-btn">
+        <div className="acct-mgmt-form-actions">
+          <button onClick={onCancel} className="acct-mgmt-cancel-btn">
             Cancel
           </button>
-          <button onClick={onConfirm} className="spice-confirm-btn">
+          <button onClick={onConfirm} className="acct-mgmt-confirm-btn">
             Confirm
           </button>
         </div>
@@ -36,6 +36,7 @@ const AccountManagement = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedRole, setSelectedRole] = useState("all");
+  const [selectedStatus, setSelectedStatus] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState({
@@ -70,7 +71,6 @@ const AccountManagement = () => {
 
         if (response.data.success) {
           setUsers(response.data.users);
-          setFilteredUsers(response.data.users);
         } else {
           setError(response.data.message);
         }
@@ -80,7 +80,7 @@ const AccountManagement = () => {
         setError(errorMessage);
         console.error("Error fetching users:", err);
         if (err.response?.status === 401) {
-          navigate("/login");
+          navigate("/login", { state: { from: "/admin" } });
         }
       } finally {
         setLoading(false);
@@ -90,35 +90,52 @@ const AccountManagement = () => {
     fetchUsers();
   }, [selectedRole, updateSuccess, navigate]);
 
-  // Filter users based on search term
+  // Filter users based on search term, role, and status
   useEffect(() => {
-    if (searchTerm.trim() === "") {
-      setFilteredUsers(users);
-    } else {
+    let results = [...users];
+
+    // Apply search term filter
+    if (searchTerm.trim() !== "") {
       const lowercasedTerm = searchTerm.toLowerCase();
-      const results = users.filter(
+      results = results.filter(
         (user) =>
           user.name?.toLowerCase().includes(lowercasedTerm) ||
           user.email?.toLowerCase().includes(lowercasedTerm)
       );
-      setFilteredUsers(results);
     }
-  }, [searchTerm, users]);
+
+    // Apply status filter
+    if (selectedStatus === "active") {
+      results = results.filter((user) => user.isActive === true);
+    } else if (selectedStatus === "deactivated") {
+      results = results.filter((user) => user.isActive === false);
+    }
+
+    setFilteredUsers(results);
+  }, [users, searchTerm, selectedStatus]);
 
   // Handle search input change
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  // Clear search
+  // Clear search and reset filters
   const handleClearSearch = () => {
     setSearchTerm("");
+    setSelectedStatus("all");
   };
 
   // Handle role selection
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
-    setSearchTerm(""); // Clear search when changing roles
+    setSearchTerm("");
+    setSelectedStatus("all");
+  };
+
+  // Handle status selection
+  const handleStatusSelect = (status) => {
+    setSelectedStatus(status);
+    setSearchTerm("");
   };
 
   // Handle activate/deactivate
@@ -170,81 +187,107 @@ const AccountManagement = () => {
   };
 
   return (
-    <div className="spice-container">
-      <h2 className="spice-title">Account Management</h2>
+    <div className="acct-mgmt-container">
+      <h2 className="acct-mgmt-title">Account Management</h2>
 
-      <div className="spice-search-container">
+      <div className="acct-mgmt-search-container">
         <input
           type="text"
           placeholder="Search by name or email..."
           value={searchTerm}
           onChange={handleSearchChange}
-          className="spice-search-input"
+          className="acct-mgmt-search-input"
         />
         {searchTerm && (
-          <button onClick={handleClearSearch} className="spice-clear-btn">
+          <button onClick={handleClearSearch} className="acct-mgmt-clear-btn">
             ×
           </button>
         )}
       </div>
 
       {/* Role filter tabs */}
-      <div className="spice-tabs">
-        <button
-          onClick={() => handleRoleSelect("all")}
-          className={`spice-tab ${
-            selectedRole === "all" ? "spice-tab-active" : ""
-          }`}
-        >
-          All Users
-        </button>
-        <button
-          onClick={() => handleRoleSelect("admin")}
-          className={`spice-tab ${
-            selectedRole === "admin" ? "spice-tab-active" : ""
-          }`}
-        >
-          Admins
-        </button>
-        <button
-          onClick={() => handleRoleSelect("supplier")}
-          className={`spice-tab ${
-            selectedRole === "supplier" ? "spice-tab-active" : ""
-          }`}
-        >
-          Suppliers
-        </button>
-        <button
-          onClick={() => handleRoleSelect("customer")}
-          className={`spice-tab ${
-            selectedRole === "customer" ? "spice-tab-active" : ""
-          }`}
-        >
-          Customers
-        </button>
-        <button
-          onClick={() => handleRoleSelect("employee")}
-          className={`spice-tab ${
-            selectedRole === "employee" ? "spice-tab-active" : ""
-          }`}
-        >
-          Employees
-        </button>
+      <div className="acct-mgmt-filter-group">
+        <h3 className="acct-mgmt-filter-title">Filter by Role</h3>
+        <div className="acct-mgmt-tabs">
+          <button
+            onClick={() => handleRoleSelect("all")}
+            className={`acct-mgmt-tab ${
+              selectedRole === "all" ? "acct-mgmt-tab-active" : ""
+            }`}
+          >
+            All Users
+          </button>
+          <button
+            onClick={() => handleRoleSelect("admin")}
+            className={`acct-mgmt-tab ${
+              selectedRole === "admin" ? "acct-mgmt-tab-active" : ""
+            }`}
+          >
+            Admins
+          </button>
+          <button
+            onClick={() => handleRoleSelect("supplier")}
+            className={`acct-mgmt-tab ${
+              selectedRole === "supplier" ? "acct-mgmt-tab-active" : ""
+            }`}
+          >
+            Suppliers
+          </button>
+          <button
+            onClick={() => handleRoleSelect("customer")}
+            className={`acct-mgmt-tab ${
+              selectedRole === "customer" ? "acct-mgmt-tab-active" : ""
+            }`}
+          >
+            Customers
+          </button>
+        </div>
+      </div>
+
+      {/* Status filter tabs */}
+      <div className="acct-mgmt-filter-group">
+        <h3 className="acct-mgmt-filter-title">Filter by Status</h3>
+        <div className="acct-mgmt-tabs acct-mgmt-status-tabs">
+          <button
+            onClick={() => handleStatusSelect("all")}
+            className={`acct-mgmt-tab ${
+              selectedStatus === "all" ? "acct-mgmt-tab-active" : ""
+            }`}
+          >
+            All Statuses
+          </button>
+          <button
+            onClick={() => handleStatusSelect("active")}
+            className={`acct-mgmt-tab ${
+              selectedStatus === "active" ? "acct-mgmt-tab-active" : ""
+            }`}
+          >
+            Active Accounts
+          </button>
+          <button
+            onClick={() => handleStatusSelect("deactivated")}
+            className={`acct-mgmt-tab ${
+              selectedStatus === "deactivated" ? "acct-mgmt-tab-active" : ""
+            }`}
+          >
+            Deactivated Accounts
+          </button>
+        </div>
       </div>
 
       {/* Status messages */}
-      {error && <div className="spice-error">{error}</div>}
+      {error && <div className="acct-mgmt-error">{error}</div>}
       {updateSuccess && (
-        <div className="spice-success">Account status updated successfully!</div>
+        <div className="acct-mgmt-success">Account status updated successfully!</div>
       )}
 
       {/* User Table */}
       {loading ? (
         <Loading message="Loading users..." />
       ) : (
-        <div className="spice-table-wrapper">
-          <table className="spice-table">
-            <thead className="spice-table-header">
+        <div className="acct-mgmt-table-wrapper">
+          <table className="acct-mgmt-table">
+            <thead className="acct-mgmt-table-header">
               <tr>
                 <th>Name</th>
                 <th>Email</th>
@@ -256,20 +299,22 @@ const AccountManagement = () => {
             <tbody>
               {filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="spice-no-results">
+                  <td colSpan="5" className="acct-mgmt-no-results">
                     {searchTerm
                       ? "No users found matching your search"
+                      : selectedStatus !== "all"
+                      ? `No ${selectedStatus} users found`
                       : "No users found"}
                   </td>
                 </tr>
               ) : (
                 filteredUsers.map((user) => (
-                  <tr key={user._id} className="spice-table-row">
+                  <tr key={user._id} className="acct-mgmt-table-row">
                     <td>{user.name}</td>
                     <td>{user.email}</td>
-                    <td className="capitalize">{user.role}</td>
+                    <td className="acct-mgmt-capitalize">{user.role}</td>
                     <td>{user.isActive ? "Active" : "Deactivated"}</td>
-                    <td className="spice-actions">
+                    <td className="acct-mgmt-actions">
                       <button
                         onClick={() =>
                           openConfirmDialog(
@@ -277,12 +322,17 @@ const AccountManagement = () => {
                             user.isActive ? "deactivate" : "activate"
                           )
                         }
-                        className={`spice-action-btn ${
+                        className={`acct-mgmt-action-btn ${
                           user.isActive
-                            ? "spice-deactivate-btn"
-                            : "spice-activate-btn"
+                            ? "acct-mgmt-deactivate-btn"
+                            : "acct-mgmt-activate-btn"
                         }`}
                         disabled={user.role === "admin" && user.isActive}
+                        title={
+                          user.role === "admin" && user.isActive
+                            ? "Cannot deactivate active admin accounts"
+                            : ""
+                        }
                       >
                         {user.isActive ? "Deactivate" : "Activate"}
                       </button>
@@ -301,9 +351,7 @@ const AccountManagement = () => {
         title={confirmDialog.title}
         message={confirmDialog.message}
         onConfirm={handleToggleStatus}
-        onCancel={() =>
-          setConfirmDialog({ ...confirmDialog, isOpen: false })
-        }
+        onCancel={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
       />
     </div>
   );

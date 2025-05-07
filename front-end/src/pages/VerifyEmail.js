@@ -63,6 +63,15 @@ const VerifyEmail = () => {
   };
 
   return (
+
+    <div className="spicesense-page-welcome">
+      {/* Header */}
+      <header className="spicesense-header-welcome">
+        <div className="spicesense-logo-welcome">
+          <span>SpiceSense</span>
+        </div>
+      </header>
+
     <div className="spice-page-container">
       <div className="spice-form-card">
         <div className="spice-header">
@@ -94,6 +103,7 @@ const VerifyEmail = () => {
           </button>
         </form>
       </div>
+    </div>
     </div>
   );
 };

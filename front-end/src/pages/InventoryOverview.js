@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../Styles/inventoryOverview.css";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
-import NavBar from "../components/navBar"; 
+import NavBar from "../components/navBar";
 import backgroundImage from "../assets/background.png";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -22,7 +22,7 @@ const InventoryOverview = () => {
         document.body.style.backgroundRepeat = "no-repeat";
 
         return () => {
-            document.body.style.backgroundImage = ""; 
+            document.body.style.backgroundImage = "";
         };
     }, []);
 
@@ -30,14 +30,14 @@ const InventoryOverview = () => {
         fetch(`${API_URL}/stocks/inventory`)
             .then(response => response.json())
             .then(data => {
-                
-                
+
+
                 if (Array.isArray(data)) {
                     setStocks(data);
                     setLowStockItems(data.filter(item => item.quantity < 50));
 
-                    
-                    const expired = data.flatMap(item => 
+
+                    const expired = data.flatMap(item =>
                         item.expiredBatches.map(batch => ({
                             name: batch.name,
                             batchNumber: batch.batchNumber
@@ -51,25 +51,27 @@ const InventoryOverview = () => {
             })
             .catch(error => console.error("Error fetching inventory data:", error));
     }, []);
-    
+
+    const filteredStocks = stocks.filter(item => item.quantity > 0);
+
     const chartData = {
-        labels: stocks.map(item => item.name),
+        labels: filteredStocks.map(item => item.name),
         datasets: [
             {
                 label: "Stock Levels",
-                data: stocks.map(item => item.quantity),
-                backgroundColor: stocks.map(item => (item.quantity < 50 ? "#ff4d4d" : "#36a2eb")),
+                data: filteredStocks.map(item => item.quantity),
+                backgroundColor: filteredStocks.map(item => (item.quantity < 50 ? "#ff4d4d" : "#36a2eb")),
             }
         ]
     };
 
     return (
         <div>
-            <NavBar /> 
+            <NavBar />
             <div className="inventory-container">
                 <h2>Inventory Overview</h2>
 
-                {/* 🔹 Expired Products Alert Section */}
+
                 {expiredItems.length > 0 && (
                     <div className="expired-alert">
                         <h3>Expired Products Alert</h3>
@@ -81,41 +83,41 @@ const InventoryOverview = () => {
                     </div>
                 )}
 
-                {/* 🔹 Low Stock Alert Section */}
-                {lowStockItems.length > 0 &&  (
+
+                {lowStockItems.filter(item => item.quantity > 0).length > 0 && (
                     <div className="low-stock-alert">
                         <h3>Low Stock Alert</h3>
                         <ul>
-                            {lowStockItems.map(item => (
+                            {lowStockItems.filter(item => item.quantity > 0).map(item => (
                                 <li key={item.id}>{item.name} is low on stock ({item.quantity} Kg)</li>
                             ))}
                         </ul>
                     </div>
                 )}
-                
+
                 <table className="stock-table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Quantity (Kg)</th>
-        </tr>
-    </thead>
-    <tbody>
-        {stocks.map(item => (
-            <tr key={item.id} className={item.quantity < 50 ? "low-stock" : ""}>
-                <td>{item.name || "Unknown"}</td>
-                <td>{item.category || "Unknown"}</td>
-                <td>{item.quantity || 0}</td>
-            </tr>
-        ))}
-    </tbody>
-</table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Quantity (Kg)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {stocks.filter(item => item.quantity > 0).map(item => (
+                            <tr key={item.id} className={item.quantity < 50 ? "low-stock" : ""}>
+                                <td>{item.name || "Unknown"}</td>
+                                <td>{item.category || "Unknown"}</td>
+                                <td>{item.quantity || 0}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
 
 
                 <div className="chart-container">
                     <h3>Stock Levels Report</h3>
-                    <Bar data={chartData}/>
+                    <Bar data={chartData} />
                 </div>
             </div>
         </div>

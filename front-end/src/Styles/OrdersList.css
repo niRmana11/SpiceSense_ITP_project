@@ -1,161 +1,392 @@
-/* OrdersList.css */
-.orders-container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+/* Styles/OrdersListSpiced.css */
+
+/* Spice-inspired color palette */
+:root {
+  --saffron: #ff9933; /* Bright orange-yellow */
+  --turmeric: #e6b800; /* Warm yellow */
+  --cinnamon: #8c5523; /* Rich brown */
+  --paprika: #e74c3c; /* Vibrant red */
+  --cardamom: #f5f5f0; /* Off-white */
+  --clove: #4a2c2a; /* Dark brown */
 }
 
-.search-container {
-  margin-bottom: 20px;
+.orders-spiced-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  animation: slideUp 0.8s ease-out;
 }
 
-.search-input {
-  width: 300px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: border-color 0.3s;
+.orders-spiced-header {
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
-.search-input:focus {
-  border-color: #3498db;
+.orders-spiced-search-input {
+  width: 100%;
+  max-width: 500px;
+  padding: 0.75rem;
+  border: 1px solid var(--cinnamon);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.orders-spiced-search-input:focus {
+  border-color: var(--saffron);
+  box-shadow: 0 0 6px rgba(255, 153, 51, 0.3);
   outline: none;
 }
 
-.orders-table {
+.orders-spiced-table-wrapper {
+  overflow-x: auto;
+}
+
+.orders-spiced-table {
   width: 100%;
   border-collapse: collapse;
   background: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.orders-table th,
-.orders-table td {
-  padding: 12px 15px;
+.orders-spiced-table th,
+.orders-spiced-table td {
+  padding: 1rem;
   text-align: left;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--cardamom);
 }
 
-.orders-table th {
-  background: #f5f5f5;
+.orders-spiced-table th {
+  background: var(--turmeric);
+  color: white;
   font-weight: 600;
-  color: #333;
 }
 
-.orders-table tr:hover {
-  background: #f9f9f9;
+.orders-spiced-row {
+  animation: slideInLeft 0.5s ease-out;
+  animation-fill-mode: backwards;
 }
 
-.pay-button {
-  background: #3498db;
+.orders-spiced-row:nth-child(even) {
+  animation: slideInRight 0.5s ease-out;
+}
+
+.orders-spiced-row:hover {
+  background: var(--cardamom);
+}
+
+.orders-spiced-item {
+  margin-bottom: 0.5rem;
+}
+
+.orders-spiced-pay-button {
+  background: var(--paprika);
   color: white;
   border: none;
-  padding: 8px 15px;
-  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.2s;
 }
 
-.pay-button:hover {
-  background: #2980b9;
+.orders-spiced-pay-button:hover {
+  background: var(--clove);
+  transform: scale(1.05);
 }
 
-.no-orders {
-  color: #666;
-  font-style: italic;
+.orders-spiced-paid {
+  color: #2ecc71;
+  font-weight: 500;
 }
 
-.modal-overlay {
+.orders-spiced-no-orders {
+  color: var(--clove);
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+/* Payment Modal */
+.payment-spiced-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  animation: fadeIn 0.3s ease-in;
 }
 
-.modal-content {
+.payment-spiced-modal {
   background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 400px;
-  max-height: 80vh;
-  overflow-y: auto;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #333;
-}
-
-.form-group input {
+  padding: 2rem;
+  border-radius: 12px;
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  animation: popIn 0.4s ease-out;
 }
 
-.form-row {
+.payment-spiced-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--cinnamon);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.payment-spiced-total {
+  font-size: 1.25rem;
+  color: var(--clove);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.payment-spiced-subtitle {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--cinnamon);
+  margin: 1rem 0 0.5rem;
+}
+
+.payment-spiced-cards-list {
+  margin-bottom: 1.5rem;
+}
+
+.payment-spiced-card-option {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--cardamom);
+  border-radius: 8px;
+  margin: 0.5rem 0;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
 }
 
-.form-row .form-group {
+.payment-spiced-card-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.payment-spiced-radio {
+  margin-right: 0.75rem;
+}
+
+.payment-spiced-card-label {
+  display: flex;
+  flex-direction: column;
+  color: var(--clove);
+}
+
+.payment-spiced-card-number {
+  font-weight: 500;
+}
+
+.payment-spiced-card-holder {
+  font-size: 0.875rem;
+  color: var(--cinnamon);
+}
+
+.payment-spiced-no-cards {
+  color: var(--clove);
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.payment-spiced-form-group {
+  margin-bottom: 1rem;
+}
+
+.payment-spiced-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--cinnamon);
+  font-weight: 500;
+}
+
+.payment-spiced-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--cinnamon);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.payment-spiced-input:focus {
+  border-color: var(--saffron);
+  box-shadow: 0 0 6px rgba(255, 153, 51, 0.3);
+  outline: none;
+}
+
+.payment-spiced-input:disabled {
+  background: var(--cardamom);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.payment-spiced-input-error {
+  border-color: var(--paprika);
+}
+
+.payment-spiced-error-message {
+  color: var(--paprika);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+  animation: shake 0.3s ease;
+}
+
+.payment-spiced-form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.payment-spiced-form-row .payment-spiced-form-group {
   flex: 1;
 }
 
-.input-error {
-  border-color: #e74c3c !important;
-}
-
-.error-message {
-  color: #e74c3c;
-  font-size: 12px;
-  margin-top: 5px;
-  display: block;
-}
-
-.cards-list {
-  margin-bottom: 20px;
-}
-
-.card-option {
-  margin: 8px 0;
-}
-
-.card-option label {
-  margin-left: 8px;
-  color: #555;
-}
-
-.modal-buttons {
-  margin-top: 20px;
+.payment-spiced-buttons {
+  margin-top: 1.5rem;
   display: flex;
-  gap: 10px;
+  gap: 1rem;
+  justify-content: center;
 }
 
-.cancel-button {
-  background: #95a5a6;
-  color: white;
+.payment-spiced-pay-button,
+.payment-spiced-cancel-button {
+  padding: 0.75rem 1.5rem;
   border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.2s;
 }
 
-.cancel-button:hover {
-  background: #7f8c8d;
+.payment-spiced-pay-button {
+  background: var(--paprika);
+  color: white;
+}
+
+.payment-spiced-pay-button:hover:not(:disabled) {
+  background: var(--clove);
+  transform: scale(1.05);
+}
+
+.payment-spiced-cancel-button {
+  background: #d1d5db;
+  color: var(--clove);
+}
+
+.payment-spiced-cancel-button:hover:not(:disabled) {
+  background: #9ca3af;
+  transform: scale(1.05);
+}
+
+.payment-spiced-pay-button:disabled,
+.payment-spiced-cancel-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.payment-spiced-spinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 3px solid white;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+  75% { transform: translateX(-3px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .orders-spiced-container {
+    padding: 1.5rem;
+  }
+
+  .orders-spiced-table th,
+  .orders-spiced-table td {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .payment-spiced-modal {
+    width: 90%;
+    padding: 1.5rem;
+  }
+
+  .payment-spiced-form-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .orders-spiced-search-input {
+    max-width: 100%;
+  }
+
+  .orders-spiced-table th,
+  .orders-spiced-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .payment-spiced-title {
+    font-size: 1.5rem;
+  }
+
+  .payment-spiced-total {
+    font-size: 1rem;
+  }
 }

@@ -1,187 +1,407 @@
 /* spice-otp-styles.css */
 
+/* Root Variables */
 :root {
-    /* Spice-inspired color palette */
-    --saffron: #ff9933;
-    --cinnamon: #d2691e;
-    --paprika: #e44d26;
-    --cardamom: #f5e8c7;
-    --nutmeg: #8b4513;
-    --cream-spice: #fff5e6;
-    --spice-shadow: rgba(210, 105, 30, 0.2);
-    --spice-success: #4ade80;
-    --spice-error: #f87171;
-  }
-  
-  .spice-page-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
+  /* Spice-inspired color palette */
+  --saffron: #ff9933;
+  --cinnamon: #d2691e;
+  --paprika: #e44d26;
+  --cardamom: #f5e8c7;
+  --nutmeg: #8b4513;
+  --cream-spice: #fff5e6;
+  --spice-shadow: rgba(210, 105, 30, 0.2);
+  --spice-success: #4ade80;
+  --spice-error: #f87171;
+}
+
+/* Page Container */
+.spice-page-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, var(--cardamom), var(--cream-spice));
+  padding: 1rem;
+  padding-top: 100px; /* Adjusted to prevent overlap with fixed header */
+  box-sizing: border-box;
+  overflow-x: hidden;
+  background-image: url('https://png.pngtree.com/background/20230611/original/pngtree-several-bowls-of-fresh-spiced-herbs-and-spices-picture-image_3143893.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  position: relative;
+  overflow-x: hidden;
+  padding: 1rem;
+}
+
+/* Header */
+.spicesense-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem 0;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  width: 100vw; /* Use viewport width to ensure full stretch */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.spicesense-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 2rem;
+}
+
+.spicesense-logo img {
+  display: none; /* Hide logo image since screenshot shows only text */
+}
+
+.spicesense-logo span {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--saffron);
+}
+
+/* Ensure navigation links are hidden */
+.spice-page-container .spicesense-header .spicesense-nav {
+  display: none !important;
+}
+
+/* Form Card */
+.spice-form-card {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px var(--spice-shadow);
+  padding: 2rem;
+  width: 100%;
+  max-width: 28rem;
+}
+
+/* Header (Form) */
+.spice-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.spice-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--cinnamon);
+}
+
+.spice-subtitle {
+  color: var(--nutmeg);
+  margin-top: 0.5rem;
+}
+
+/* Messages */
+.spice-message {
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.spice-message-success {
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid var(--spice-success);
+  color: var(--cinnamon);
+}
+
+.spice-message-error {
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid var(--spice-error);
+  color: var(--paprika);
+}
+
+/* Form */
+.spice-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Input Group */
+.spice-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Label */
+.spice-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--nutmeg);
+}
+
+/* Input */
+.spice-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--cardamom);
+  border-radius: 0.375rem;
+  outline: none;
+  transition: all 0.3s ease;
+  background: var(--cream-spice);
+}
+
+.spice-input:focus {
+  border-color: var(--saffron);
+  box-shadow: 0 0 0 3px rgba(255, 153, 51, 0.2);
+}
+
+.spice-input-error {
+  border-color: var(--paprika);
+}
+
+/* OTP Container */
+.spice-otp-container {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+/* OTP Digit */
+.spice-otp-digit {
+  width: 3rem;
+  height: 3.5rem;
+  text-align: center;
+  font-size: 1.25rem;
+  border: 2px solid var(--cardamom);
+  border-radius: 0.375rem;
+  outline: none;
+  transition: all 0.3s ease;
+  background: var(--cream-spice);
+  color: var(--nutmeg);
+}
+
+.spice-otp-digit:focus {
+  border-color: var(--saffron);
+  box-shadow: 0 0 0 3px rgba(255, 153, 51, 0.2);
+  transform: scale(1.05);
+}
+
+/* Animation */
+@keyframes spicePulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.spice-otp-digit:valid {
+  animation: spicePulse 0.3s ease;
+}
+
+/* Error Text */
+.spice-error-text {
+  color: var(--paprika);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+/* Button */
+.spice-button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  border: none;
+  background: var(--saffron);
+  color: white;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.spice-button:hover:not(:disabled) {
+  background: var(--cinnamon);
+  transform: translateY(-2px);
+}
+
+.spice-button:disabled {
+  background: var(--cardamom);
+  color: var(--nutmeg);
+  cursor: not-allowed;
+}
+
+/* Link Section */
+.spice-link-section {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.spice-link-text {
+  color: var(--nutmeg);
+  font-size: 0.875rem;
+}
+
+.spice-link {
+  color: var(--saffron);
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.spice-link:hover {
+  color: var(--cinnamon);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .spicesense-header {
+    padding: 1rem 0;
     justify-content: center;
-    background: linear-gradient(to bottom, var(--cardamom), var(--cream-spice));
-    padding: 1rem;
   }
-  
+
+  .spicesense-logo {
+    padding: 0 1.5rem;
+  }
+
+  .spicesense-logo span {
+    font-size: 1.15rem;
+  }
+
+  .spice-page-container .spicesense-header .spicesense-nav {
+    display: none !important;
+  }
+
   .spice-form-card {
-    background: white;
-    border-radius: 1rem;
-    box-shadow: 0 8px 24px var(--spice-shadow);
-    padding: 2rem;
-    width: 100%;
-    max-width: 28rem;
+    max-width: 24rem;
+    padding: 1.8rem;
   }
-  
-  .spice-header {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-  
+
   .spice-title {
-    font-size: 1.875rem;
-    font-weight: 700;
-    color: var(--cinnamon);
+    font-size: 1.75rem;
   }
-  
+
   .spice-subtitle {
-    color: var(--nutmeg);
-    margin-top: 0.5rem;
+    margin-bottom: 1.2rem;
   }
-  
-  .spice-message {
-    padding: 0.75rem 1rem;
-    border-radius: 0.375rem;
-    margin-bottom: 1rem;
-    font-size: 0.875rem;
-  }
-  
-  .spice-message-success {
-    background: rgba(74, 222, 128, 0.1);
-    border: 1px solid var(--spice-success);
-    color: var(--cinnamon);
-  }
-  
-  .spice-message-error {
-    background: rgba(248, 113, 113, 0.1);
-    border: 1px solid var(--spice-error);
-    color: var(--paprika);
-  }
-  
+
   .spice-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.9rem;
   }
-  
-  .spice-input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+
+  .spice-input-group,
+  .spice-label,
+  .spice-input,
+  .spice-otp-container,
+  .spice-otp-digit,
+  .spice-button,
+  .spice-error-text,
+  .spice-message {
+    max-width: 280px;
   }
-  
-  .spice-label {
+}
+
+@media (max-width: 768px) {
+  .spicesense-header {
+    padding: 1rem 0;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .spicesense-logo {
+    padding: 0 1rem;
+  }
+
+  .spicesense-logo span {
+    font-size: 1.1rem;
+  }
+
+  .spice-page-container .spicesense-header .spicesense-nav {
+    display: none !important;
+  }
+
+  .spice-form-card {
+    max-width: 22rem;
+    padding: 1.5rem;
+  }
+
+  .spice-title {
+    font-size: 1.625rem;
+  }
+
+  .spice-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .spice-form {
+    gap: 0.8rem;
+  }
+
+  .spice-input-group,
+  .spice-label,
+  .spice-input,
+  .spice-otp-container,
+  .spice-otp-digit,
+  .spice-button,
+  .spice-error-text,
+  .spice-message {
+    max-width: 260px;
+  }
+}
+
+@media (max-width: 480px) {
+  .spicesense-logo span {
+    font-size: 1rem;
+  }
+
+  .spice-page-container .spicesense-header .spicesense-nav {
+    display: none !important;
+  }
+
+  .spice-form-card {
+    max-width: 90%;
+    padding: 1.2rem;
+  }
+
+  .spice-title {
+    font-size: 1.5rem;
+  }
+
+  .spice-subtitle {
     font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--nutmeg);
+    margin-bottom: 0.8rem;
   }
-  
-  .spice-input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 2px solid var(--cardamom);
-    border-radius: 0.375rem;
-    outline: none;
-    transition: all 0.3s ease;
-    background: var(--cream-spice);
+
+  .spice-form {
+    gap: 0.7rem;
   }
-  
-  .spice-input:focus {
-    border-color: var(--saffron);
-    box-shadow: 0 0 0 3px rgba(255, 153, 51, 0.2);
+
+  .spice-input-group,
+  .spice-label,
+  .spice-input,
+  .spice-otp-container,
+  .spice-otp-digit,
+  .spice-button,
+  .spice-error-text,
+  .spice-message {
+    max-width: 100%;
   }
-  
-  .spice-input-error {
-    border-color: var(--paprika);
-  }
-  
-  .spice-otp-container {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: space-between;
-  }
-  
+
   .spice-otp-digit {
-    width: 3rem;
-    height: 3.5rem;
-    text-align: center;
-    font-size: 1.25rem;
-    border: 2px solid var(--cardamom);
-    border-radius: 0.375rem;
-    outline: none;
-    transition: all 0.3s ease;
-    background: var(--cream-spice);
-    color: var(--nutmeg);
+    width: 2.5rem;
+    height: 3rem;
+    font-size: 1rem;
   }
-  
-  .spice-otp-digit:focus {
-    border-color: var(--saffron);
-    box-shadow: 0 0 0 3px rgba(255, 153, 51, 0.2);
-    transform: scale(1.05);
-  }
-  
-  @keyframes spicePulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-  }
-  
-  .spice-otp-digit:valid {
-    animation: spicePulse 0.3s ease;
-  }
-  
-  .spice-error-text {
-    color: var(--paprika);
-    font-size: 0.75rem;
-    margin-top: 0.25rem;
-  }
-  
+
+  .spice-input,
   .spice-button {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border-radius: 0.375rem;
-    border: none;
-    background: var(--saffron);
-    color: white;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    padding: 0.7rem 0.9rem;
   }
-  
-  .spice-button:hover:not(:disabled) {
-    background: var(--cinnamon);
-    transform: translateY(-2px);
+
+  .spice-message {
+    padding: 0.7rem 0.9rem;
   }
-  
-  .spice-button:disabled {
-    background: var(--cardamom);
-    color: var(--nutmeg);
-    cursor: not-allowed;
-  }
-  
+
   .spice-link-section {
-    margin-top: 1.5rem;
-    text-align: center;
+    margin-top: 1rem;
   }
-  
-  .spice-link-text {
-    color: var(--nutmeg);
-    font-size: 0.875rem;
-  }
-  
-  .spice-link {
-    color: var(--saffron);
-    font-weight: 500;
-    transition: color 0.3s ease;
-  }
-  
-  .spice-link:hover {
-    color: var(--cinnamon);
-  }
+}

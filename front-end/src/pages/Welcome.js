@@ -4,10 +4,10 @@ import '../Styles/spicesense.css'; // Import the CSS
 
 const Welcome = () => {
   return (
-    <div className="spicesense-page">
+    <div className="spicesense-page-welcome">
       {/* Header */}
-      <header className="spicesense-header">
-        <div className="spicesense-logo">
+      <header className="spicesense-header-welcome">
+        <div className="spicesense-logo-welcome">
           <span>SpiceSense</span>
         </div>
       </header>

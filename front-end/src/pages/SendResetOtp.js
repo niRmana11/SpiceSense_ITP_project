@@ -37,6 +37,15 @@ const SendResetOtp = () => {
   };
 
   return (
+
+    <div className="spicesense-page">
+    {/* Header */}
+    <header className="spicesense-header">
+      <div className="spicesense-logo">
+        <span>SpiceSense</span>
+      </div>
+    </header>
+
     <div className="spice-page-container">
       <div className="spice-form-card">
         <div className="spice-header">
@@ -90,6 +99,7 @@ const SendResetOtp = () => {
           </p>
         </div>
       </div>
+    </div>
     </div>
   );
 };

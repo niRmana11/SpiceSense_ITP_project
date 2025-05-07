@@ -2,386 +2,633 @@
 
 /* Ginger Color Palette */
 :root {
-    --ginger: #DAA520;
-    --nutmeg: #8A4F2D;
-    --chili: #C41E3A;
-    --coriander: #F0EAD6;
-    --pepper: #333333;
-    --cumin: #F5F5F5;
+  --ginger: #DAA520;
+  --nutmeg: #8A4F2D;
+  --chili: #C41E3A;
+  --coriander: #F0EAD6;
+  --pepper: #333333;
+  --cumin: #F5F5F5;
+  --white: #FFFFFF;
+  --shadow-sm: 0 2px 8px rgba(138, 79, 45, 0.1);
+  --shadow-md: 0 4px 15px rgba(138, 79, 45, 0.15);
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --transition: all 0.3s ease;
+}
+
+/* Base Reset for Consistency */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container */
+.ginger-container {
+  background: var(--white);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  max-width: 100%;
+  margin: 1rem;
+  width: calc(100% - 2rem);
+  box-sizing: border-box;
+}
+
+@keyframes gingerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  /* Container */
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Title */
+.ginger-title {
+  color: var(--nutmeg);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+/* Search */
+.ginger-search-container {
+  position: relative;
+  margin-bottom: 1rem;
+  max-width: 100%;
+}
+
+.ginger-search-input {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border: 1px solid var(--coriander);
+  border-radius: var(--radius-sm);
+  background: var(--cumin);
+  font-size: 0.875rem;
+  transition: var(--transition);
+}
+
+.ginger-search-input:focus {
+  border-color: var(--ginger);
+  box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2);
+  outline: none;
+}
+
+.ginger-clear-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--pepper);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.ginger-clear-btn:hover {
+  color: var(--chili);
+}
+
+/* Tabs */
+.ginger-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--coriander);
+  margin-bottom: 1rem;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.ginger-tab {
+  padding: 0.75rem 1rem;
+  color: var(--pepper);
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.ginger-tab:hover {
+  color: var(--ginger);
+}
+
+.ginger-tab-active {
+  color: var(--ginger);
+  border-bottom: 2px solid var(--ginger);
+}
+
+/* Messages */
+.ginger-error,
+.ginger-success {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  animation: gingerMessageSlide 0.3s ease-out;
+}
+
+.ginger-error {
+  background: rgba(196, 30, 58, 0.1);
+  color: var(--chili);
+}
+
+.ginger-success {
+  background: rgba(34, 139, 34, 0.1);
+  color: #228B22;
+}
+
+@keyframes gingerMessageSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Table Wrapper */
+.ginger-table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  max-width: 100%;
+}
+
+/* Table */
+.ginger-table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  font-size: 0.875rem;
+  table-layout: auto;
+}
+
+.ginger-table-header {
+  background: var(--coriander);
+  color: var(--nutmeg);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.ginger-table-header th {
+  padding: 0.75rem 0.5rem;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.ginger-table-row {
+  border-bottom: 1px solid var(--coriander);
+  transition: var(--transition);
+}
+
+.ginger-table-row:hover {
+  background: var(--cumin);
+}
+
+.ginger-table-row td {
+  padding: 0.75rem 0.5rem;
+  vertical-align: middle;
+  white-space: nowrap; /* Default nowrap for most columns */
+}
+
+/* Specific styles for Role Details column */
+.ginger-table th:nth-child(5),
+.ginger-table td:nth-child(5) {
+  white-space: normal; /* Allow text wrapping */
+  word-wrap: break-word; /* Break long words */
+  max-width: none; /* Remove max-width restriction */
+}
+
+/* Specific column widths */
+.ginger-table th:nth-child(1),
+.ginger-table td:nth-child(1) {
+  width: 14%; /* Name */
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ginger-table th:nth-child(2),
+.ginger-table td:nth-child(2) {
+  width: 18%; /* Email */
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ginger-table th:nth-child(3),
+.ginger-table td:nth-child(3) {
+  width: 14%; /* Phone */
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ginger-table th:nth-child(4),
+.ginger-table td:nth-child(4) {
+  width: 9%; /* Role */
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ginger-table th:nth-child(5),
+.ginger-table td:nth-child(5) {
+  width: 25%; /* Role Details - Increased for more space */
+  min-width: 200px; /* Ensure sufficient minimum width */
+}
+
+.ginger-table th:nth-child(6),
+.ginger-table td:nth-child(6) {
+  width: 20%; /* Actions */
+  min-width: 160px; /* Ensure enough space for buttons */
+}
+
+/* Actions */
+.ginger-actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.ginger-update-btn,
+.ginger-delete-btn,
+.ginger-create-btn {
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  color: var(--white);
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+  min-width: 70px;
+  text-align: center;
+}
+
+.ginger-update-btn {
+  background: var(--ginger);
+}
+
+.ginger-update-btn:hover {
+  background: #e6b800;
+  transform: translateY(-1px);
+}
+
+.ginger-delete-btn {
+  background: var(--chili);
+}
+
+.ginger-delete-btn:hover {
+  background: #b71c1c;
+  transform: translateY(-1px);
+}
+
+.ginger-create-btn {
+  background: var(--ginger);
+}
+
+.ginger-create-btn:hover {
+  background: #e6b800;
+  transform: translateY(-1px);
+}
+
+.ginger-create-btn:disabled,
+.ginger-update-btn:disabled,
+.ginger-delete-btn:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Create Button Container */
+.ginger-create-button-container {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Modal */
+.ginger-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: gingerOverlayFade 0.3s ease-out;
+}
+
+@keyframes gingerOverlayFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ginger-modal {
+  background: var(--white);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-md);
+  animation: gingerModalPop 0.3s ease-out;
+}
+
+@keyframes gingerModalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.ginger-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.ginger-modal-title {
+  color: var(--nutmeg);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.ginger-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--pepper);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.ginger-close-btn:hover {
+  color: var(--chili);
+}
+
+/* Form */
+.ginger-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ginger-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.ginger-label {
+  color: var(--nutmeg);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.ginger-input,
+.ginger-select,
+.ginger-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--coriander);
+  border-radius: var(--radius-sm);
+  background: var(--cumin);
+  font-size: 0.875rem;
+  transition: var(--transition);
+}
+
+.ginger-input:focus,
+.ginger-select:focus,
+.ginger-textarea:focus {
+  border-color: var(--ginger);
+  box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2);
+  outline: none;
+}
+
+.ginger-hint {
+  color: var(--pepper);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  opacity: 0.7;
+}
+
+.ginger-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.ginger-cancel-btn,
+.ginger-submit-btn {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.ginger-cancel-btn {
+  background: var(--coriander);
+  color: var(--pepper);
+  border: none;
+}
+
+.ginger-cancel-btn:hover {
+  background: #e0e0e0;
+}
+
+.ginger-submit-btn {
+  background: var(--ginger);
+  color: var(--white);
+  border: none;
+}
+
+.ginger-submit-btn:hover {
+  background: #e6b800;
+}
+
+.ginger-submit-btn:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Confirm Dialog */
+.ginger-confirm-message {
+  margin-bottom: 1rem;
+  color: var(--pepper);
+  font-size: 0.875rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
   .ginger-container {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 15px rgba(138, 79, 45, 0.1);
-    animation: gingerFadeIn 0.5s ease-out;
+    margin: 0.5rem;
+    padding: 0.75rem;
   }
-  
-  @keyframes gingerFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+
+  .ginger-table-header th,
+  .ginger-table-row td {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.75rem;
   }
-  
-  /* Title */
-  .ginger-title {
-    color: var(--nutmeg);
-    font-size: 1.75rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
+
+  .ginger-table-row td {
+    max-width: 150px;
   }
-  
-  /* Search */
+
+  /* Keep actions inline */
+  .ginger-actions {
+    flex-direction: row;
+    gap: 0.3rem;
+  }
+
+  .ginger-update-btn,
+  .ginger-delete-btn {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.7rem;
+    min-width: 60px;
+  }
+
+  .ginger-table th:nth-child(5),
+  .ginger-table td:nth-child(5) {
+    min-width: 180px; /* Slightly reduced for smaller screens */
+  }
+
+  .ginger-table th:nth-child(6),
+  .ginger-table td:nth-child(6) {
+    min-width: 140px; /* Adjusted for smaller screens */
+  }
+}
+
+@media (max-width: 768px) {
   .ginger-search-container {
-    position: relative;
-    margin-bottom: 2rem;
-    max-width: 300px; /* Reduced width for a more compact search bar */
+    max-width: 100%;
   }
-  
-  .ginger-search-input {
-    width: 100%;
-    padding: 0.75rem 2.5rem 0.75rem 1rem;
-    border: 1px solid var(--coriander);
-    border-radius: 2rem;
-    background: var(--cumin);
-    transition: all 0.3s ease;
-    font-size: 1rem;
-  }
-  
-  .ginger-search-input:focus {
-    border-color: var(--ginger);
-    box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2);
-  }
-  
-  .ginger-clear-btn {
-    position: absolute;
-    right: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: var(--pepper);
-    font-size: 1.25rem;
-    cursor: pointer;
-    transition: color 0.3s ease;
-  }
-  
-  .ginger-clear-btn:hover {
-    color: var(--chili);
-  }
-  
-  /* Tabs */
+
   .ginger-tabs {
-    display: flex;
-    border-bottom: 2px solid var(--coriander);
-    margin-bottom: 2rem;
-    overflow-x: auto;
-    white-space: nowrap;
+    flex-direction: column;
+    border-bottom: none;
   }
-  
+
   .ginger-tab {
-    padding: 0.75rem 1.5rem;
-    color: var(--pepper);
-    font-weight: 500;
-    transition: all 0.3s ease;
+    border-bottom: 1px solid var(--coriander);
+    padding: 0.5rem;
   }
-  
-  .ginger-tab:hover {
-    color: var(--ginger);
-  }
-  
+
   .ginger-tab-active {
-    color: var(--ginger);
     border-bottom: 2px solid var(--ginger);
   }
-  
-  /* Messages */
-  .ginger-error, .ginger-success {
-    padding: 0.75rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1.5rem;
-    animation: gingerMessageSlide 0.3s ease-out;
-  }
-  
-  .ginger-error {
-    background: rgba(196, 30, 58, 0.1);
-    color: var(--chili);
-  }
-  
-  .ginger-success {
-    background: rgba(34, 139, 34, 0.1);
-    color: #228B22;
-  }
-  
-  @keyframes gingerMessageSlide {
-    from {
-      opacity: 0;
-      transform: translateX(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-  
-  /* Table */
-  .ginger-table-wrapper {
-    overflow-x: auto;
-  }
-  
-  .ginger-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #fff;
-  }
-  
-  .ginger-table-header {
-    background: var(--coriander);
-    color: var(--nutmeg);
-  }
-  
-  .ginger-table-header th {
-    padding: 0.75rem 1rem;
-    text-align: left;
-    font-weight: 600;
-  }
-  
-  .ginger-table-row {
-    border-bottom: 1px solid var(--coriander);
-    transition: background 0.3s ease;
-  }
-  
-  .ginger-table-row:hover {
-    background: var(--cumin);
-  }
-  
-  .ginger-table-row td {
-    padding: 1rem;
-  }
-  
-  .ginger-no-results {
-    text-align: center;
-    padding: 2rem;
-    color: var(--pepper);
-    opacity: 0.7;
-  }
-  
-  /* Actions */
-  .ginger-actions {
-    display: flex;
-    gap: 0.75rem;
+
+  .ginger-create-button-container {
     justify-content: center;
   }
-  
-  .ginger-update-btn, .ginger-delete-btn {
-    padding: 0.5rem 1.25rem;
-    border-radius: 0.5rem;
-    color: #fff;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
-  }
-  
-  .ginger-update-btn {
-    background: var(--ginger);
-  }
-  
-  .ginger-update-btn:hover {
-    background: #e6b800;
-    transform: translateY(-2px);
-  }
-  
-  .ginger-delete-btn {
-    background: var(--chili);
-  }
-  
-  .ginger-delete-btn:hover {
-    background: #b71c1c;
-    transform: translateY(-2px);
-  }
-  
-  /* Modal */
-  .ginger-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 50;
-    animation: gingerOverlayFade 0.3s ease-out;
-  }
-  
-  @keyframes gingerOverlayFade {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
+
   .ginger-modal {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 1rem;
-    width: 100%;
-    max-width: 32rem;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 8px 25px rgba(138, 79, 45, 0.2);
-    animation: gingerModalPop 0.3s ease-out;
-  }
-  
-  @keyframes gingerModalPop {
-    from {
-      opacity: 0;
-      transform: scale(0.9);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-  
-  .ginger-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .ginger-modal-title {
-    color: var(--nutmeg);
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
-  .ginger-close-btn {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: var(--pepper);
-    cursor: pointer;
-    transition: color 0.3s ease;
-  }
-  
-  .ginger-close-btn:hover {
-    color: var(--chili);
-  }
-  
-  /* Form */
-  .ginger-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .ginger-form-group {
-    margin-bottom: 0;
-  }
-  
-  .ginger-label {
-    display: block;
-    color: var(--nutmeg);
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-  }
-  
-  .ginger-input, .ginger-select, .ginger-textarea {
-    width: 100%;
+    max-width: 95%;
     padding: 0.75rem;
-    border: 1px solid var(--coriander);
-    border-radius: 0.5rem;
-    background: var(--cumin);
-    transition: all 0.3s ease;
+  }
+
+  /* Hide less critical columns */
+  .ginger-table th:nth-child(5),
+  .ginger-table td:nth-child(5) {
+    display: none; /* Hide Role Details */
+  }
+
+  .ginger-table th:nth-child(3),
+  .ginger-table td:nth-child(3) {
+    display: none; /* Hide Phone */
+  }
+
+  .ginger-table th:nth-child(1),
+  .ginger-table td:nth-child(1) {
+    width: 25%; /* Name */
+    max-width: 150px;
+  }
+
+  .ginger-table th:nth-child(2),
+  .ginger-table td:nth-child(2) {
+    width: 35%; /* Email */
+    max-width: 200px;
+  }
+
+  .ginger-table th:nth-child(4),
+  .ginger-table td:nth-child(4) {
+    width: 20%; /* Role */
+    max-width: 100px;
+  }
+
+  .ginger-table th:nth-child(6),
+  .ginger-table td:nth-child(6) {
+    width: 20%; /* Actions */
+    min-width: 140px;
+  }
+
+  .ginger-actions {
+    flex-direction: row;
+    gap: 0.3rem;
+  }
+
+  .ginger-update-btn,
+  .ginger-delete-btn {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.65rem;
+    min-width: 55px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ginger-title {
+    font-size: 1.25rem;
+  }
+
+  .ginger-modal-title {
     font-size: 1rem;
   }
-  
-  .ginger-input:focus, .ginger-select:focus, .ginger-textarea:focus {
-    border-color: var(--ginger);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.2);
+
+  .ginger-table {
+    font-size: 0.7rem;
   }
-  
-  .ginger-hint {
-    color: var(--pepper);
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-    opacity: 0.7;
+
+  .ginger-table-row td {
+    max-width: 100px;
   }
-  
-  .ginger-form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 2rem;
+
+  .ginger-table th:nth-child(6),
+  .ginger-table td:nth-child(6) {
+    min-width: 120px;
   }
-  
-  .ginger-cancel-btn, .ginger-submit-btn {
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    transition: all 0.3s ease;
-    font-size: 1rem;
+
+  .ginger-update-btn,
+  .ginger-delete-btn,
+  .ginger-create-btn {
+    padding: 0.3rem 0.4rem;
+    font-size: 0.6rem;
+    min-width: 50px;
   }
-  
-  .ginger-cancel-btn {
-    background: var(--coriander);
-    color: var(--pepper);
-  }
-  
-  .ginger-cancel-btn:hover {
-    background: #e0e0e0;
-  }
-  
-  .ginger-submit-btn {
-    background: var(--ginger);
-    color: #fff;
-  }
-  
-  .ginger-submit-btn:hover {
-    background: #e6b800;
-  }
-  
-  .ginger-submit-btn:disabled {
-    background: #cccccc;
-    cursor: not-allowed;
-  }
-  
-  /* Confirm Dialog Specific */
-  .ginger-confirm-message {
-    margin-bottom: 1.5rem;
-    color: var(--pepper);
-    font-size: 1rem;
-  }
-  
-  /* Responsive */
-  @media (max-width: 640px) {
-    .ginger-container {
-      padding: 1rem;
-    }
-  
-    .ginger-search-container {
-      max-width: 100%;
-    }
-  
-    .ginger-tabs {
-      flex-direction: column;
-      border-bottom: none;
-    }
-  
-    .ginger-tab {
-      border-bottom: 1px solid var(--coriander);
-    }
-  
-    .ginger-tab-active {
-      border-bottom: 1px solid var(--ginger);
-    }
-  
-    .ginger-modal {
-      padding: 1.5rem;
-      max-width: 90%;
-    }
-  }
+}
