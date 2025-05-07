@@ -24,7 +24,7 @@ const SupplierProducts = () => {
   const [productsByCategory, setProductsByCategory] = useState({
     "Whole Spices": ["Black Pepper", "Cardamom", "Cinnamon", "Cloves", "Cumin Seeds", "Fennel Seeds"],
     "Ground Spices": ["Ground Turmeric", "Ground Cumin", "Ground Coriander", "Ground Cinnamon", "Ground Cardamom"],
-    "Blended Spices": ["Garam Masala", "Curry Powder", "Chaat Masala", "Tandoori Masala", "Biryani Masala"],
+    "Blended Spices": ["Chilli Powder", "Curry Powder", "Ginger Powder", "Tandoori Masala", "Cinnamon Powder"],
     "Herbs": ["Basil", "Oregano", "Rosemary", "Thyme", "Mint", "Coriander Leaves"],
     "Seasoning Mixes": ["Italian Seasoning", "BBQ Rub", "Mexican Seasoning", "Cajun Spice Mix"],
     "Exotic Spices": ["Saffron", "Star Anise", "Vanilla Beans", "Sumac", "Za'atar"],

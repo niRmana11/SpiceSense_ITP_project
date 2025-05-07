@@ -31,7 +31,6 @@ const AdminTransactions = () => {
     paymentMethod: ""
   });
   
-  // Define payment methods
   const paymentMethods = [
     { value: "bank_transfer", label: "Bank Transfer", refLabel: "Transaction ID/Reference Number" },
     { value: "cash", label: "Cash", refLabel: "Receipt Number" },
@@ -101,7 +100,6 @@ const AdminTransactions = () => {
       });
       
       if (response.data.success) {
-        // Filter out orders that already have transactions
         const orderIds = new Set(transactions.map(t => t.orderDeliveryId?._id || t.orderDeliveryId));
         const filteredOrders = response.data.orders.filter(order => !orderIds.has(order._id));
         setOrders(filteredOrders);
@@ -121,7 +119,7 @@ const AdminTransactions = () => {
       orderDeliveryId: orders[0]._id,
       amount: orders[0].totalAmount || "",
       paymentMethod: "bank_transfer",
-      dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 days from now
+      dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       notes: ""
     });
     
@@ -135,7 +133,6 @@ const AdminTransactions = () => {
       [name]: value
     });
     
-    // Auto-fill amount when order is selected
     if (name === "orderDeliveryId") {
       const selectedOrder = orders.find(order => order._id === value);
       if (selectedOrder) {
@@ -214,6 +211,7 @@ const AdminTransactions = () => {
     setActiveTransaction(null);
   };
   
+  // Updated handleUpdateTransaction to refetch the full transaction list after a successful update
   const handleUpdateTransaction = async (e) => {
     e.preventDefault();
     
@@ -225,10 +223,9 @@ const AdminTransactions = () => {
     }
     
     try {
-      // Include the payment method in the update
       const dataToUpdate = {
         ...updateFormData,
-        paymentMethod: updateFormData.paymentMethod || activeTransaction.paymentMethod
+        paymentMethod: updateFormData.paymentMethod || activeTransaction.paymentMethod,
       };
       
       const response = await axios.put(
@@ -238,9 +235,9 @@ const AdminTransactions = () => {
       );
       
       if (response.data.success) {
-        setTransactions(transactions.map(t => 
-          t._id === activeTransaction._id ? response.data.transaction : t
-        ));
+        // Instead of manually updating the state, refetch the full transaction list
+        // This ensures the UI has the complete data, including nested fields like supplierId and orderDeliveryId
+        await fetchTransactions();
         setShowUpdateModal(false);
         setActiveTransaction(null);
         setError(null);
@@ -487,7 +484,6 @@ const AdminTransactions = () => {
         )}
       </div>
       
-      {/* Create Transaction Modal */}
       {showCreateModal && (
         <div className="at-modal">
           <div className="at-modal-content">
@@ -497,7 +493,7 @@ const AdminTransactions = () => {
                 className="at-modal-close"
                 onClick={handleCloseCreateModal}
               >
-                &times;
+                ×
               </button>
             </div>
             
@@ -597,7 +593,6 @@ const AdminTransactions = () => {
         </div>
       )}
       
-      {/* Update Transaction Modal */}
       {showUpdateModal && activeTransaction && (
         <div className="at-modal">
           <div className="at-modal-content">
@@ -607,7 +602,7 @@ const AdminTransactions = () => {
                 className="at-modal-close"
                 onClick={handleCloseUpdateModal}
               >
-                &times;
+                ×
               </button>
             </div>
             
@@ -709,7 +704,6 @@ const AdminTransactions = () => {
         </div>
       )}
       
-      {/* Transaction Details Modal */}
       {showDetailsModal && activeTransaction && (
         <div className="at-modal">
           <div className="at-modal-content at-modal-large">
@@ -719,7 +713,7 @@ const AdminTransactions = () => {
                 className="at-modal-close"
                 onClick={handleCloseDetailsModal}
               >
-                &times;
+                ×
               </button>
             </div>
             

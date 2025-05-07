@@ -16,26 +16,27 @@ const SupplierMessages = () => {
     rejectReason: "",
   });
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        setLoading(true);
-        
-        const response = await axios.get("http://localhost:5000/api/messages/supplier", {
-          withCredentials: true,
-        });
-        
-        if (response.data.success) {
-          setMessages(response.data.messages);
-        }
-      } catch (error) {
-        console.error("Error fetching messages:", error);
-        setError("Failed to load messages. Please try again.");
-      } finally {
-        setLoading(false);
+  // Define fetchMessages as a reusable function
+  const fetchMessages = async () => {
+    try {
+      setLoading(true);
+      
+      const response = await axios.get("http://localhost:5000/api/messages/supplier", {
+        withCredentials: true,
+      });
+      
+      if (response.data.success) {
+        setMessages(response.data.messages || []);
       }
-    };
-    
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+      setError("Failed to load messages. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchMessages();
   }, []);
   
@@ -85,6 +86,7 @@ const SupplierMessages = () => {
         { withCredentials: true }
       );
       
+      // Update the message as seen in the state
       setMessages(messages.map(msg => 
         msg._id === messageId ? { ...msg, seen: true } : msg
       ));
@@ -93,6 +95,7 @@ const SupplierMessages = () => {
     }
   };
   
+  // Updated handleSubmitResponse to refetch the full message list after a successful response
   const handleSubmitResponse = async (e) => {
     e.preventDefault();
     
@@ -118,9 +121,9 @@ const SupplierMessages = () => {
       );
       
       if (response.data.success) {
-        setMessages(messages.map(msg => 
-          msg._id === activeMessage._id ? response.data.data : msg
-        ));
+        // Refetch the full message list to ensure the UI has the complete data
+        // This prevents the "Unknown" issue for nested fields like productId and adminId
+        await fetchMessages();
         setActiveMessage(null);
         setError(null);
       }

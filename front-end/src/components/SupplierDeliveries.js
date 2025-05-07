@@ -68,7 +68,6 @@ const SupplierDeliveries = () => {
       );
       
       if (response.data.success) {
-        // Filter out orders that already have shipments
         const orderIds = new Set(shipments.map(shipment => 
           shipment.orderDeliveryId?._id || shipment.orderDeliveryId
         ));
@@ -159,6 +158,7 @@ const SupplierDeliveries = () => {
     }
   };
   
+  // Updated handleUpdateShipment to refetch the full shipment list after a successful update
   const handleUpdateShipment = async (e) => {
     e.preventDefault();
     
@@ -172,11 +172,12 @@ const SupplierDeliveries = () => {
       );
       
       if (response.data.success) {
-        setShipments(shipments.map(shipment => 
-          shipment._id === activeShipment._id ? response.data.shipment : shipment
-        ));
+        // Refetch the full shipment list to ensure the UI has the complete data
+        // This prevents the "Unknown" issue for nested fields like orderDeliveryId.productId
+        await fetchShipments();
         setShowUpdateModal(false);
         setActiveShipment(null);
+        setError(null); // Clear any previous errors
       }
     } catch (error) {
       console.error("Error updating shipment:", error);
@@ -316,8 +317,6 @@ const SupplierDeliveries = () => {
     doc.save('shipment_report.pdf');
   };
   
-  
-
   return (
     <div className="sd-container">
       <div className="sd-card">
