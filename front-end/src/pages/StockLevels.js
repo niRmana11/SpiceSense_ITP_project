@@ -76,15 +76,15 @@ const StockLevels = () => {
 
   // Edit batch details
   const handleEditBatch = async (stockId, batchNumber) => {
-    const today = new Date().toISOString().split("T")[0]; // format: yyyy-mm-dd
+    const today = new Date().toISOString().split("T")[0];
 
-    // Validation: Expiry Date must not be in the past
+
     if (editFormData.expiryDate < today) {
       alert("Expiry date cannot be a past date.");
       return;
     }
 
-    // Validation: Quantity must be a positive number
+
     if (isNaN(editFormData.quantity) || Number(editFormData.quantity) <= 0) {
       alert("Quantity must be a positive number.");
       return;
@@ -97,7 +97,7 @@ const StockLevels = () => {
       setStocks(stocks.map(stock =>
         stock._id === stockId ? response.data.stock : stock
       ));
-      setEditingBatch(null); // Close form after update
+      setEditingBatch(null);
     } catch (error) {
       console.error("Error updating batch:", error.response?.data || error.message);
     }
@@ -114,7 +114,7 @@ const StockLevels = () => {
       alert("Batch deleted successfully!");
       window.location.reload();
 
-      // Dynamically update UI without reload
+
       setStocks(prevStocks => prevStocks.map(stock => ({
         ...stock,
         batches: stock.batches.filter(batch => batch.batchNumber !== batchNumber)
@@ -166,12 +166,12 @@ const StockLevels = () => {
       backgroundAttachment: "fixed",
       backgroundRepeat: "no-repeat"
     }}>
-      <NavBar /> {/* Add the Navbar at the top */}
+      <NavBar />
       <div className="stock-container">
         <h2>Stock Management</h2>
 
         <div className="form-container">
-          {/* add stock form */}
+
           <form onSubmit={handleSubmit} className="stock-form">
             <h3>Add Stock</h3>
             <label htmlFor="productId">Select Product</label>
@@ -191,7 +191,7 @@ const StockLevels = () => {
             <button type="submit" className="stock-button">Add Stock</button>
           </form>
 
-          {/* outgoing stock form */}
+
           <form onSubmit={handleStockOut} className="stock-form">
             <h3>Sell Product</h3>
             <label htmlFor="soldProductId">Select Product</label>

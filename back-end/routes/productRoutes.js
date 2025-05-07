@@ -56,7 +56,7 @@ router.delete("/:id", async (req, res) => {
             return res.status(404).json({ message: "Product not found" });
         }
 
-        // No need to manually delete stock — it's handled in the middleware
+
         res.json({ message: "Product and related stocks deleted successfully" });
     } catch (error) {
         res.status(500).json({ message: "Error deleting product", error });

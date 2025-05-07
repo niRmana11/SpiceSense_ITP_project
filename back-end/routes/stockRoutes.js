@@ -45,8 +45,6 @@ router.get("/", async (req, res) => {
 
         const stocks = await Stock.find().populate("product");
 
-
-
         res.json(stocks);
     } catch (error) {
         res.status(500).json({ message: "Error fetching stock levels", error });
@@ -223,9 +221,6 @@ router.get("/transactions", async (req, res) => {
     try {
         const transactions = await Transaction.find().populate("product", "productName category");
 
-
-
-
         res.json(transactions);
     } catch (error) {
         res.status(500).json({ message: "Error fetching transactions", error });
@@ -286,7 +281,7 @@ router.get("/expiry", async (req, res) => {
 
 
 
-// Fetch stock data with batch details for filtering
+// Fetch stock data with batch details
 router.get("/searchFilter", async (req, res) => {
     try {
         const stockData = await Stock.find().populate("product", "productName category");

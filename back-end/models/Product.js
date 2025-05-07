@@ -8,7 +8,7 @@ const productSchema = new mongoose.Schema({
 const Stock = require("./Stock");
 const Transaction = require("./Transaction")
 
-// Middleware: when a product is removed, delete its stock
+
 productSchema.pre("findOneAndDelete", async function (next) {
     const product = await this.model.findOne(this.getFilter());
 
