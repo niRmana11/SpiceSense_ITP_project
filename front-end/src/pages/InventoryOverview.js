@@ -71,7 +71,7 @@ const InventoryOverview = () => {
             <div className="inventory-container">
                 <h2>Inventory Overview</h2>
 
-                {/* 🔹 Expired Products Alert Section */}
+
                 {expiredItems.length > 0 && (
                     <div className="expired-alert">
                         <h3>Expired Products Alert</h3>
@@ -83,7 +83,7 @@ const InventoryOverview = () => {
                     </div>
                 )}
 
-                {/* 🔹 Low Stock Alert Section */}
+
                 {lowStockItems.filter(item => item.quantity > 0).length > 0 && (
                     <div className="low-stock-alert">
                         <h3>Low Stock Alert</h3>

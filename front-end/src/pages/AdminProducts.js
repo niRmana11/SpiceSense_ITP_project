@@ -38,16 +38,16 @@ const AdminProducts = () => {
 
     // Check for special characters in product name
     const containsSpecialCharacters = (str) => {
-        const regex = /[^a-zA-Z0-9\s]/; // Regex to match any non-alphanumeric character (excluding spaces)
+        const regex = /[^a-zA-Z0-9\s]/;
         return regex.test(str);
     };
 
-    // Check for product name length (between 3 and 50 characters)
+    // Check for product name length 
     const isProductNameValidLength = (str) => {
         return str.length >= 5 && str.length <= 20;
     };
 
-    // Submit form with validation
+    // Submit form 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (containsSpecialCharacters(formData.productName)) {
@@ -63,7 +63,7 @@ const AdminProducts = () => {
             return;
         }
 
-        setError(""); // Reset error if all validations pass
+        setError("");
 
         const productData = {
             productName: formData.productName,

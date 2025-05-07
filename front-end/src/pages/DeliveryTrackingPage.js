@@ -4,6 +4,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { fetchOrder } from '../api'; // Use the existing API function
 import NavigationBar from "../components/NavigationBar";
 import "../Styles/DeliveryTracking.css";
+import axios from "axios";
 
 const DeliveryTrackingPage = () => {
   const { deliveryId } = useParams();
@@ -12,6 +13,37 @@ const DeliveryTrackingPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const userId = sessionStorage.getItem("userId");
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const passedUserData = location.state?.userData;
+        if (passedUserData) {
+          setUserData(passedUserData);
+          return;
+        }
+
+        const response = await axios.get("http://localhost:5000/api/user/data", {
+          withCredentials: true,
+        });
+
+        if (response.data.success) {
+          setUserData(response.data.userData);
+        } else {
+          setError(response.data.message);
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error.response?.data?.message || error.message);
+        setError("Failed to load user data. Please log in again.");
+        navigate("/login");
+      }
+    };
+
+    fetchUserData();
+  }, [navigate, location.state]);
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -121,7 +153,7 @@ const DeliveryTrackingPage = () => {
   if (isLoading) {
     return (
       <div>
-        <NavigationBar />
+        <NavigationBar userData={userData} />
         <div className="delivery-tracking-container">
           <div className="delivery-tracking-loading">Loading tracking information...</div>
         </div>
@@ -132,7 +164,7 @@ const DeliveryTrackingPage = () => {
   if (error) {
     return (
       <div>
-        <NavigationBar />
+        <NavigationBar userData={userData} />
         <div className="delivery-tracking-container">
           <div className="delivery-tracking-error">{error}</div>
           <button onClick={() => navigate('/home')} className="back-button">
@@ -146,7 +178,7 @@ const DeliveryTrackingPage = () => {
   if (!order) {
     return (
       <div>
-        <NavigationBar />
+        <NavigationBar userData={userData} />
         <div className="delivery-tracking-container">
           <div className="delivery-tracking-error">Order information not found.</div>
           <button onClick={() => navigate('/home')} className="back-button">
@@ -162,7 +194,7 @@ const DeliveryTrackingPage = () => {
 
   return (
     <div>
-      <NavigationBar />
+      <NavigationBar userData={userData}/>
       <div className="delivery-tracking-container">
         <h2 className="delivery-tracking-title">Order Tracking</h2>
         

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { fetchOrder, updateOrder, deleteOrder } from '../api';
 import "../Styles/OrderConfirmationPage.css"; 
 import NavigationBar from "../components/NavigationBar";
+import axios from "axios";
 
 const OrderConfirmationPage = () => {
   const { orderId } = useParams();
@@ -11,6 +12,39 @@ const OrderConfirmationPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const userId = sessionStorage.getItem("userId");
+  const [userData, setUserData] = useState(null);
+  const location = useLocation();
+
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const passedUserData = location.state?.userData;
+        if (passedUserData) {
+          setUserData(passedUserData);
+          return;
+        }
+
+        const response = await axios.get("http://localhost:5000/api/user/data", {
+          withCredentials: true,
+        });
+
+        if (response.data.success) {
+          setUserData(response.data.userData);
+        } else {
+          setError(response.data.message);
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error.response?.data?.message || error.message);
+        setError("Failed to load user data. Please log in again.");
+        navigate("/login");
+      }
+    };
+
+    fetchUserData();
+  }, [navigate, location.state]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -75,7 +109,7 @@ const OrderConfirmationPage = () => {
     try {
       // Update order status to "paid" using the updateOrder function from api.js
       const updatedOrderData = {
-        status: 'paid'
+        status: 'pending'
       };
       
       const response = await updateOrder(orderId, updatedOrderData);
@@ -129,7 +163,7 @@ const OrderConfirmationPage = () => {
 
   return (
     <div>
-      <NavigationBar />
+      <NavigationBar  userData={userData}/>
       <div className="order-confirmation-container">
         <h2 className="order-confirmation-title">Order Confirmation</h2>
         
