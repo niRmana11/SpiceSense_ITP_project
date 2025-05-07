@@ -96,7 +96,7 @@ const AboutUs = () => {
               className="about-spiced-team-image"
             />
             <h3 className="about-spiced-team-name">Nirmana Herath</h3>
-            <p className="about-spiced-team-role">Inventory Manger</p>
+            <p className="about-spiced-team-role">Inventory Manager</p>
           </div>
           <div className="about-spiced-team-member">
             <img
@@ -105,7 +105,7 @@ const AboutUs = () => {
               className="about-spiced-team-image"
             />
             <h3 className="about-spiced-team-name">Matheesha Weerakoon</h3>
-            <p className="about-spiced-team-role">Finance Analysit</p>
+            <p className="about-spiced-team-role">Financial Analyst</p>
           </div>
           <div className="about-spiced-team-member">
             <img
@@ -114,7 +114,7 @@ const AboutUs = () => {
               className="about-spiced-team-image"
             />
             <h3 className="about-spiced-team-name">Kanushka Kahakotuwa</h3>
-            <p className="about-spiced-team-role">Supplier Mangement</p>
+            <p className="about-spiced-team-role">Supplier Manager</p>
           </div>
           <div className="about-spiced-team-member">
             <img
@@ -123,7 +123,7 @@ const AboutUs = () => {
               className="about-spiced-team-image"
             />
             <h3 className="about-spiced-team-name">Bishan Wishwajith</h3>
-            <p className="about-spiced-team-role">Order Manger</p>
+            <p className="about-spiced-team-role">Order Manager</p>
           </div>
         </div>
       </section>
