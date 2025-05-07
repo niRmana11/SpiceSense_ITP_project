@@ -75,7 +75,7 @@ const OrderConfirmationPage = () => {
     try {
       // Update order status to "paid" using the updateOrder function from api.js
       const updatedOrderData = {
-        status: 'paid'
+        status: 'pending'
       };
       
       const response = await updateOrder(orderId, updatedOrderData);

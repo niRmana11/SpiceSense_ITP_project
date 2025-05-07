@@ -16,6 +16,7 @@ import orderRoute from "./routes/order.js";
 import itemRoute from "./routes/item.js";
 import productRoutes from "./routes/productRoutes.js";
 import stockRoutes from "./routes/stockRoutes.js";
+import deliveryRoutes from "./routes/delivery.js";
 
 
 
@@ -85,6 +86,8 @@ app.use("/api/order", orderRoute);
 app.use("/api/item", itemRoute);
 app.use("/api/products", productRoutes);
 app.use("/api/stocks", stockRoutes);
+app.use("/api/stocks", stockRoutes);
+app.use("/api/delivery", deliveryRoutes);
 
 
 app.use("/api/supProducts", productRouter);

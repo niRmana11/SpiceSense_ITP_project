@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavigationBar from "../components/NavigationBar";
-import "../Styles/DeliveryDashboard.css"; // You'll need to create this CSS file
+import "../Styles/DeliveryDashboard.css";
 
 const CustomerDeliveryDashboard = () => {
-  const [deliveries, setDeliveries] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [statusFilter, setStatusFilter] = useState('all');
@@ -16,28 +16,67 @@ const CustomerDeliveryDashboard = () => {
   const userId = sessionStorage.getItem("userId");
   
   useEffect(() => {
-    const fetchDeliveries = async () => {
+    const fetchOrders = async () => {
       try {
         setIsLoading(true);
-        // This API endpoint would need to be implemented
-        const response = await axios.get(`http://localhost:5000/api/deliveries/user/${userId}`);
-        setDeliveries(response.data);
+        
+        // Instead of fetching deliveries, fetch orders for this user
+        const response = await axios.get(`http://localhost:5000/api/order`);
+        
+        // Filter to only include paid orders (which are potentially being delivered)
+        const paidOrders = response.data.filter(order => order.status === 'paid');
+        setOrders(paidOrders);
         setError(null);
       } catch (err) {
-        console.error('Error fetching deliveries:', err);
-        setError('Unable to load delivery information. Please try again later.');
+        console.error('Error fetching orders:', err);
+        setError('Unable to load order information. Please try again later.');
       } finally {
         setIsLoading(false);
       }
     };
 
     if (userId) {
-      fetchDeliveries();
+      fetchOrders();
     } else {
-      setError('Please log in to view your deliveries');
+      setError('Please log in to view your orders');
       navigate('/login');
     }
   }, [userId, navigate]);
+
+  // Map order status to delivery status
+  const getDeliveryStatus = (order) => {
+    const orderDate = new Date(order.createdAt || Date.now());
+    const currentDate = new Date();
+    const daysSinceOrder = Math.floor((currentDate - orderDate) / (1000 * 60 * 60 * 24));
+    
+    // Simulate delivery status based on order age
+    if (daysSinceOrder < 1) {
+      return 'ready for shipment';
+    } else if (daysSinceOrder < 3) {
+      return 'shipped';
+    } else if (daysSinceOrder < 5) {
+      return 'in transit';
+    } else {
+      return 'delivered';
+    }
+  };
+
+  // Create virtual delivery objects from orders
+  const deliveries = orders.map(order => ({
+    _id: order._id,
+    orderId: order._id,
+    status: getDeliveryStatus(order),
+    trackingNumber: `TRK${order._id.substring(0, 8).toUpperCase()}`,
+    carrier: 'Express Shipping',
+    estimatedDeliveryDate: (() => {
+      const date = new Date(order.createdAt || Date.now());
+      date.setDate(date.getDate() + 7); // Estimated delivery in 7 days
+      return date;
+    })(),
+    createdAt: order.createdAt,
+    shippingAddress: order.shippingAddress,
+    deliveryNotes: 'Your order is being processed'
+  }));
 
   // Filter deliveries based on selected status
   const filteredDeliveries = statusFilter === 'all' 
@@ -62,18 +101,24 @@ const CustomerDeliveryDashboard = () => {
 
   // Function to format date
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric'
-    });
+    if (!dateString) return 'Pending';
+    
+    try {
+      return new Date(dateString).toLocaleDateString('en-US', {
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric'
+      });
+    } catch (e) {
+      return 'Invalid Date';
+    }
   };
 
   return (
     <div>
       <NavigationBar />
       <div className="delivery-dashboard-container">
-        <h2 className="delivery-dashboard-title">My Deliveries</h2>
+        <h2 className="delivery-dashboard-title">My Orders & Deliveries</h2>
         
         {/* Status filter buttons */}
         <div className="delivery-status-filters">
@@ -111,12 +156,22 @@ const CustomerDeliveryDashboard = () => {
 
         {/* Loading and error states */}
         {isLoading ? (
-          <div className="delivery-loading">Loading your deliveries...</div>
+          <div className="delivery-loading">Loading your order information...</div>
         ) : error ? (
           <div className="delivery-error">{error}</div>
+        ) : orders.length === 0 ? (
+          <div className="no-deliveries">
+            <p>You have no orders in progress.</p>
+            <button 
+              className="shop-now-btn"
+              onClick={() => navigate('/home')}
+            >
+              Shop Now
+            </button>
+          </div>
         ) : filteredDeliveries.length === 0 ? (
           <div className="no-deliveries">
-            <p>No deliveries found with the selected status.</p>
+            <p>No orders found with the selected status.</p>
           </div>
         ) : (
           <div className="deliveries-list">
@@ -131,23 +186,19 @@ const CustomerDeliveryDashboard = () => {
                 
                 <div className="delivery-details">
                   <div className="delivery-info">
+                    <p><strong>Order Date:</strong> {formatDate(delivery.createdAt)}</p>
                     <p><strong>Tracking Number:</strong> {delivery.trackingNumber || 'Not available yet'}</p>
                     <p><strong>Carrier:</strong> {delivery.carrier || 'Not assigned yet'}</p>
-                    <p><strong>Estimated Delivery:</strong> {delivery.estimatedDeliveryDate 
-                      ? formatDate(delivery.estimatedDeliveryDate) 
-                      : 'Not available yet'}
-                    </p>
-                    {delivery.actualDeliveryDate && (
-                      <p><strong>Delivered On:</strong> {formatDate(delivery.actualDeliveryDate)}</p>
-                    )}
+                    <p><strong>Estimated Delivery:</strong> {formatDate(delivery.estimatedDeliveryDate)}</p>
+                    <p><strong>Shipping To:</strong> {delivery.shippingAddress}</p>
                   </div>
                   
                   <div className="delivery-actions">
                     <button 
                       className="view-details-btn"
-                      onClick={() => navigate(`/delivery-tracking/${delivery._id}`)}
+                      onClick={() => navigate(`/delivery-tracking/${delivery.orderId}`)}
                     >
-                      View Details
+                      Track Order
                     </button>
                   </div>
                 </div>
