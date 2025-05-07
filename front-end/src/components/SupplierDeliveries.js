@@ -278,7 +278,7 @@ const SupplierDeliveries = () => {
       doc.text(line, 14, 32 + i * 6);
     });
   
-    const headers = [['Shipment ID', 'Product', 'Status', 'Expected Delivery']];
+    const headers = [['Shipment ID', 'Product standpoint', 'Status', 'Expected Delivery']];
     const data = shipments.map(item => [
       item._id,
       item.orderDeliveryId?.productId?.productName || 'Unknown',
@@ -308,7 +308,6 @@ const SupplierDeliveries = () => {
           >
             Create New Shipment
           </button>
-
         </div>
         
         {error && (
@@ -319,21 +318,23 @@ const SupplierDeliveries = () => {
         
         {/* Status filter */}
         <div className="sd-filter">
-          <label className="sd-label">Filter by status:</label>
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="sd-select"
-          >
-            <option value="all">All Shipments</option>
-            <option value="preparing">Preparing</option>
-            <option value="shipped">Shipped</option>
-            <option value="in_transit">In Transit</option>
-            <option value="out_for_delivery">Out for Delivery</option>
-            <option value="delivered">Delivered</option>
-            <option value="failed_delivery">Failed Delivery</option>
-          </select>
-          <button onClick={generatePDF} variant="contained" color="primary" className="sd-button sd-button-submit">
+          <div className="sd-filter-group">
+            <label className="sd-label">Filter by status:</label>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="sd-select"
+            >
+              <option value="all">All Shipments</option>
+              <option value="preparing">Preparing</option>
+              <option value="shipped">Shipped</option>
+              <option value="in_transit">In Transit</option>
+              <option value="out_for_delivery">Out for Delivery</option>
+              <option value="delivered">Delivered</option>
+              <option value="failed_delivery">Failed Delivery</option>
+            </select>
+          </div>
+          <button onClick={generatePDF} className="sd-button sd-button-submit">
             Export to PDF
           </button>
         </div>
@@ -628,8 +629,6 @@ const SupplierDeliveries = () => {
                 </button>
               </div>
             </form>
-            
-            
           </div>
         </div>
       )}

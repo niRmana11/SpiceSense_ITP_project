@@ -96,11 +96,17 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Filter with turmeric accent */
+/* Filter with turmeric accent and space-between for alignment */
 .sd-filter {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
+}
+
+.sd-filter-group {
+  display: flex;
+  align-items: center;
 }
 
 .sd-label {
@@ -195,8 +201,8 @@
 
 .sd-status-shipped {
   background: #ffedd5;
-  color: #c2410c; /* Paprika */
   border: 1px solid #fb923c;
+  color: #c2410c; /* Paprika */
 }
 
 .sd-status-transit {
