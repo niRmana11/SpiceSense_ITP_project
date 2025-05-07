@@ -8,7 +8,7 @@ import ExcelJS from "exceljs";
 
 const router = express.Router();
 
-//  POST route 
+//  save payement after paying for order
 router.post("/", async (req, res) => {
   try {
     console.log("Payment request body:", req.body);

@@ -14,7 +14,7 @@ const FinancialReports = () => {
   useEffect(() => {
     fetchFinancialReports();
   }, []);
-
+//get top items , summary , full log
   const fetchFinancialReports = async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/payments/financial-reports");
