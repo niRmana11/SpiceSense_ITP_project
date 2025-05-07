@@ -52,13 +52,15 @@ const InventoryOverview = () => {
             .catch(error => console.error("Error fetching inventory data:", error));
     }, []);
 
+    const filteredStocks = stocks.filter(item => item.quantity > 0);
+
     const chartData = {
-        labels: stocks.filter(item => item.quantity > 0).map(item => item.name),
+        labels: filteredStocks.map(item => item.name),
         datasets: [
             {
                 label: "Stock Levels",
-                data: stocks.map(item => item.quantity),
-                backgroundColor: stocks.map(item => (item.quantity < 50 ? "#ff4d4d" : "#36a2eb")),
+                data: filteredStocks.map(item => item.quantity),
+                backgroundColor: filteredStocks.map(item => (item.quantity < 50 ? "#ff4d4d" : "#36a2eb")),
             }
         ]
     };
