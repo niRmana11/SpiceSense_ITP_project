@@ -164,12 +164,12 @@ const ContactUs = () => {
           <div className="contact-spiced-info-card">
             <span className="contact-spiced-info-icon">📞</span>
             <h3 className="contact-spiced-info-title">Phone</h3>
-            <p className="contact-spiced-info-detail">+1 (555) 123-4567</p>
+            <p className="contact-spiced-info-detail">+94 (555) 123-4567</p>
           </div>
           <div className="contact-spiced-info-card">
             <span className="contact-spiced-info-icon">📍</span>
             <h3 className="contact-spiced-info-title">Address</h3>
-            <p className="contact-spiced-info-detail">123 Spice Lane, Flavor Town, USA</p>
+            <p className="contact-spiced-info-detail">123 Spice Lane, Palapathwela, Sri Lanka</p>
           </div>
           <div className="contact-spiced-info-card">
             <span className="contact-spiced-info-icon">🌐</span>
