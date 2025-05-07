@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../Styles/inventoryOverview.css";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 import NavBar from "../components/navBar";
@@ -13,6 +15,7 @@ const InventoryOverview = () => {
     const [stocks, setStocks] = useState([]);
     const [lowStockItems, setLowStockItems] = useState([]);
     const [expiredItems, setExpiredItems] = useState([]);
+
 
     useEffect(() => {
         document.body.style.backgroundImage = `url(${backgroundImage})`;
@@ -52,6 +55,62 @@ const InventoryOverview = () => {
             .catch(error => console.error("Error fetching inventory data:", error));
     }, []);
 
+
+    // generate inventory overview report
+    const generatePDF = () => {
+        const doc = new jsPDF();
+
+        doc.setFontSize(18);
+        doc.text("Inventory Overview Report", 14, 22);
+
+        doc.setFontSize(12);
+        doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 30);
+
+
+        const tableColumn = ["Name", "Category", "Quantity (Kg)"];
+        const tableRows = [];
+
+        stocks.filter(item => item.quantity > 0).forEach(item => {
+            const rowData = [
+                item.name || "Unknown",
+                item.category || "Unknown",
+                item.quantity || 0
+            ];
+            tableRows.push(rowData);
+        });
+
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRows,
+            startY: 40,
+        });
+
+        if (expiredItems.length > 0) {
+            doc.addPage();
+            doc.setFontSize(16);
+            doc.text("Expired Products Alert", 14, 20);
+
+            expiredItems.forEach((item, index) => {
+                doc.text(`${index + 1}. ${item.name} batch ${item.batchNumber} is expired`, 14, 30 + index * 10);
+            });
+        }
+
+        if (lowStockItems.filter(item => item.quantity > 0).length > 0) {
+            doc.addPage();
+            doc.setFontSize(16);
+            doc.text("Low Stock Alert", 14, 20);
+
+            lowStockItems.filter(item => item.quantity > 0).forEach((item, index) => {
+                doc.text(`${index + 1}. ${item.name} is low on stock (${item.quantity} Kg)`, 14, 30 + index * 10);
+            });
+        }
+
+        doc.save("inventory_report.pdf");
+    };
+
+
+
+
     const filteredStocks = stocks.filter(item => item.quantity > 0);
 
     const chartData = {
@@ -64,6 +123,8 @@ const InventoryOverview = () => {
             }
         ]
     };
+
+
 
     return (
         <div>
@@ -119,6 +180,14 @@ const InventoryOverview = () => {
                     <h3>Stock Levels Report</h3>
                     <Bar data={chartData} />
                 </div>
+
+
+                <hr style={{ margin: "30px 0", border: "none", borderTop: "1px solid #d59e76" }} />
+
+                <button className="download-btn" onClick={generatePDF}>
+                    Download Inventory Report (PDF)
+                </button>
+
             </div>
         </div>
     );

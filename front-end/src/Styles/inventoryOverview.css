@@ -1,5 +1,3 @@
-
-
 .inventory-container {
     max-width: 900px;
     margin: 0px auto;
@@ -46,14 +44,17 @@
     margin-bottom: 20px;
     border-radius: 8px;
 }
+
 .expired-alert h3 {
     color: #b30000;
     margin: 0 0 10px;
 }
+
 .expired-alert ul {
     list-style: none;
     padding: 0;
 }
+
 .expired-alert li {
     color: #5a3d1c;
     font-size: 14px;
@@ -69,7 +70,8 @@
     overflow: hidden;
 }
 
-.stock-table th, .stock-table td {
+.stock-table th,
+.stock-table td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #e0c9a6;
@@ -95,13 +97,34 @@
     background: #f5e1da;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    
+
 }
 
 .chart-container h3 {
     margin-bottom: 15px;
     color: #5a3d1c;
 }
+
+.download-btn {
+    background-color: #8b4513;
+    color: #fff;
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 20px auto;
+    display: block;
+}
+
+.download-btn:hover {
+    background-color: #a0522d;
+    transform: scale(1.03);
+}
+
+
 
 
 @media (max-width: 768px) {
@@ -110,7 +133,8 @@
         padding: 15px;
     }
 
-    .stock-table th, .stock-table td {
+    .stock-table th,
+    .stock-table td {
         padding: 8px;
         font-size: 14px;
     }
@@ -126,7 +150,8 @@
         padding: 10px;
     }
 
-    h2, .chart-container h3 {
+    h2,
+    .chart-container h3 {
         font-size: 18px;
     }
 
@@ -134,7 +159,8 @@
         padding: 10px;
     }
 
-    .stock-table th, .stock-table td {
+    .stock-table th,
+    .stock-table td {
         padding: 6px;
         font-size: 12px;
     }

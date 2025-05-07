@@ -2,19 +2,19 @@
     max-width: 900px;
     margin: 0px auto;
     padding: 30px;
-    background: #fdf7e3; 
+    background: #fdf7e3;
     border-radius: 15px;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     font-family: 'Arial', sans-serif;
     text-align: center;
     color: #333;
-    border: 1px solid #e0e0e0; 
+    border: 1px solid #e0e0e0;
 }
 
 .transactions-container h2 {
     font-size: 28px;
     margin-bottom: 20px;
-    color: #8b4513; 
+    color: #8b4513;
 }
 
 table {
@@ -23,9 +23,10 @@ table {
     margin-top: 30px;
 }
 
-th, td {
+th,
+td {
     padding: 12px;
-    border: 1px solid #e0e0e0; 
+    border: 1px solid #e0e0e0;
     text-align: left;
 }
 
@@ -37,17 +38,17 @@ th {
 }
 
 tr:hover {
-    background-color: #f8f8f8; 
+    background-color: #f8f8f8;
 }
 
 .stock-in {
-    background: #d4edda; 
+    background: #d4edda;
     color: green;
     font-weight: bold;
 }
 
 .stock-out {
-    background: #ffcccc; 
+    background: #ffcccc;
     color: red;
     font-weight: bold;
 }
