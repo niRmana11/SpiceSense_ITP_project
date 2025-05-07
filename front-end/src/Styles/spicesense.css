@@ -1,11 +1,11 @@
-/* General Reset */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
   
-  /* Page Layout */
+  
   .spicesense-page-welcome {
     min-height: 100vh;
     display: flex;
@@ -16,7 +16,7 @@
     overflow-x: hidden;
   }
   
-  /* Header */
+  
   .spicesense-header-welcome {
     display: flex;
     justify-content: space-between;

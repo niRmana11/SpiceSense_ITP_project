@@ -8,7 +8,7 @@ import AdminMessages from "../components/AdminMessages";
 import AdminDeliveries from "../components/AdminDeliveries";
 import AdminTransactions from "../components/AdminTransactions";
 import FinancialReports from "../pages/FinancialReports";
-import AccountManagement from "../pages/AccountManagement"; // Already imported
+import AccountManagement from "../pages/AccountManagement"; 
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import "../Styles/AdminNav.css";

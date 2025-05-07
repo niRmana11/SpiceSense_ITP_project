@@ -7,7 +7,7 @@ const authRouter = express.Router();
 authRouter.post('/register', register);
 authRouter.post('/login', login);
 authRouter.post('/logout', userAuth, logout);
-authRouter.post('/verify-account', verifyEmail); // Remove userAuth middleware
+authRouter.post('/verify-account', verifyEmail); 
 authRouter.post('/send-reset-otp', sendResetOtp);
 authRouter.post('/reset-password', resetPassword);
 

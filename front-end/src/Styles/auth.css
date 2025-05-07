@@ -1,4 +1,4 @@
-/* General Reset */
+
 * {
   margin: 0;
   padding: 0;
@@ -23,13 +23,12 @@ html, body {
   --spice-success: #4ade80;
 }
 
-/* Page Layout */
+
 .spicesense-page {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: 'Roboto', sans-serif;
-  /* Background image with spice-themed placeholder URL */
   background-image: url('https://png.pngtree.com/background/20230611/original/pngtree-several-bowls-of-fresh-spiced-herbs-and-spices-picture-image_3143893.jpg');
   background-size: cover;
   background-attachment: fixed;
@@ -48,7 +47,7 @@ html, body {
   background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: fixed;
-  width: 100vw; /* Use viewport width to ensure full stretch */
+  width: 100vw; 
   top: 0;
   left: 0;
   right: 0;
@@ -65,7 +64,7 @@ html, body {
 }
 
 .spicesense-logo img {
-  display: none; /* Hide logo image since screenshot shows only text */
+  display: none; 
 }
 
 .spicesense-logo span {
@@ -74,12 +73,12 @@ html, body {
   color: var(--saffron);
 }
 
-/* Increase specificity to ensure navigation links are hidden */
+
 .spicesense-page .spicesense-header .spicesense-nav {
   display: none !important;
 }
 
-/* Animations */
+
 @keyframes fadeInUp {
   0% {
     opacity: 0;

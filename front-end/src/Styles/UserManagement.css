@@ -1,6 +1,6 @@
 /* Styles/UserManagement.css */
 
-/* Ginger Color Palette */
+
 :root {
   --ginger: #DAA520;
   --nutmeg: #8A4F2D;
@@ -16,14 +16,14 @@
   --transition: all 0.3s ease;
 }
 
-/* Base Reset for Consistency */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* Container */
+
 .ginger-container {
   background: var(--white);
   padding: 1rem;
@@ -198,21 +198,21 @@
 .ginger-table-row td {
   padding: 0.75rem 0.5rem;
   vertical-align: middle;
-  white-space: nowrap; /* Default nowrap for most columns */
+  white-space: nowrap; 
 }
 
-/* Specific styles for Role Details column */
+
 .ginger-table th:nth-child(5),
 .ginger-table td:nth-child(5) {
-  white-space: normal; /* Allow text wrapping */
-  word-wrap: break-word; /* Break long words */
-  max-width: none; /* Remove max-width restriction */
+  white-space: normal; 
+  word-wrap: break-word; 
+  max-width: none; 
 }
 
-/* Specific column widths */
+
 .ginger-table th:nth-child(1),
 .ginger-table td:nth-child(1) {
-  width: 14%; /* Name */
+  width: 14%; 
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -220,7 +220,7 @@
 
 .ginger-table th:nth-child(2),
 .ginger-table td:nth-child(2) {
-  width: 18%; /* Email */
+  width: 18%; 
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -228,7 +228,7 @@
 
 .ginger-table th:nth-child(3),
 .ginger-table td:nth-child(3) {
-  width: 14%; /* Phone */
+  width: 14%; 
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -236,7 +236,7 @@
 
 .ginger-table th:nth-child(4),
 .ginger-table td:nth-child(4) {
-  width: 9%; /* Role */
+  width: 9%; 
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -244,14 +244,14 @@
 
 .ginger-table th:nth-child(5),
 .ginger-table td:nth-child(5) {
-  width: 25%; /* Role Details - Increased for more space */
-  min-width: 200px; /* Ensure sufficient minimum width */
+  width: 25%; 
+  min-width: 200px;
 }
 
 .ginger-table th:nth-child(6),
 .ginger-table td:nth-child(6) {
-  width: 20%; /* Actions */
-  min-width: 160px; /* Ensure enough space for buttons */
+  width: 20%; 
+  min-width: 160px;
 }
 
 /* Actions */

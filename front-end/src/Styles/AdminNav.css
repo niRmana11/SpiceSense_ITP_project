@@ -1,45 +1,44 @@
 /* Styles/AdminNav.css */
 
-/* Refined Professional Color Palette */
 :root {
-  --primary: #d97706; /* Vibrant Amber (more lively than original golden brown) */
-  --secondary: #5a2e0f; /* Deep Espresso (richer brown for contrast) */
-  --accent: #e65100; /* Vivid Orange (brighter, more engaging) */
-  --background-light: #f5f0e8; /* Softer Beige (modern and clean) */
-  --background-dark: #33241f; /* Darker Cocoa (deeper for contrast) */
-  --text-primary: #1a1a1a; /* Near-Black for high contrast */
-  --text-secondary: #4a4a4a; /* Medium Gray for secondary text */
-  --card-background: #ffffff; /* White for cards */
-  --card-border: rgba(0, 0, 0, 0.08); /* Subtler border */
-  --button-hover: #7f3f0c; /* Muted brown for hover states */
+  --primary: #d97706;
+  --secondary: #5a2e0f; 
+  --accent: #e65100; 
+  --background-light: #f5f0e8;
+  --background-dark: #33241f;
+  --text-primary: #1a1a1a;
+  --text-secondary: #4a4a4a;
+  --card-background: #ffffff; 
+  --card-border: rgba(0, 0, 0, 0.08); 
+  --button-hover: #7f3f0c; 
 }
 
-/* Container with Background Image */
+
 .spice-dashboard-container {
   min-height: 100vh;
-  /* Background image specific to this page, with fallback gradient */
+  
   background: linear-gradient(135deg, rgba(240, 205, 205, 0.8), rgba(245, 217, 172, 0.8)),
               url('https://i.pinimg.com/736x/e1/2a/8e/e12a8ea15dc3cf40777ea8d7b01142d2.jpg') no-repeat center center/cover;
-  padding: 2.5rem; /* Increased padding for spacious feel */
+  padding: 2.5rem; 
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   position: relative;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden; 
 }
 
-/* Ensure background image doesn't affect other pages */
+
 body:not(.dashboard-page) .spice-dashboard-container {
-  background: linear-gradient(135deg, #f0cdcd, #f5d9ac); /* Fallback for other pages */
+  background: linear-gradient(135deg, #f0cdcd, #f5d9ac); 
 }
 
-/* Navigation Bar */
+
 .spice-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255, 255, 255, 0.95); /* Semi-transparent for modern look */
-  backdrop-filter: blur(8px); /* Glassmorphism effect */
+  background: rgba(255, 255, 255, 0.95); 
+  backdrop-filter: blur(8px);
   padding: 1.25rem 2.5rem;
   border-radius: 0;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
@@ -69,7 +68,7 @@ body:not(.dashboard-page) .spice-dashboard-container {
 }
 
 .spice-logo-circle {
-  width: 48px; /* Slightly larger for prominence */
+  width: 48px; 
   height: 48px;
   background: var(--primary);
   border-radius: 50%;
@@ -81,7 +80,7 @@ body:not(.dashboard-page) .spice-dashboard-container {
 
 .spice-nav:hover .spice-logo-circle {
   transform: rotate(360deg);
-  box-shadow: 0 0 12px rgba(217, 119, 6, 0.5); /* Glow effect */
+  box-shadow: 0 0 12px rgba(217, 119, 6, 0.5);
 }
 
 .spice-logo-text {
@@ -93,7 +92,7 @@ body:not(.dashboard-page) .spice-dashboard-container {
 
 .spice-nav-title {
   color: var(--text-primary);
-  font-size: 2rem; /* Larger for emphasis */
+  font-size: 2rem; 
   font-weight: 800;
   letter-spacing: 0.6px;
 }
@@ -115,13 +114,13 @@ body:not(.dashboard-page) .spice-dashboard-container {
 
 .spice-nav:hover .spice-user-greeting {
   opacity: 1;
-  color: var(--text-primary); /* Darken on hover for emphasis */
+  color: var(--text-primary); 
 }
 
 /* Logout Button */
 .spice-logout-btn {
   position: relative;
-  padding: 0.75rem 1.5rem; /* Slightly larger for touch targets */
+  padding: 0.75rem 1.5rem; 
   background: var(--accent);
   color: #fff;
   border: none;
@@ -137,7 +136,7 @@ body:not(.dashboard-page) .spice-dashboard-container {
 
 .spice-logout-btn:hover {
   background: var(--button-hover);
-  transform: translateX(8px); /* More pronounced slide */
+  transform: translateX(8px); 
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
@@ -156,7 +155,7 @@ body:not(.dashboard-page) .spice-dashboard-container {
 
 /* Content Wrapper */
 .spice-content-wrapper {
-  max-width: 1400px; /* Wider for larger screens */
+  max-width: 1400px; 
   width: 100%;
   margin: 0;
 }
@@ -171,19 +170,19 @@ body:not(.dashboard-page) .spice-dashboard-container {
   font-weight: 500;
 }
 
-/* Main Layout */
+
 .spice-main-layout {
   display: flex;
   flex-direction: row;
   gap: 2.5rem;
   align-items: flex-start;
-  min-height: 1200px; /* Increased height for longer dashboard overview */
+  min-height: 1200px; 
 }
 
 /* Sidebar */
 .spice-sidebar {
   width: 100%;
-  max-width: 280px; /* Slightly wider for better spacing */
+  max-width: 280px; 
   background: rgba(255, 255, 255, 0.98);
   border-radius: 1.2rem;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
@@ -262,9 +261,9 @@ body:not(.dashboard-page) .spice-dashboard-container {
 /* Dashboard Content */
 .spice-dashboard-content {
   margin-top: 0;
-  max-width: 900px; /* Slightly wider for more content */
+  max-width: 900px; 
   width: 100%;
-  min-height: 1000px; /* Ensure longer dashboard overview */
+  min-height: 1000px; 
 }
 
 /* Card */
@@ -345,7 +344,7 @@ body:not(.dashboard-page) .spice-dashboard-container {
   transition: all 0.3s ease;
   font-weight: 600;
   width: 100%;
-  max-width: 200px; /* Slightly larger for prominence */
+  max-width: 200px; 
   text-align: center;
   border: none;
   cursor: pointer;
@@ -412,11 +411,11 @@ body:not(.dashboard-page) .spice-dashboard-container {
   }
 
   .spice-main-layout {
-    min-height: auto; /* Allow natural height on mobile */
+    min-height: auto; 
   }
 
   .spice-grid {
-    grid-template-columns: 1fr; /* Single column on mobile */
+    grid-template-columns: 1fr; 
   }
 
   .spice-action-btn {
