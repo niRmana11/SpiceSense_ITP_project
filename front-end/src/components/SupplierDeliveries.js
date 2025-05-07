@@ -266,34 +266,56 @@ const SupplierDeliveries = () => {
   const generatePDF = () => {
     const doc = new jsPDF();
   
+    // Main Title
     doc.setFontSize(18);
-    doc.text('Shipment Report', 14, 22);
+    doc.setTextColor(44, 62, 80); // dark gray-blue
+    doc.text('Shipment Report', 14, 20);
   
-    const filterInfo = [
-      `Status: ${statusFilter || 'All'}`
-    ];
+    // Date & Time
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 28);
   
-    doc.setFontSize(12);
-    filterInfo.forEach((line, i) => {
-      doc.text(line, 14, 32 + i * 6);
-    });
-  
-    const headers = [['Shipment ID', 'Product standpoint', 'Status', 'Expected Delivery']];
-    const data = shipments.map(item => [
-      item._id,
-      item.orderDeliveryId?.productId?.productName || 'Unknown',
-      getStatusLabel(item.status),
-      formatDate(item.expectedDeliveryDate)
+    // Table headers and data
+    const headers = [['Shipment ID', 'Product', 'Status', 'Carrier', 'Tracking #', 'Created']];
+    const data = shipments.map(shipment => [
+      shipment._id?.substring(0, 8) || 'N/A',
+      shipment.orderDeliveryId?.productId?.productName || 'N/A',
+      getStatusLabel(shipment.status),
+      shipment.carrier || 'N/A',
+      shipment.trackingNumber || 'N/A',
+      formatDateTime(shipment.createdAt)
     ]);
   
+    // Stylish compact table
     doc.autoTable({
-      startY: 60,
+      startY: 35,
       head: headers,
       body: data,
+      theme: 'striped',
+      styles: {
+        fontSize: 10,
+        textColor: [60, 60, 60],
+        fillColor: [255, 255, 255], // white background
+        lineWidth: 0.1,
+        lineColor: [200, 200, 200], // light gray lines
+        cellPadding: 3
+      },
+      headStyles: {
+        fillColor: [52, 152, 219], // blue
+        textColor: 255,
+        fontStyle: 'bold'
+      },
+      alternateRowStyles: { fillColor: [245, 245, 245] }, // very light gray rows
+      margin: { top: 35 },
+      tableLineColor: [230, 230, 230],
+      tableLineWidth: 0.1
     });
   
+    // Save PDF
     doc.save('shipment_report.pdf');
   };
+  
   
 
   return (
