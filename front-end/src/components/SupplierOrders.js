@@ -23,6 +23,8 @@ const SupplierOrders = () => {
     fetchApprovedMessages();
   }, [statusFilter]);
   
+
+  //Fetches supplier orders, optionally filtered by status
   const fetchOrders = async () => {
     try {
       setLoading(true);
@@ -47,6 +49,7 @@ const SupplierOrders = () => {
     }
   };
   
+  //Fetches approved messages not yet converted to orders.
   const fetchApprovedMessages = async () => {
     try {
       const response = await axios.get(
@@ -75,6 +78,7 @@ const SupplierOrders = () => {
     });
   };
   
+  //Converts an approved message into an order.
   const handleCreateOrderFromMessage = async (messageId) => {
     try {
       const response = await axios.post(

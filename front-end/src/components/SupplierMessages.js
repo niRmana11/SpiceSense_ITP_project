@@ -16,7 +16,8 @@ const SupplierMessages = () => {
     rejectReason: "",
   });
 
-  // Define fetchMessages as a reusable function
+  // Fetches all messages for the supplier on component mount.
+
   const fetchMessages = async () => {
     try {
       setLoading(true);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../Styles/SupplierProducts.css"; // Import the separate CSS file
+import "../Styles/SupplierProducts.css";
 
 const SupplierProducts = () => {
   const [products, setProducts] = useState([]);
@@ -20,7 +20,7 @@ const SupplierProducts = () => {
   const [showEditForm, setShowEditForm] = useState(false);
   const [formErrors, setFormErrors] = useState({});
 
-  // Predefined product lists by category
+  
   const [productsByCategory, setProductsByCategory] = useState({
     "Whole Spices": ["Black Pepper", "Cardamom", "Cinnamon", "Cloves", "Cumin Seeds", "Fennel Seeds"],
     "Ground Spices": ["Ground Turmeric", "Ground Cumin", "Ground Coriander", "Ground Cinnamon", "Ground Cardamom"],
@@ -31,9 +31,10 @@ const SupplierProducts = () => {
     "Organic Spices": ["Organic Turmeric", "Organic Ginger", "Organic Cinnamon", "Organic Cloves"]
   });
 
-  // Available product options based on selected category
+  
   const [availableProducts, setAvailableProducts] = useState([]);
 
+//Fetches all products and suppliers on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -73,13 +74,12 @@ const SupplierProducts = () => {
     fetchData();
   }, []);
 
-  // Update available products when category changes
+  
   useEffect(() => {
     if (formData.productCategory) {
-      // Get products from the selected category
+  
       const categoryProducts = productsByCategory[formData.productCategory] || [];
 
-      // Filter out products that the current supplier has already added
       const currentSupplierProducts = products.filter(
         product => product.supplierId === getCurrentSupplierId()
       );
@@ -88,7 +88,7 @@ const SupplierProducts = () => {
         .filter(product => product.productCategory === formData.productCategory)
         .map(product => product.productName);
 
-      // Set available products, excluding already added ones
+
       const filteredProducts = categoryProducts.filter(
         product => !alreadyAddedProductNames.includes(product)
       );
@@ -99,10 +99,9 @@ const SupplierProducts = () => {
     }
   }, [formData.productCategory, products]);
 
-  // Helper function to get current supplier ID (you might need to replace this with actual logic)
+  
   const getCurrentSupplierId = () => {
-    // Replace this with how you determine the current supplier ID in your app
-    // This might come from a user context, URL parameter, etc.
+
     return "current-supplier-id";
   };
 
@@ -115,7 +114,7 @@ const SupplierProducts = () => {
 
     setFormErrors({ ...formErrors, [name]: "" });
 
-    // If changing product category, reset product name
+    
     if (name === "productCategory") {
       setFormData(prev => ({
         ...prev,
@@ -124,6 +123,7 @@ const SupplierProducts = () => {
     }
   };
 
+  //validation
   const validateForm = () => {
     let errors = {};
     if (!formData.productName.trim()) errors.productName = "Product name is required.";
@@ -132,7 +132,7 @@ const SupplierProducts = () => {
     if (!formData.stockQuantity || formData.stockQuantity < 0) errors.stockQuantity = "Stock quantity cannot be negative.";
     if (!formData.minimumOrderQuantity || formData.minimumOrderQuantity < 1) errors.minimumOrderQuantity = "Minimum order must be at least 1.";
 
-    // Check if product already exists for this supplier
+    
     const isDuplicate = products.some(product =>
       product.supplierId === getCurrentSupplierId() &&
       product.productName === formData.productName &&
@@ -161,7 +161,7 @@ const SupplierProducts = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return; // Stop if validation fails
+    if (!validateForm()) return; 
 
     try {
       const response = await axios.put(
@@ -192,20 +192,20 @@ const SupplierProducts = () => {
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return; // Stop if validation fails
+    if (!validateForm()) return; 
 
     try {
       const response = await axios.post(
         "http://localhost:5000/api/supProducts",
         {
           ...formData,
-          supplierId: getCurrentSupplierId() // Make sure to include the supplier ID
+          supplierId: getCurrentSupplierId() 
         },
         { withCredentials: true }
       );
 
       if (response.data.success) {
-        // Add the new product to the products array
+       
         const newProduct = {
           ...response.data.product,
           supplierName: suppliers.find(s => s._id === getCurrentSupplierId())?.name || "Unknown",
@@ -214,7 +214,7 @@ const SupplierProducts = () => {
 
         setProducts([...products, newProduct]);
 
-        // Reset form
+       
         setFormData({
           productName: "",
           productCategory: "",
@@ -374,7 +374,7 @@ const SupplierProducts = () => {
                 Product Name *
               </label>
               {editingProduct ? (
-                // When editing, just show the name (can't change it)
+                
                 <input
                   type="text"
                   name="productName"
@@ -383,7 +383,7 @@ const SupplierProducts = () => {
                   disabled
                 />
               ) : (
-                // This shouldn't happen in edit mode, but just in case
+                
                 <select
                   name="productName"
                   value={formData.productName}

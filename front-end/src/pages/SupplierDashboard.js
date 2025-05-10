@@ -39,6 +39,7 @@ const SupplierDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  //Fetches supplier’s account data on component mount.
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -73,7 +74,7 @@ const SupplierDashboard = () => {
     fetchUserData();
   }, [navigate, location.state]);
 
-  // Update available products when category changes
+  
   useEffect(() => {
     if (formData.productCategory) {
       // Get products from the selected category
@@ -94,6 +95,9 @@ const SupplierDashboard = () => {
       setAvailableProducts([]);
     }
   }, [formData.productCategory, products]);
+  
+
+  //Fetches supplier’s products from the backend
 
   const fetchProducts = async () => {
     try {
@@ -135,6 +139,7 @@ const SupplierDashboard = () => {
     }
   };
 
+  //update
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
@@ -146,7 +151,7 @@ const SupplierDashboard = () => {
 
     if (isDuplicate) {
       setError("You have already added this product. Please choose a different one.");
-      return; // Prevent form submission
+      return; 
     }
 
     try {

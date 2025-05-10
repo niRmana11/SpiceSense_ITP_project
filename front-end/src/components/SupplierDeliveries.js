@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-
 import "../Styles/SupplierDeliveries.css";
 
 const SupplierDeliveries = () => {
@@ -30,7 +29,10 @@ const SupplierDeliveries = () => {
     expectedDeliveryDate: "",
     deliveryNotes: ""
   });
-  
+
+  const [createFormErrors, setCreateFormErrors] = useState({});
+  const [updateFormErrors, setUpdateFormErrors] = useState({});
+
   useEffect(() => {
     fetchShipments();
     fetchReadyOrders();
@@ -39,16 +41,13 @@ const SupplierDeliveries = () => {
   const fetchShipments = async () => {
     try {
       setLoading(true);
-      
       let url = "http://localhost:5000/api/deliveries/supplier";
       if (statusFilter !== "all") {
         url += `?status=${statusFilter}`;
       }
-      
       const response = await axios.get(url, {
         withCredentials: true,
       });
-      
       if (response.data.success) {
         setShipments(response.data.shipments || []);
       }
@@ -66,21 +65,52 @@ const SupplierDeliveries = () => {
         "http://localhost:5000/api/orderdelivers/supplier?status=ready_for_shipment",
         { withCredentials: true }
       );
-      
       if (response.data.success) {
         const orderIds = new Set(shipments.map(shipment => 
           shipment.orderDeliveryId?._id || shipment.orderDeliveryId
         ));
-        
         const filteredOrders = response.data.orders.filter(
           order => !orderIds.has(order._id)
         );
-        
         setReadyOrders(filteredOrders);
       }
     } catch (error) {
       console.error("Error fetching ready orders:", error);
     }
+  };
+
+  const validateCreateForm = () => {
+    const errors = {};
+    if (!createFormData.orderDeliveryId) {
+      errors.orderDeliveryId = "Please select an order.";
+    }
+    if (!createFormData.expectedDeliveryDate) {
+      errors.expectedDeliveryDate = "Expected delivery date is required.";
+    }
+    if (createFormData.trackingNumber && !/^[a-zA-Z0-9-]{1,50}$/.test(createFormData.trackingNumber)) {
+      errors.trackingNumber = "Tracking number must be alphanumeric (up to 50 characters).";
+    }
+    setCreateFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const validateUpdateForm = () => {
+    const errors = {};
+    if (!updateFormData.status) {
+      errors.status = "Please select a status.";
+    }
+    if (updateFormData.status === "delivered") {
+      if (!updateFormData.actualDeliveryDate) {
+        errors.actualDeliveryDate = "Actual delivery date is required.";
+      } else if (new Date(updateFormData.actualDeliveryDate) > new Date()) {
+        errors.actualDeliveryDate = "Delivery date cannot be in the future.";
+      }
+    }
+    if (updateFormData.trackingNumber && !/^[a-zA-Z0-9-]{1,50}$/.test(updateFormData.trackingNumber)) {
+      errors.trackingNumber = "Tracking number must be alphanumeric (up to 50 characters).";
+    }
+    setUpdateFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
   
   const handleUpdateInputChange = (e) => {
@@ -89,6 +119,8 @@ const SupplierDeliveries = () => {
       ...updateFormData,
       [name]: value
     });
+    setUpdateFormErrors({ ...updateFormErrors, [name]: "" });
+    validateUpdateForm();
   };
   
   const handleCreateInputChange = (e) => {
@@ -97,6 +129,8 @@ const SupplierDeliveries = () => {
       ...createFormData,
       [name]: value
     });
+    setCreateFormErrors({ ...createFormErrors, [name]: "" });
+    validateCreateForm();
   };
   
   const handleOpenUpdateModal = (shipment) => {
@@ -109,6 +143,7 @@ const SupplierDeliveries = () => {
       actualDeliveryDate: ""
     });
     setShowUpdateModal(true);
+    setUpdateFormErrors({});
   };
   
   const handleOpenCreateModal = () => {
@@ -116,7 +151,6 @@ const SupplierDeliveries = () => {
       setError("No orders ready for shipment.");
       return;
     }
-    
     setCreateFormData({
       orderDeliveryId: readyOrders[0]._id,
       trackingNumber: "",
@@ -124,33 +158,35 @@ const SupplierDeliveries = () => {
       expectedDeliveryDate: "",
       deliveryNotes: ""
     });
-    
     setShowCreateModal(true);
+    setCreateFormErrors({});
   };
   
   const handleCloseUpdateModal = () => {
     setShowUpdateModal(false);
     setActiveShipment(null);
+    setUpdateFormErrors({});
   };
   
   const handleCloseCreateModal = () => {
     setShowCreateModal(false);
+    setCreateFormErrors({});
   };
   
   const handleCreateShipment = async (e) => {
     e.preventDefault();
-    
+    if (!validateCreateForm()) return;
     try {
       const response = await axios.post(
         "http://localhost:5000/api/deliveries",
         createFormData,
         { withCredentials: true }
       );
-      
       if (response.data.success) {
         fetchShipments();
         fetchReadyOrders();
         setShowCreateModal(false);
+        setCreateFormErrors({});
       }
     } catch (error) {
       console.error("Error creating shipment:", error);
@@ -158,26 +194,21 @@ const SupplierDeliveries = () => {
     }
   };
   
-  // Updated handleUpdateShipment to refetch the full shipment list after a successful update
   const handleUpdateShipment = async (e) => {
     e.preventDefault();
-    
-    if (!activeShipment) return;
-    
+    if (!activeShipment || !validateUpdateForm()) return;
     try {
       const response = await axios.put(
         `http://localhost:5000/api/deliveries/${activeShipment._id}/status`,
         updateFormData,
         { withCredentials: true }
       );
-      
       if (response.data.success) {
-        // Refetch the full shipment list to ensure the UI has the complete data
-        // This prevents the "Unknown" issue for nested fields like orderDeliveryId.productId
         await fetchShipments();
         setShowUpdateModal(false);
         setActiveShipment(null);
-        setError(null); // Clear any previous errors
+        setError(null);
+        setUpdateFormErrors({});
       }
     } catch (error) {
       console.error("Error updating shipment:", error);
@@ -266,18 +297,12 @@ const SupplierDeliveries = () => {
 
   const generatePDF = () => {
     const doc = new jsPDF();
-  
-    // Main Title
     doc.setFontSize(18);
-    doc.setTextColor(44, 62, 80); // dark gray-blue
+    doc.setTextColor(44, 62, 80);
     doc.text('Shipment Report', 14, 20);
-  
-    // Date & Time
     doc.setFontSize(11);
     doc.setTextColor(100);
     doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 28);
-  
-    // Table headers and data
     const headers = [['Shipment ID', 'Product', 'Status', 'Carrier', 'Tracking #', 'Created']];
     const data = shipments.map(shipment => [
       shipment._id?.substring(0, 8) || 'N/A',
@@ -287,8 +312,6 @@ const SupplierDeliveries = () => {
       shipment.trackingNumber || 'N/A',
       formatDateTime(shipment.createdAt)
     ]);
-  
-    // Stylish compact table
     doc.autoTable({
       startY: 35,
       head: headers,
@@ -297,26 +320,33 @@ const SupplierDeliveries = () => {
       styles: {
         fontSize: 10,
         textColor: [60, 60, 60],
-        fillColor: [255, 255, 255], // white background
+        fillColor: [255, 255, 255],
         lineWidth: 0.1,
-        lineColor: [200, 200, 200], // light gray lines
+        lineColor: [200, 200, 200],
         cellPadding: 3
       },
       headStyles: {
-        fillColor: [52, 152, 219], // blue
+        fillColor: [52, 152, 219],
         textColor: 255,
         fontStyle: 'bold'
       },
-      alternateRowStyles: { fillColor: [245, 245, 245] }, // very light gray rows
+      alternateRowStyles: { fillColor: [245, 245, 245] },
       margin: { top: 35 },
       tableLineColor: [230, 230, 230],
       tableLineWidth: 0.1
     });
-  
-    // Save PDF
     doc.save('shipment_report.pdf');
   };
-  
+
+  if (loading) {
+    return (
+      <div className="sd-loading-container">
+        <div className="sd-spinner"></div>
+        <p>Loading shipments...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="sd-container">
       <div className="sd-card">
@@ -337,7 +367,6 @@ const SupplierDeliveries = () => {
           </div>
         )}
         
-        {/* Status filter */}
         <div className="sd-filter">
           <div className="sd-filter-group">
             <label className="sd-label">Filter by status:</label>
@@ -360,7 +389,6 @@ const SupplierDeliveries = () => {
           </button>
         </div>
         
-        {/* Shipments list */}
         {shipments.length === 0 ? (
           <div className="sd-empty">
             <p>No shipments found.</p>
@@ -452,207 +480,206 @@ const SupplierDeliveries = () => {
             ))}
           </div>
         )}
-      </div>
-      
-      {/* Create shipment modal */}
-      {showCreateModal && (
-        <div className="sd-modal">
-          <div className="sd-modal-content">
-            <h3 className="sd-modal-title">
-              Create New Shipment
-            </h3>
-            
-            <form onSubmit={handleCreateShipment}>
-              <div className="sd-form-group">
-                <label className="sd-label">Select Order *</label>
-                <select
-                  name="orderDeliveryId"
-                  value={createFormData.orderDeliveryId}
-                  onChange={handleCreateInputChange}
-                  required
-                  className="sd-input"
-                >
-                  <option value="">Select an order</option>
-                  {readyOrders.map(order => (
-                    <option key={order._id} value={order._id}>
-                      {order.productId?.productName} - Qty: {order.quantity}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              <div className="sd-form-group">
-                <label className="sd-label">Carrier</label>
-                <input
-                  type="text"
-                  name="carrier"
-                  value={createFormData.carrier}
-                  onChange={handleCreateInputChange}
-                  placeholder="Enter carrier name (e.g. DHL, FedEx)"
-                  className="sd-input"
-                />
-              </div>
-              
-              <div className="sd-form-group">
-                <label className="sd-label">Tracking Number</label>
-                <input
-                  type="text"
-                  name="trackingNumber"
-                  value={createFormData.trackingNumber}
-                  onChange={handleCreateInputChange}
-                  placeholder="Enter tracking number"
-                  className="sd-input"
-                />
-              </div>
-              
-              <div className="sd-form-group">
-                <label className="sd-label">Expected Delivery Date *</label>
-                <input
-                  type="date"
-                  name="expectedDeliveryDate"
-                  value={createFormData.expectedDeliveryDate}
-                  onChange={handleCreateInputChange}
-                  required
-                  className="sd-input"
-                />
-              </div>
-              
-              <div className="sd-form-group">
-                <label className="sd-label">Delivery Notes</label>
-                <textarea
-                  name="deliveryNotes"
-                  value={createFormData.deliveryNotes}
-                  onChange={handleCreateInputChange}
-                  placeholder="Enter any special instructions or notes"
-                  rows="3"
-                  className="sd-textarea"
-                ></textarea>
-              </div>
-              
-              <div className="sd-modal-buttons">
-                <button
-                  type="button"
-                  onClick={handleCloseCreateModal}
-                  className="sd-button sd-button-cancel"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="sd-button sd-button-submit"
-                >
-                  Create Shipment
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-      
-      {/* Update shipment modal */}
-      {showUpdateModal && activeShipment && (
-        <div className="sd-modal">
-          <div className="sd-modal-content">
-            <h3 className="sd-modal-title">
-              Update Shipment Status
-            </h3>
-            
-            <div className="sd-modal-info">
-              <p className="sd-modal-product">
-                {activeShipment.orderDeliveryId?.productId?.productName || "Product"}
-              </p>
-              <p className="sd-modal-status">
-                Current Status: <span className={getStatusClass(activeShipment.status)}>
-                  {getStatusLabel(activeShipment.status)}
-                </span>
-              </p>
-            </div>
-            
-            <form onSubmit={handleUpdateShipment}>
-              <div className="sd-form-group">
-                <label className="sd-label">New Status *</label>
-                <select
-                  name="status"
-                  value={updateFormData.status}
-                  onChange={handleUpdateInputChange}
-                  required
-                  className="sd-input"
-                >
-                  <option value="">Select new status</option>
-                  {getNextStatusOptions(activeShipment.status).map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              <div className="sd-form-group">
-                <label className="sd-label">Tracking Number</label>
-                <input
-                  type="text"
-                  name="trackingNumber"
-                  value={updateFormData.trackingNumber}
-                  onChange={handleUpdateInputChange}
-                  className="sd-input"
-                />
-              </div>
-              
-              <div className="sd-form-group">
-                <label className="sd-label">Carrier</label>
-                <input
-                  type="text"
-                  name="carrier"
-                  value={updateFormData.carrier}
-                  onChange={handleUpdateInputChange}
-                  className="sd-input"
-                />
-              </div>
-              
-              {updateFormData.status === "delivered" && (
+        
+        {showCreateModal && (
+          <div className="sd-modal">
+            <div className="sd-modal-content">
+              <h3 className="sd-modal-title">Create New Shipment</h3>
+              <form onSubmit={handleCreateShipment}>
                 <div className="sd-form-group">
-                  <label className="sd-label">Actual Delivery Date *</label>
+                  <label className="sd-label">Select Order *</label>
+                  <select
+                    name="orderDeliveryId"
+                    value={createFormData.orderDeliveryId}
+                    onChange={handleCreateInputChange}
+                    required
+                    className={`sd-input ${createFormErrors.orderDeliveryId ? "sd-input-error" : ""}`}
+                  >
+                    <option value="">Select an order</option>
+                    {readyOrders.map(order => (
+                      <option key={order._id} value={order._id}>
+                        {order.productId?.productName} - Qty: {order.quantity}
+                      </option>
+                    ))}
+                  </select>
+                  {createFormErrors.orderDeliveryId && (
+                    <p className="sd-field-error">{createFormErrors.orderDeliveryId}</p>
+                  )}
+                </div>
+                <div className="sd-form-group">
+                  <label className="sd-label">Carrier</label>
                   <input
-                    type="date"
-                    name="actualDeliveryDate"
-                    value={updateFormData.actualDeliveryDate}
-                    onChange={handleUpdateInputChange}
-                    required={updateFormData.status === "delivered"}
+                    type="text"
+                    name="carrier"
+                    value={createFormData.carrier}
+                    onChange={handleCreateInputChange}
+                    placeholder="Enter carrier name (e.g. DHL, FedEx)"
                     className="sd-input"
                   />
                 </div>
-              )}
-              
-              <div className="sd-form-group">
-                <label className="sd-label">Delivery Notes</label>
-                <textarea
-                  name="deliveryNotes"
-                  value={updateFormData.deliveryNotes}
-                  onChange={handleUpdateInputChange}
-                  rows="3"
-                  className="sd-textarea"
-                ></textarea>
-              </div>
-              
-              <div className="sd-modal-buttons">
-                <button
-                  type="button"
-                  onClick={handleCloseUpdateModal}
-                  className="sd-button sd-button-cancel"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="sd-button sd-button-submit"
-                >
-                  Update Shipment
-                </button>
-              </div>
-            </form>
+                <div className="sd-form-group">
+                  <label className="sd-label">Tracking Number</label>
+                  <input
+                    type="text"
+                    name="trackingNumber"
+                    value={createFormData.trackingNumber}
+                    onChange={handleCreateInputChange}
+                    placeholder="Enter tracking number"
+                    className={`sd-input ${createFormErrors.trackingNumber ? "sd-input-error" : ""}`}
+                  />
+                  {createFormErrors.trackingNumber && (
+                    <p className="sd-field-error">{createFormErrors.trackingNumber}</p>
+                  )}
+                </div>
+                <div className="sd-form-group">
+                  <label className="sd-label">Expected Delivery Date *</label>
+                  <input
+                    type="date"
+                    name="expectedDeliveryDate"
+                    value={createFormData.expectedDeliveryDate}
+                    onChange={handleCreateInputChange}
+                    required
+                    className={`sd-input ${createFormErrors.expectedDeliveryDate ? "sd-input-error" : ""}`}
+                  />
+                  {createFormErrors.expectedDeliveryDate && (
+                    <p className="sd-field-error">{createFormErrors.expectedDeliveryDate}</p>
+                  )}
+                </div>
+                <div className="sd-form-group">
+                  <label className="sd-label">Delivery Notes</label>
+                  <textarea
+                    name="deliveryNotes"
+                    value={createFormData.deliveryNotes}
+                    onChange={handleCreateInputChange}
+                    placeholder="Enter any special instructions or notes"
+                    rows="3"
+                    className="sd-textarea"
+                  ></textarea>
+                </div>
+                <div className="sd-modal-buttons">
+                  <button
+                    type="button"
+                    onClick={handleCloseCreateModal}
+                    className="sd-button sd-button-cancel"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="sd-button sd-button-submit"
+                  >
+                    Create Shipment
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+        
+        {showUpdateModal && activeShipment && (
+          <div className="sd-modal">
+            <div className="sd-modal-content">
+              <h3 className="sd-modal-title">Update Shipment Status</h3>
+              <div className="sd-modal-info">
+                <p className="sd-modal-product">
+                  {activeShipment.orderDeliveryId?.productId?.productName || "Product"}
+                </p>
+                <p className="sd-modal-status">
+                  Current Status: <span className={getStatusClass(activeShipment.status)}>
+                    {getStatusLabel(activeShipment.status)}
+                  </span>
+                </p>
+              </div>
+              <form onSubmit={handleUpdateShipment}>
+                <div className="sd-form-group">
+                  <label className="sd-label">New Status *</label>
+                  <select
+                    name="status"
+                    value={updateFormData.status}
+                    onChange={handleUpdateInputChange}
+                    required
+                    className={`sd-input ${updateFormErrors.status ? "sd-input-error" : ""}`}
+                  >
+                    <option value="">Select new status</option>
+                    {getNextStatusOptions(activeShipment.status).map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  {updateFormErrors.status && (
+                    <p className="sd-field-error">{updateFormErrors.status}</p>
+                  )}
+                </div>
+                <div className="sd-form-group">
+                  <label className="sd-label">Tracking Number</label>
+                  <input
+                    type="text"
+                    name="trackingNumber"
+                    value={updateFormData.trackingNumber}
+                    onChange={handleUpdateInputChange}
+                    className={`sd-input ${updateFormErrors.trackingNumber ? "sd-input-error" : ""}`}
+                  />
+                  {updateFormErrors.trackingNumber && (
+                    <p className="sd-field-error">{updateFormErrors.trackingNumber}</p>
+                  )}
+                </div>
+                <div className="sd-form-group">
+                  <label className="sd-label">Carrier</label>
+                  <input
+                    type="text"
+                    name="carrier"
+                    value={updateFormData.carrier}
+                    onChange={handleUpdateInputChange}
+                    className="sd-input"
+                  />
+                </div>
+                {updateFormData.status === "delivered" && (
+                  <div className="sd-form-group">
+                    <label className="sd-label">Actual Delivery Date *</label>
+                    <input
+                      type="date"
+                      name="actualDeliveryDate"
+                      value={updateFormData.actualDeliveryDate}
+                      onChange={handleUpdateInputChange}
+                      required={updateFormData.status === "delivered"}
+                      className={`sd-input ${updateFormErrors.actualDeliveryDate ? "sd-input-error" : ""}`}
+                    />
+                    {updateFormErrors.actualDeliveryDate && (
+                      <p className="sd-field-error">{updateFormErrors.actualDeliveryDate}</p>
+                    )}
+                  </div>
+                )}
+                <div className="sd-form-group">
+                  <label className="sd-label">Delivery Notes</label>
+                  <textarea
+                    name="deliveryNotes"
+                    value={updateFormData.deliveryNotes}
+                    onChange={handleUpdateInputChange}
+                    rows="3"
+                    className="sd-textarea"
+                  ></textarea>
+                </div>
+                <div className="sd-modal-buttons">
+                  <button
+                    type="button"
+                    onClick={handleCloseUpdateModal}
+                    className="sd-button sd-button-cancel"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="sd-button sd-button-submit"
+                  >
+                    Update Shipment
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

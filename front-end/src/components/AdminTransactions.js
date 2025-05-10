@@ -15,7 +15,10 @@ const AdminTransactions = () => {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
-  
+  const [modalLoading, setModalLoading] = useState(false);
+  const [createFormErrors, setCreateFormErrors] = useState({});
+  const [updateFormErrors, setUpdateFormErrors] = useState({});
+
   const [createFormData, setCreateFormData] = useState({
     orderDeliveryId: "",
     amount: "",
@@ -23,14 +26,14 @@ const AdminTransactions = () => {
     dueDate: "",
     notes: ""
   });
-  
+
   const [updateFormData, setUpdateFormData] = useState({
     status: "",
     paymentReference: "",
     notes: "",
     paymentMethod: ""
   });
-  
+
   const paymentMethods = [
     { value: "bank_transfer", label: "Bank Transfer", refLabel: "Transaction ID/Reference Number" },
     { value: "cash", label: "Cash", refLabel: "Receipt Number" },
@@ -38,67 +41,69 @@ const AdminTransactions = () => {
     { value: "company_credit", label: "Company Credit", refLabel: "Credit Reference" },
     { value: "online_payment", label: "Online Payment", refLabel: "Payment ID" }
   ];
-  
+
   useEffect(() => {
     fetchTransactions();
     fetchSuppliers();
     fetchOrders();
   }, [statusFilter, supplierFilter]);
-  
-  const fetchTransactions = async () => {
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
+  const fetchTransactions = async (retryCount = 3) => {
     try {
       setLoading(true);
-      
       let url = "http://localhost:5000/api/transactions/admin";
       const params = [];
-      
-      if (statusFilter !== "all") {
-        params.push(`status=${statusFilter}`);
-      }
-      
-      if (supplierFilter !== "all") {
-        params.push(`supplierId=${supplierFilter}`);
-      }
-      
-      if (params.length > 0) {
-        url += `?${params.join('&')}`;
-      }
-      
-      const response = await axios.get(url, {
-        withCredentials: true,
-      });
-      
+      if (statusFilter !== "all") params.push(`status=${statusFilter}`);
+      if (supplierFilter !== "all") params.push(`supplierId=${supplierFilter}`);
+      if (params.length > 0) url += `?${params.join('&')}`;
+      const response = await axios.get(url, { withCredentials: true });
       if (response.data.success) {
-        setTransactions(response.data.transactions || []);
+        const validatedTransactions = validateTransactions(response.data.transactions || []);
+        setTransactions(validatedTransactions);
+        localStorage.setItem("cachedAdminTransactions", JSON.stringify(validatedTransactions));
       }
     } catch (error) {
       console.error("Error fetching transactions:", error);
-      setError("Failed to load transactions. Please try again.");
+      if (retryCount > 0) {
+        setTimeout(() => fetchTransactions(retryCount - 1), 1000);
+      } else {
+        setError("Failed to load transactions. Showing cached data.");
+        const cached = JSON.parse(localStorage.getItem("cachedAdminTransactions") || "[]");
+        setTransactions(validateTransactions(cached));
+      }
     } finally {
       setLoading(false);
     }
   };
-  
-  const fetchSuppliers = async () => {
+
+  const fetchSuppliers = async (retryCount = 3) => {
     try {
       const response = await axios.get("http://localhost:5000/api/user/role/supplier", {
         withCredentials: true,
       });
-      
       if (response.data.success) {
         setSuppliers(response.data.users || []);
       }
     } catch (error) {
       console.error("Error fetching suppliers:", error);
+      if (retryCount > 0) {
+        setTimeout(() => fetchSuppliers(retryCount - 1), 1000);
+      }
     }
   };
-  
-  const fetchOrders = async () => {
+
+  const fetchOrders = async (retryCount = 3) => {
     try {
       const response = await axios.get("http://localhost:5000/api/orderdelivers/admin?status=delivered", {
         withCredentials: true,
       });
-      
       if (response.data.success) {
         const orderIds = new Set(transactions.map(t => t.orderDeliveryId?._id || t.orderDeliveryId));
         const filteredOrders = response.data.orders.filter(order => !orderIds.has(order._id));
@@ -106,15 +111,73 @@ const AdminTransactions = () => {
       }
     } catch (error) {
       console.error("Error fetching orders:", error);
+      if (retryCount > 0) {
+        setTimeout(() => fetchOrders(retryCount - 1), 1000);
+      }
     }
   };
-  
+
+  const validateTransactions = (transactions) => {
+    return transactions.map((transaction) => ({
+      ...transaction,
+      invoiceNumber: transaction.invoiceNumber || "N/A",
+      amount: isNaN(parseFloat(transaction.amount)) ? 0 : parseFloat(transaction.amount),
+      dueDate: isValidDate(transaction.dueDate) ? transaction.dueDate : null,
+      status: transaction.status || "unknown",
+      orderDeliveryId: transaction.orderDeliveryId || {},
+      supplierId: transaction.supplierId || {},
+      paymentMethod: transaction.paymentMethod || "N/A",
+    }));
+  };
+
+  const isValidDate = (dateString) => {
+    const date = new Date(dateString);
+    return date instanceof Date && !isNaN(date);
+  };
+
+  const validateCreateForm = () => {
+    const errors = {};
+    if (!createFormData.orderDeliveryId) {
+      errors.orderDeliveryId = "Please select an order.";
+    }
+    if (!createFormData.amount) {
+      errors.amount = "Amount is required.";
+    } else if (parseFloat(createFormData.amount) <= 0) {
+      errors.amount = "Amount must be greater than 0.";
+    }
+    if (!createFormData.paymentMethod) {
+      errors.paymentMethod = "Please select a payment method.";
+    }
+    if (!createFormData.dueDate) {
+      errors.dueDate = "Due date is required.";
+    }
+    if (createFormData.notes && createFormData.notes.length > 500) {
+      errors.notes = "Notes cannot exceed 500 characters.";
+    }
+    setCreateFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const validateUpdateForm = () => {
+    const errors = {};
+    if (!updateFormData.status) {
+      errors.status = "Please select a status.";
+    }
+    if (updateFormData.paymentReference && !/^[a-zA-Z0-9-]{1,50}$/.test(updateFormData.paymentReference)) {
+      errors.paymentReference = "Payment reference must be alphanumeric (up to 50 characters).";
+    }
+    if (updateFormData.notes && updateFormData.notes.length > 500) {
+      errors.notes = "Notes cannot exceed 500 characters.";
+    }
+    setUpdateFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleOpenCreateModal = () => {
     if (orders.length === 0) {
       setError("No eligible orders found for creating transactions.");
       return;
     }
-    
     setCreateFormData({
       orderDeliveryId: orders[0]._id,
       amount: orders[0].totalAmount || "",
@@ -122,17 +185,17 @@ const AdminTransactions = () => {
       dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       notes: ""
     });
-    
     setShowCreateModal(true);
+    setCreateFormErrors({});
   };
-  
+
   const handleCreateInputChange = (e) => {
     const { name, value } = e.target;
     setCreateFormData({
       ...createFormData,
       [name]: value
     });
-    
+    setCreateFormErrors({ ...createFormErrors, [name]: "" });
     if (name === "orderDeliveryId") {
       const selectedOrder = orders.find(order => order._id === value);
       if (selectedOrder) {
@@ -142,26 +205,28 @@ const AdminTransactions = () => {
         }));
       }
     }
+    validateCreateForm();
   };
-  
+
   const handleCloseCreateModal = () => {
     setShowCreateModal(false);
+    setCreateFormErrors({});
   };
-  
+
   const handleCreateTransaction = async (e) => {
     e.preventDefault();
-    
+    if (!validateCreateForm()) return;
     try {
       const response = await axios.post(
         "http://localhost:5000/api/transactions",
         createFormData,
         { withCredentials: true }
       );
-      
       if (response.data.success) {
         fetchTransactions();
         fetchOrders();
         setShowCreateModal(false);
+        setCreateFormErrors({});
         setError(null);
       }
     } catch (error) {
@@ -169,24 +234,27 @@ const AdminTransactions = () => {
       setError("Failed to create transaction. " + (error.response?.data?.message || "Please try again."));
     }
   };
-  
+
   const handleViewDetails = async (transactionId) => {
     try {
+      setModalLoading(true);
       const response = await axios.get(
         `http://localhost:5000/api/transactions/${transactionId}`,
         { withCredentials: true }
       );
-      
       if (response.data.success) {
-        setActiveTransaction(response.data.transaction);
+        const validatedTransaction = validateTransactions([response.data.transaction])[0];
+        setActiveTransaction(validatedTransaction);
         setShowDetailsModal(true);
       }
     } catch (error) {
       console.error("Error fetching transaction details:", error);
       setError("Failed to load transaction details. Please try again.");
+    } finally {
+      setModalLoading(false);
     }
   };
-  
+
   const handleOpenUpdateModal = (transaction) => {
     setActiveTransaction(transaction);
     setUpdateFormData({
@@ -196,50 +264,43 @@ const AdminTransactions = () => {
       notes: transaction.notes || ""
     });
     setShowUpdateModal(true);
+    setUpdateFormErrors({});
   };
-  
+
   const handleUpdateInputChange = (e) => {
     const { name, value } = e.target;
     setUpdateFormData({
       ...updateFormData,
       [name]: value
     });
+    setUpdateFormErrors({ ...updateFormErrors, [name]: "" });
+    validateUpdateForm();
   };
-  
+
   const handleCloseUpdateModal = () => {
     setShowUpdateModal(false);
     setActiveTransaction(null);
+    setUpdateFormErrors({});
   };
-  
-  // Updated handleUpdateTransaction to refetch the full transaction list after a successful update
+
   const handleUpdateTransaction = async (e) => {
     e.preventDefault();
-    
-    if (!activeTransaction) return;
-    
-    if (!updateFormData.status) {
-      setError("Please select a status to update");
-      return;
-    }
-    
+    if (!activeTransaction || !validateUpdateForm()) return;
     try {
       const dataToUpdate = {
         ...updateFormData,
         paymentMethod: updateFormData.paymentMethod || activeTransaction.paymentMethod,
       };
-      
       const response = await axios.put(
         `http://localhost:5000/api/transactions/${activeTransaction._id}/status`,
         dataToUpdate,
         { withCredentials: true }
       );
-      
       if (response.data.success) {
-        // Instead of manually updating the state, refetch the full transaction list
-        // This ensures the UI has the complete data, including nested fields like supplierId and orderDeliveryId
         await fetchTransactions();
         setShowUpdateModal(false);
         setActiveTransaction(null);
+        setUpdateFormErrors({});
         setError(null);
       }
     } catch (error) {
@@ -247,12 +308,13 @@ const AdminTransactions = () => {
       setError("Failed to update transaction. " + (error.response?.data?.message || "Please try again."));
     }
   };
-  
+
   const handleCloseDetailsModal = () => {
     setShowDetailsModal(false);
     setActiveTransaction(null);
+    setModalLoading(false);
   };
-  
+
   const getStatusLabel = (status) => {
     switch (status) {
       case "pending": return "Pending";
@@ -261,10 +323,10 @@ const AdminTransactions = () => {
       case "completed": return "Completed";
       case "cancelled": return "Cancelled";
       case "refunded": return "Refunded";
-      default: return status;
+      default: return "Unknown";
     }
   };
-  
+
   const getStatusClass = (status) => {
     switch (status) {
       case "pending": return "at-status-pending";
@@ -276,31 +338,31 @@ const AdminTransactions = () => {
       default: return "at-status-default";
     }
   };
-  
+
   const getPaymentMethodLabel = (method) => {
     const foundMethod = paymentMethods.find(m => m.value === method);
-    return foundMethod ? foundMethod.label : method;
+    return foundMethod ? foundMethod.label : "N/A";
   };
-  
+
   const getPaymentReferenceLabel = (method) => {
     const foundMethod = paymentMethods.find(m => m.value === method);
     return foundMethod ? foundMethod.refLabel : "Payment Reference";
   };
-  
+
   const formatDate = (dateString) => {
-    if (!dateString) return "Not set";
-    const options = { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+    if (!dateString || !isValidDate(dateString)) return "Not set";
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
     };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
-  
+
   const formatCurrency = (amount) => {
     return `Rs${parseFloat(amount).toFixed(2)}`;
   };
-  
+
   const getNextStatusOptions = (currentStatus) => {
     switch (currentStatus) {
       case "pending":
@@ -335,20 +397,17 @@ const AdminTransactions = () => {
         return [];
     }
   };
-  
+
   const filteredTransactions = transactions.filter(transaction => {
     if (!searchTerm) return true;
-    
     const invoiceNumber = transaction.invoiceNumber.toLowerCase();
     const productName = transaction.orderDeliveryId?.productId?.productName?.toLowerCase() || "";
     const supplierName = transaction.supplierId?.name?.toLowerCase() || "";
     const companyName = transaction.supplierId?.companyName?.toLowerCase() || "";
-    
     const term = searchTerm.toLowerCase();
-    
-    return invoiceNumber.includes(term) || 
-           productName.includes(term) || 
-           supplierName.includes(term) || 
+    return invoiceNumber.includes(term) ||
+           productName.includes(term) ||
+           supplierName.includes(term) ||
            companyName.includes(term);
   });
 
@@ -374,13 +433,13 @@ const AdminTransactions = () => {
             New Transaction
           </button>
         </div>
-        
+
         {error && (
-          <div className="at-error">
+          <div className="at-error at-field-error">
             {error}
           </div>
         )}
-        
+
         <div className="at-filters">
           <div className="at-filter-group">
             <label className="at-label">Status:</label>
@@ -398,7 +457,7 @@ const AdminTransactions = () => {
               <option value="refunded">Refunded</option>
             </select>
           </div>
-          
+
           <div className="at-filter-group">
             <label className="at-label">Supplier:</label>
             <select
@@ -414,7 +473,7 @@ const AdminTransactions = () => {
               ))}
             </select>
           </div>
-          
+
           <div className="at-filter-group at-search">
             <input
               type="text"
@@ -425,7 +484,7 @@ const AdminTransactions = () => {
             />
           </div>
         </div>
-        
+
         {filteredTransactions.length === 0 ? (
           <div className="at-empty">
             <p>No transactions found matching your criteria.</p>
@@ -466,6 +525,7 @@ const AdminTransactions = () => {
                       <button
                         onClick={() => handleViewDetails(transaction._id)}
                         className="at-view-btn"
+                        disabled={modalLoading}
                       >
                         View
                       </button>
@@ -483,20 +543,20 @@ const AdminTransactions = () => {
           </div>
         )}
       </div>
-      
+
       {showCreateModal && (
         <div className="at-modal">
           <div className="at-modal-content">
             <div className="at-modal-header">
               <h3 className="at-modal-title">Create New Transaction</h3>
-              <button 
+              <button
                 className="at-modal-close"
                 onClick={handleCloseCreateModal}
               >
                 ×
               </button>
             </div>
-            
+
             <form onSubmit={handleCreateTransaction}>
               <div className="at-modal-body">
                 <div className="at-form-group">
@@ -506,18 +566,21 @@ const AdminTransactions = () => {
                     value={createFormData.orderDeliveryId}
                     onChange={handleCreateInputChange}
                     required
-                    className="at-form-select"
+                    className={`at-form-select ${createFormErrors.orderDeliveryId ? "at-input-error" : ""}`}
                   >
                     <option value="">Select an order</option>
                     {orders.map(order => (
                       <option key={order._id} value={order._id}>
-                        {order.productId?.productName} - {formatCurrency(order.totalAmount)} 
+                        {order.productId?.productName} - {formatCurrency(order.totalAmount)}
                         ({order.supplierId?.name})
                       </option>
                     ))}
                   </select>
+                  {createFormErrors.orderDeliveryId && (
+                    <p className="at-field-error">{createFormErrors.orderDeliveryId}</p>
+                  )}
                 </div>
-                
+
                 <div className="at-form-group">
                   <label className="at-form-label">Amount (Rs) *</label>
                   <input
@@ -528,10 +591,13 @@ const AdminTransactions = () => {
                     required
                     min="0.01"
                     step="0.01"
-                    className="at-form-input"
+                    className={`at-form-input ${createFormErrors.amount ? "at-input-error" : ""}`}
                   />
+                  {createFormErrors.amount && (
+                    <p className="at-field-error">{createFormErrors.amount}</p>
+                  )}
                 </div>
-                
+
                 <div className="at-form-group">
                   <label className="at-form-label">Payment Method *</label>
                   <select
@@ -539,7 +605,7 @@ const AdminTransactions = () => {
                     value={createFormData.paymentMethod}
                     onChange={handleCreateInputChange}
                     required
-                    className="at-form-select"
+                    className={`at-form-select ${createFormErrors.paymentMethod ? "at-input-error" : ""}`}
                   >
                     {paymentMethods.map(method => (
                       <option key={method.value} value={method.value}>
@@ -547,8 +613,11 @@ const AdminTransactions = () => {
                       </option>
                     ))}
                   </select>
+                  {createFormErrors.paymentMethod && (
+                    <p className="at-field-error">{createFormErrors.paymentMethod}</p>
+                  )}
                 </div>
-                
+
                 <div className="at-form-group">
                   <label className="at-form-label">Due Date *</label>
                   <input
@@ -557,22 +626,28 @@ const AdminTransactions = () => {
                     value={createFormData.dueDate}
                     onChange={handleCreateInputChange}
                     required
-                    className="at-form-input"
+                    className={`at-form-input ${createFormErrors.dueDate ? "at-input-error" : ""}`}
                   />
+                  {createFormErrors.dueDate && (
+                    <p className="at-field-error">{createFormErrors.dueDate}</p>
+                  )}
                 </div>
-                
+
                 <div className="at-form-group">
                   <label className="at-form-label">Notes</label>
                   <textarea
                     name="notes"
                     value={createFormData.notes}
                     onChange={handleCreateInputChange}
-                    className="at-form-textarea"
+                    className={`at-form-textarea ${createFormErrors.notes ? "at-input-error" : ""}`}
                     rows="3"
                   ></textarea>
+                  {createFormErrors.notes && (
+                    <p className="at-field-error">{createFormErrors.notes}</p>
+                  )}
                 </div>
               </div>
-              
+
               <div className="at-modal-footer">
                 <button
                   type="button"
@@ -592,26 +667,26 @@ const AdminTransactions = () => {
           </div>
         </div>
       )}
-      
+
       {showUpdateModal && activeTransaction && (
         <div className="at-modal">
           <div className="at-modal-content">
             <div className="at-modal-header">
               <h3 className="at-modal-title">Update Transaction Status</h3>
-              <button 
+              <button
                 className="at-modal-close"
                 onClick={handleCloseUpdateModal}
               >
                 ×
               </button>
             </div>
-            
+
             <form onSubmit={handleUpdateTransaction}>
               <div className="at-modal-body">
                 <div className="at-transaction-info">
                   <p className="at-transaction-invoice">{activeTransaction.invoiceNumber}</p>
                   <p className="at-transaction-supplier">
-                    Supplier: {activeTransaction.supplierId?.name} 
+                    Supplier: {activeTransaction.supplierId?.name}
                     {activeTransaction.supplierId?.companyName && ` (${activeTransaction.supplierId.companyName})`}
                   </p>
                   <p className="at-transaction-amount">
@@ -623,7 +698,7 @@ const AdminTransactions = () => {
                     </span>
                   </p>
                 </div>
-                
+
                 <div className="at-form-group">
                   <label className="at-form-label">New Status *</label>
                   <select
@@ -631,7 +706,7 @@ const AdminTransactions = () => {
                     value={updateFormData.status}
                     onChange={handleUpdateInputChange}
                     required
-                    className="at-form-select"
+                    className={`at-form-select ${updateFormErrors.status ? "at-input-error" : ""}`}
                   >
                     <option value="">Select new status</option>
                     {getNextStatusOptions(activeTransaction.status).map(option => (
@@ -640,8 +715,11 @@ const AdminTransactions = () => {
                       </option>
                     ))}
                   </select>
+                  {updateFormErrors.status && (
+                    <p className="at-field-error">{updateFormErrors.status}</p>
+                  )}
                 </div>
-                
+
                 <div className="at-form-group">
                   <label className="at-form-label">Payment Method</label>
                   <select
@@ -657,7 +735,7 @@ const AdminTransactions = () => {
                     ))}
                   </select>
                 </div>
-                
+
                 <div className="at-form-group">
                   <label className="at-form-label">
                     {getPaymentReferenceLabel(updateFormData.paymentMethod)}
@@ -667,23 +745,29 @@ const AdminTransactions = () => {
                     name="paymentReference"
                     value={updateFormData.paymentReference}
                     onChange={handleUpdateInputChange}
-                    className="at-form-input"
+                    className={`at-form-input ${updateFormErrors.paymentReference ? "at-input-error" : ""}`}
                     placeholder={getPaymentReferenceLabel(updateFormData.paymentMethod)}
                   />
+                  {updateFormErrors.paymentReference && (
+                    <p className="at-field-error">{updateFormErrors.paymentReference}</p>
+                  )}
                 </div>
-                
+
                 <div className="at-form-group">
                   <label className="at-form-label">Notes</label>
                   <textarea
                     name="notes"
                     value={updateFormData.notes}
                     onChange={handleUpdateInputChange}
-                    className="at-form-textarea"
+                    className={`at-form-textarea ${updateFormErrors.notes ? "at-input-error" : ""}`}
                     rows="3"
                   ></textarea>
+                  {updateFormErrors.notes && (
+                    <p className="at-field-error">{updateFormErrors.notes}</p>
+                  )}
                 </div>
               </div>
-              
+
               <div className="at-modal-footer">
                 <button
                   type="button"
@@ -703,155 +787,163 @@ const AdminTransactions = () => {
           </div>
         </div>
       )}
-      
+
       {showDetailsModal && activeTransaction && (
         <div className="at-modal">
           <div className="at-modal-content at-modal-large">
             <div className="at-modal-header">
               <h3 className="at-modal-title">Transaction Details</h3>
-              <button 
+              <button
                 className="at-modal-close"
                 onClick={handleCloseDetailsModal}
               >
                 ×
               </button>
             </div>
+
             
-            <div className="at-modal-body">
-              <div className="at-detail-header">
-                <div>
-                  <h4 className="at-invoice-number">{activeTransaction.invoiceNumber}</h4>
-                  <p className="at-product-name">
-                    {activeTransaction.orderDeliveryId?.productId?.productName || "Unknown Product"}
-                  </p>
-                </div>
-                <div>
-                  <span className={`at-status-large ${getStatusClass(activeTransaction.status)}`}>
-                    {getStatusLabel(activeTransaction.status)}
-                  </span>
-                </div>
+            {modalLoading ? (
+              <div className="at-loading-container">
+                <div className="at-spinner"></div>
+                <p>Loading transaction details...</p>
               </div>
-              
-              <div className="at-detail-section">
-                <h4 className="at-section-title">Transaction Information</h4>
-                <div className="at-detail-grid">
-                  <div className="at-detail-group">
-                    <p className="at-detail-label">Amount:</p>
-                    <p className="at-detail-value">{formatCurrency(activeTransaction.amount)}</p>
+            ) : (
+              <div className="at-modal-body">
+                <div className="at-detail-header">
+                  <div>
+                    <h4 className="at-invoice-number">{activeTransaction.invoiceNumber}</h4>
+                    <p className="at-product-name">
+                      {activeTransaction.orderDeliveryId?.productId?.productName || "Unknown Product"}
+                    </p>
                   </div>
-                  <div className="at-detail-group">
-                    <p className="at-detail-label">Payment Method:</p>
-                    <p className="at-detail-value">{getPaymentMethodLabel(activeTransaction.paymentMethod)}</p>
-                  </div>
-                  <div className="at-detail-group">
-                    <p className="at-detail-label">Created Date:</p>
-                    <p className="at-detail-value">{formatDate(activeTransaction.createdAt)}</p>
-                  </div>
-                  <div className="at-detail-group">
-                    <p className="at-detail-label">Due Date:</p>
-                    <p className="at-detail-value">{formatDate(activeTransaction.dueDate)}</p>
-                  </div>
-                  {activeTransaction.paymentDate && (
-                    <div className="at-detail-group">
-                      <p className="at-detail-label">Payment Date:</p>
-                      <p className="at-detail-value">{formatDate(activeTransaction.paymentDate)}</p>
-                    </div>
-                  )}
-                  {activeTransaction.completedDate && (
-                    <div className="at-detail-group">
-                      <p className="at-detail-label">Completed Date:</p>
-                      <p className="at-detail-value">{formatDate(activeTransaction.completedDate)}</p>
-                    </div>
-                  )}
-                  {activeTransaction.paymentReference && (
-                    <div className="at-detail-group">
-                      <p className="at-detail-label">{getPaymentReferenceLabel(activeTransaction.paymentMethod)}:</p>
-                      <p className="at-detail-value">{activeTransaction.paymentReference}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-              
-              <div className="at-detail-section">
-                <h4 className="at-section-title">Supplier Information</h4>
-                <div className="at-detail-grid">
-                  <div className="at-detail-group">
-                    <p className="at-detail-label">Supplier Name:</p>
-                    <p className="at-detail-value">{activeTransaction.supplierId?.name || "Unknown"}</p>
-                  </div>
-                  <div className="at-detail-group">
-                    <p className="at-detail-label">Company Name:</p>
-                    <p className="at-detail-value">{activeTransaction.supplierId?.companyName || "Not provided"}</p>
-                  </div>
-                  <div className="at-detail-group">
-                    <p className="at-detail-label">Email:</p>
-                    <p className="at-detail-value">{activeTransaction.supplierId?.email || "Unknown"}</p>
+                  <div>
+                    <span className={`at-status-large ${getStatusClass(activeTransaction.status)}`}>
+                      {getStatusLabel(activeTransaction.status)}
+                    </span>
                   </div>
                 </div>
-              </div>
-              
-              <div className="at-detail-section">
-                <h4 className="at-section-title">Order Details</h4>
-                <div className="at-detail-grid">
-                  <div className="at-detail-group">
-                    <p className="at-detail-label">Order ID:</p>
-                    <p className="at-detail-value">
-                      {activeTransaction.orderDeliveryId?._id || "N/A"}
-                    </p>
-                  </div>
-                  <div className="at-detail-group">
-                    <p className="at-detail-label">Product:</p>
-                    <p className="at-detail-value">
-                      {activeTransaction.orderDeliveryId?.productId?.productName || "N/A"}
-                    </p>
-                  </div>
-                  <div className="at-detail-group">
-                    <p className="at-detail-label">Category:</p>
-                    <p className="at-detail-value">
-                      {activeTransaction.orderDeliveryId?.productId?.productCategory || "N/A"}
-                    </p>
-                  </div>
-                  <div className="at-detail-group">
-                    <p className="at-detail-label">Quantity:</p>
-                    <p className="at-detail-value">
-                      {activeTransaction.orderDeliveryId?.quantity || "N/A"}
-                    </p>
-                  </div>
-                  <div className="at-detail-group">
-                    <p className="at-detail-label">Unit Price:</p>
-                    <p className="at-detail-value">
-                      {activeTransaction.orderDeliveryId?.price ? 
-                        formatCurrency(activeTransaction.orderDeliveryId.price) : "N/A"}
-                    </p>
-                  </div>
-                  <div className="at-detail-group">
-                    <p className="at-detail-label">Order Status:</p>
-                    <p className="at-detail-value">
-                      {activeTransaction.orderDeliveryId?.orderStatus || "N/A"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              {activeTransaction.notes && (
+
                 <div className="at-detail-section">
-                  <h4 className="at-section-title">Notes</h4>
-                  <p className="at-notes-text">{activeTransaction.notes}</p>
+                  <h4 className="at-section-title">Transaction Information</h4>
+                  <div className="at-detail-grid">
+                    <div className="at-detail-group">
+                      <p className="at-detail-label">Amount:</p>
+                      <p className="at-detail-value">{formatCurrency(activeTransaction.amount)}</p>
+                    </div>
+                    <div className="at-detail-group">
+                      <p className="at-detail-label">Payment Method:</p>
+                      <p className="at-detail-value">{getPaymentMethodLabel(activeTransaction.paymentMethod)}</p>
+                    </div>
+                    <div className="at-detail-group">
+                      <p className="at-detail-label">Created Date:</p>
+                      <p className="at-detail-value">{formatDate(activeTransaction.createdAt)}</p>
+                    </div>
+                    <div className="at-detail-group">
+                      <p className="at-detail-label">Due Date:</p>
+                      <p className="at-detail-value">{formatDate(activeTransaction.dueDate)}</p>
+                    </div>
+                    {activeTransaction.paymentDate && (
+                      <div className="at-detail-group">
+                        <p className="at-detail-label">Payment Date:</p>
+                        <p className="at-detail-value">{formatDate(activeTransaction.paymentDate)}</p>
+                      </div>
+                    )}
+                    {activeTransaction.completedDate && (
+                      <div className="at-detail-group">
+                        <p className="at-detail-label">Completed Date:</p>
+                        <p className="at-detail-value">{formatDate(activeTransaction.completedDate)}</p>
+                      </div>
+                    )}
+                    {activeTransaction.paymentReference && (
+                      <div className="at-detail-group">
+                        <p className="at-detail-label">{getPaymentReferenceLabel(activeTransaction.paymentMethod)}:</p>
+                        <p className="at-detail-value">{activeTransaction.paymentReference}</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
-              
-              <div className="at-detail-actions">
-                <button
-                  onClick={() => {
-                    handleCloseDetailsModal();
-                    handleOpenUpdateModal(activeTransaction);
-                  }}
-                  className="at-button at-button-update"
-                >
-                  Update Status
-                </button>
+
+                <div className="at-detail-section">
+                  <h4 className="at-section-title">Supplier Information</h4>
+                  <div className="at-detail-grid">
+                    <div className="at-detail-group">
+                      <p className="at-detail-label">Supplier Name:</p>
+                      <p className="at-detail-value">{activeTransaction.supplierId?.name || "Unknown"}</p>
+                    </div>
+                    <div className="at-detail-group">
+                      <p className="at-detail-label">Company Name:</p>
+                      <p className="at-detail-value">{activeTransaction.supplierId?.companyName || "Not provided"}</p>
+                    </div>
+                    <div className="at-detail-group">
+                      <p className="at-detail-label">Email:</p>
+                      <p className="at-detail-value">{activeTransaction.supplierId?.email || "Unknown"}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="at-detail-section">
+                  <h4 className="at-section-title">Order Details</h4>
+                  <div className="at-detail-grid">
+                    <div className="at-detail-group">
+                      <p className="at-detail-label">Order ID:</p>
+                      <p className="at-detail-value">
+                        {activeTransaction.orderDeliveryId?._id || "N/A"}
+                      </p>
+                    </div>
+                    <div className="at-detail-group">
+                      <p className="at-detail-label">Product:</p>
+                      <p className="at-detail-value">
+                        {activeTransaction.orderDeliveryId?.productId?.productName || "N/A"}
+                      </p>
+                    </div>
+                    <div className="at-detail-group">
+                      <p className="at-detail-label">Category:</p>
+                      <p className="at-detail-value">
+                        {activeTransaction.orderDeliveryId?.productId?.productCategory || "N/A"}
+                      </p>
+                    </div>
+                    <div className="at-detail-group">
+                      <p className="at-detail-label">Quantity:</p>
+                      <p className="at-detail-value">
+                        {activeTransaction.orderDeliveryId?.quantity || "N/A"}
+                      </p>
+                    </div>
+                    <div className="at-detail-group">
+                      <p className="at-detail-label">Unit Price:</p>
+                      <p className="at-detail-value">
+                        {activeTransaction.orderDeliveryId?.price ?
+                          formatCurrency(activeTransaction.orderDeliveryId.price) : "N/A"}
+                      </p>
+                    </div>
+                    <div className="at-detail-group">
+                      <p className="at-detail-label">Order Status:</p>
+                      <p className="at-detail-value">
+                        {activeTransaction.orderDeliveryId?.orderStatus || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {activeTransaction.notes && (
+                  <div className="at-detail-section">
+                    <h4 className="at-section-title">Notes</h4>
+                    <p className="at-notes-text">{activeTransaction.notes}</p>
+                  </div>
+                )}
+
+                <div className="at-detail-actions">
+                  <button
+                    onClick={() => {
+                      handleCloseDetailsModal();
+                      handleOpenUpdateModal(activeTransaction);
+                    }}
+                    className="at-button at-button-update"
+                  >
+                    Update Status
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}

@@ -9,57 +9,88 @@ const SupplierTransactions = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [activeTransaction, setActiveTransaction] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  
+  const [modalLoading, setModalLoading] = useState(false);
+
   useEffect(() => {
     fetchTransactions();
   }, [statusFilter]);
-  
-  const fetchTransactions = async () => {
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
+  const fetchTransactions = async (retryCount = 3) => {
     try {
       setLoading(true);
-      
       let url = "http://localhost:5000/api/transactions/supplier";
       if (statusFilter !== "all") {
         url += `?status=${statusFilter}`;
       }
-      
-      const response = await axios.get(url, {
-        withCredentials: true,
-      });
-      
+      const response = await axios.get(url, { withCredentials: true });
       if (response.data.success) {
-        setTransactions(response.data.transactions || []);
+        const validatedTransactions = validateTransactions(response.data.transactions || []);
+        setTransactions(validatedTransactions);
+        localStorage.setItem("cachedTransactions", JSON.stringify(validatedTransactions));
       }
     } catch (error) {
       console.error("Error fetching transactions:", error);
-      setError("Failed to load transactions. Please try again.");
+      if (retryCount > 0) {
+        setTimeout(() => fetchTransactions(retryCount - 1), 1000);
+      } else {
+        setError("Failed to load transactions. Showing cached data.");
+        const cached = JSON.parse(localStorage.getItem("cachedTransactions") || "[]");
+        setTransactions(validateTransactions(cached));
+      }
     } finally {
       setLoading(false);
     }
   };
-  
+
+  const validateTransactions = (transactions) => {
+    return transactions.map((transaction) => ({
+      ...transaction,
+      invoiceNumber: transaction.invoiceNumber || "N/A",
+      amount: isNaN(parseFloat(transaction.amount)) ? 0 : parseFloat(transaction.amount),
+      dueDate: isValidDate(transaction.dueDate) ? transaction.dueDate : null,
+      status: transaction.status || "unknown",
+      orderDeliveryId: transaction.orderDeliveryId || {},
+    }));
+  };
+
+  const isValidDate = (dateString) => {
+    const date = new Date(dateString);
+    return date instanceof Date && !isNaN(date);
+  };
+
   const handleViewDetails = async (transactionId) => {
     try {
+      setModalLoading(true);
       const response = await axios.get(
         `http://localhost:5000/api/transactions/${transactionId}`,
         { withCredentials: true }
       );
-      
       if (response.data.success) {
-        setActiveTransaction(response.data.transaction);
+        const validatedTransaction = validateTransactions([response.data.transaction])[0];
+        setActiveTransaction(validatedTransaction);
         setShowDetailsModal(true);
       }
     } catch (error) {
       console.error("Error fetching transaction details:", error);
       setError("Failed to load transaction details. Please try again.");
+    } finally {
+      setModalLoading(false);
     }
   };
-  
+
   const handleCloseModal = () => {
     setShowDetailsModal(false);
     setActiveTransaction(null);
+    setModalLoading(false);
   };
-  
+
   const getStatusLabel = (status) => {
     switch (status) {
       case "pending": return "Pending";
@@ -68,10 +99,10 @@ const SupplierTransactions = () => {
       case "completed": return "Completed";
       case "cancelled": return "Cancelled";
       case "refunded": return "Refunded";
-      default: return status;
+      default: return "Unknown";
     }
   };
-  
+
   const getStatusClass = (status) => {
     switch (status) {
       case "pending": return "st-status-pending";
@@ -83,7 +114,7 @@ const SupplierTransactions = () => {
       default: return "st-status-default";
     }
   };
-  
+
   const getPaymentMethodLabel = (method) => {
     switch (method) {
       case "bank_transfer": return "Bank Transfer";
@@ -91,20 +122,20 @@ const SupplierTransactions = () => {
       case "check": return "Check";
       case "cash": return "Cash";
       case "online_payment": return "Online Payment";
-      default: return method;
+      default: return "N/A";
     }
   };
-  
+
   const formatDate = (dateString) => {
-    if (!dateString) return "Not set";
-    const options = { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+    if (!dateString || !isValidDate(dateString)) return "Not set";
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
-  
+
   const formatCurrency = (amount) => {
     return `Rs${parseFloat(amount).toFixed(2)}`;
   };
@@ -122,13 +153,13 @@ const SupplierTransactions = () => {
     <div className="st-container">
       <div className="st-card">
         <h2 className="st-title">Transaction History</h2>
-        
+
         {error && (
-          <div className="st-error">
+          <div className="st-error st-field-error">
             {error}
           </div>
         )}
-        
+
         <div className="st-filter">
           <label className="st-label">Filter by status:</label>
           <select
@@ -145,7 +176,7 @@ const SupplierTransactions = () => {
             <option value="refunded">Refunded</option>
           </select>
         </div>
-        
+
         {transactions.length === 0 ? (
           <div className="st-empty">
             <p>No transactions found.</p>
@@ -179,8 +210,9 @@ const SupplierTransactions = () => {
                       <button
                         onClick={() => handleViewDetails(transaction._id)}
                         className="st-view-btn"
+                        disabled={modalLoading}
                       >
-                        View Details
+                        {modalLoading ? "Loading..." : "View Details"}
                       </button>
                     </td>
                   </tr>
@@ -190,122 +222,122 @@ const SupplierTransactions = () => {
           </div>
         )}
       </div>
-      
-      {/* Transaction Details Modal */}
+
       {showDetailsModal && activeTransaction && (
         <div className="st-modal">
           <div className="st-modal-content">
             <div className="st-modal-header">
               <h3 className="st-modal-title">Transaction Details</h3>
-              <button 
-                className="st-modal-close"
-                onClick={handleCloseModal}
-              >
-                &times;
+              <button className="st-modal-close" onClick={handleCloseModal}>
+                ×
               </button>
             </div>
-            
-            <div className="st-modal-body">
-              <div className="st-detail-header">
-                <div>
-                  <h4 className="st-invoice-number">{activeTransaction.invoiceNumber}</h4>
-                  <p className="st-product-name">
-                    {activeTransaction.orderDeliveryId?.productId?.productName || "Unknown Product"}
-                  </p>
-                </div>
-                <div>
-                  <span className={`st-status-large ${getStatusClass(activeTransaction.status)}`}>
-                    {getStatusLabel(activeTransaction.status)}
-                  </span>
-                </div>
+
+            {modalLoading ? (
+              <div className="st-loading-container">
+                <div className="st-spinner"></div>
+                <p>Loading transaction details...</p>
               </div>
-              
-              <div className="st-detail-grid">
-                <div className="st-detail-group">
-                  <p className="st-detail-label">Amount:</p>
-                  <p className="st-detail-value">{formatCurrency(activeTransaction.amount)}</p>
-                </div>
-                <div className="st-detail-group">
-                  <p className="st-detail-label">Payment Method:</p>
-                  <p className="st-detail-value">{getPaymentMethodLabel(activeTransaction.paymentMethod)}</p>
-                </div>
-                <div className="st-detail-group">
-                  <p className="st-detail-label">Created Date:</p>
-                  <p className="st-detail-value">{formatDate(activeTransaction.createdAt)}</p>
-                </div>
-                <div className="st-detail-group">
-                  <p className="st-detail-label">Due Date:</p>
-                  <p className="st-detail-value">{formatDate(activeTransaction.dueDate)}</p>
-                </div>
-                {activeTransaction.paymentDate && (
-                  <div className="st-detail-group">
-                    <p className="st-detail-label">Payment Date:</p>
-                    <p className="st-detail-value">{formatDate(activeTransaction.paymentDate)}</p>
+            ) : (
+              <div className="st-modal-body">
+                <div className="st-detail-header">
+                  <div>
+                    <h4 className="st-invoice-number">{activeTransaction.invoiceNumber}</h4>
+                    <p className="st-product-name">
+                      {activeTransaction.orderDeliveryId?.productId?.productName || "Unknown Product"}
+                    </p>
                   </div>
-                )}
-                {activeTransaction.completedDate && (
-                  <div className="st-detail-group">
-                    <p className="st-detail-label">Completed Date:</p>
-                    <p className="st-detail-value">{formatDate(activeTransaction.completedDate)}</p>
+                  <div>
+                    <span className={`st-status-large ${getStatusClass(activeTransaction.status)}`}>
+                      {getStatusLabel(activeTransaction.status)}
+                    </span>
                   </div>
-                )}
-                {activeTransaction.paymentReference && (
-                  <div className="st-detail-group">
-                    <p className="st-detail-label">Payment Reference:</p>
-                    <p className="st-detail-value">{activeTransaction.paymentReference}</p>
-                  </div>
-                )}
-              </div>
-              
-              <div className="st-order-details">
-                <h4 className="st-section-title">Order Details</h4>
+                </div>
+
                 <div className="st-detail-grid">
                   <div className="st-detail-group">
-                    <p className="st-detail-label">Order ID:</p>
-                    <p className="st-detail-value">
-                      {activeTransaction.orderDeliveryId?._id.substring(0, 8) || "N/A"}
-                    </p>
+                    <p className="st-detail-label">Amount:</p>
+                    <p className="st-detail-value">{formatCurrency(activeTransaction.amount)}</p>
                   </div>
                   <div className="st-detail-group">
-                    <p className="st-detail-label">Quantity:</p>
-                    <p className="st-detail-value">
-                      {activeTransaction.orderDeliveryId?.quantity || "N/A"}
-                    </p>
+                    <p className="st-detail-label">Payment Method:</p>
+                    <p className="st-detail-value">{getPaymentMethodLabel(activeTransaction.paymentMethod)}</p>
                   </div>
                   <div className="st-detail-group">
-                    <p className="st-detail-label">Product Category:</p>
-                    <p className="st-detail-value">
-                      {activeTransaction.orderDeliveryId?.productId?.productCategory || "N/A"}
-                    </p>
+                    <p className="st-detail-label">Created Date:</p>
+                    <p className="st-detail-value">{formatDate(activeTransaction.createdAt)}</p>
                   </div>
                   <div className="st-detail-group">
-                    <p className="st-detail-label">Order Status:</p>
-                    <p className="st-detail-value">
-                      {activeTransaction.orderDeliveryId?.orderStatus || "N/A"}
-                    </p>
+                    <p className="st-detail-label">Due Date:</p>
+                    <p className="st-detail-value">{formatDate(activeTransaction.dueDate)}</p>
+                  </div>
+                  {activeTransaction.paymentDate && (
+                    <div className="st-detail-group">
+                      <p className="st-detail-label">Payment Date:</p>
+                      <p className="st-detail-value">{formatDate(activeTransaction.paymentDate)}</p>
+                    </div>
+                  )}
+                  {activeTransaction.completedDate && (
+                    <div className="st-detail-group">
+                      <p className="st-detail-label">Completed Date:</p>
+                      <p className="st-detail-value">{formatDate(activeTransaction.completedDate)}</p>
+                    </div>
+                  )}
+                  {activeTransaction.paymentReference && (
+                    <div className="st-detail-group">
+                      <p className="st-detail-label">Payment Reference:</p>
+                      <p className="st-detail-value">{activeTransaction.paymentReference}</p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="st-order-details">
+                  <h4 className="st-section-title">Order Details</h4>
+                  <div className="st-detail-grid">
+                    <div className="st-detail-group">
+                      <p className="st-detail-label">Order ID:</p>
+                      <p className="st-detail-value">
+                        {activeTransaction.orderDeliveryId?._id?.substring(0, 8) || "N/A"}
+                      </p>
+                    </div>
+                    <div className="st-detail-group">
+                      <p className="st-detail-label">Quantity:</p>
+                      <p className="st-detail-value">
+                        {activeTransaction.orderDeliveryId?.quantity || "N/A"}
+                      </p>
+                    </div>
+                    <div className="st-detail-group">
+                      <p className="st-detail-label">Product Category:</p>
+                      <p className="st-detail-value">
+                        {activeTransaction.orderDeliveryId?.productId?.productCategory || "N/A"}
+                      </p>
+                    </div>
+                    <div className="st-detail-group">
+                      <p className="st-detail-label">Order Status:</p>
+                      <p className="st-detail-value">
+                        {activeTransaction.orderDeliveryId?.orderStatus || "N/A"}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              {activeTransaction.notes && (
-                <div className="st-notes">
-                  <h4 className="st-section-title">Notes</h4>
-                  <p className="st-notes-text">{activeTransaction.notes}</p>
+
+                {activeTransaction.notes && (
+                  <div className="st-notes">
+                    <h4 className="st-section-title">Notes</h4>
+                    <p className="st-notes-text">{activeTransaction.notes}</p>
+                  </div>
+                )}
+
+                <div className="st-admin-info">
+                  <p className="st-admin-text">
+                    Created by: {activeTransaction.adminId?.name || "Unknown Admin"}
+                  </p>
                 </div>
-              )}
-              
-              <div className="st-admin-info">
-                <p className="st-admin-text">
-                  Created by: {activeTransaction.adminId?.name || "Unknown Admin"}
-                </p>
               </div>
-            </div>
-            
+            )}
+
             <div className="st-modal-footer">
-              <button
-                onClick={handleCloseModal}
-                className="st-button st-button-close"
-              >
+              <button onClick={handleCloseModal} className="st-button st-button-close">
                 Close
               </button>
             </div>

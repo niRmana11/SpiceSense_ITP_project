@@ -404,3 +404,16 @@
   background: #ea580c;
   transform: scale(1.05);
 }
+/* SupplierDeliveries.css */
+
+/* Error input styling */
+.sd-input-error {
+  border: 1px solid #dc3545 !important;
+}
+
+/* Error message styling */
+.sd-field-error {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
