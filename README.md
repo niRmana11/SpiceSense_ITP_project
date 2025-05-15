@@ -4,16 +4,6 @@
 
 This is a **group project** developed by 5 team members using the **MERN stack** (MongoDB, Express.js, React.js, Node.js).
 
----
-
-## 👤 My Contribution
-
-My primary responsibility in the project was to design and implement the **Inventory Management and Automated Alert System**, which includes:
-
-- Real-time **low stock** and **expiry alerts**
-- Interactive **inventory overview dashboard** with visual insights
-- Stock **in/out tracking** and transaction logging
-- Smart **filtering, searching**, and **report generation** tools
 
 ---
 
