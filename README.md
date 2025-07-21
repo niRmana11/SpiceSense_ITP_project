@@ -7,7 +7,7 @@ This is a **group project** developed by 5 team members using the **MERN stack**
 
 ---
 
-## 🔧 Features
+## 🔧 My Contribution
 
 ### 🧮 Inventory Overview Page
 - Displays **automated alerts** for low stock and nearing/expired products
