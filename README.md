@@ -56,10 +56,25 @@ This is a **group project** developed by 5 team members using the **MERN stack**
 
 ---
 
-## 📌 Project Status
+## User Interfaces
+### Inventory Overview
+<img width="1902" height="862" alt="dashboard01" src="https://github.com/user-attachments/assets/7a3c06aa-a2f8-4d1b-9b78-3bd5ed8764b3" />
+<img width="1897" height="862" alt="dashboard02" src="https://github.com/user-attachments/assets/a62162b3-12bd-4f50-b43e-8f04adcec13a" />
 
-- 🔄 Currently under active development
-- ✅ Core features completed and tested
-- 🧪 Final testing and enhancements in progress
+### Stock Levels Page
+<img width="1893" height="866" alt="stock page" src="https://github.com/user-attachments/assets/eedf615e-40d6-42bb-a2d9-2acede31acc4" />
+
+### Expiry Alerts Page
+<img width="1918" height="867" alt="expiryalerts " src="https://github.com/user-attachments/assets/69e643f4-42ca-44be-8991-f4f10a3bd6b7" />
+
+### Transactions Page
+<img width="1896" height="862" alt="transaction" src="https://github.com/user-attachments/assets/21e399f4-d15a-424a-b404-231761f92003" />
+
+### Search & Filter Page
+<img width="1917" height="862" alt="search" src="https://github.com/user-attachments/assets/ec938887-def2-4f34-8156-b8b37e3c1bcc" />
+
+### Add Product Page
+<img width="1918" height="863" alt="add products" src="https://github.com/user-attachments/assets/f149cac0-1089-4f8a-8689-f8428d25584f" />
+
 
 ---
